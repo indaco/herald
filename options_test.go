@@ -192,6 +192,67 @@ func TestWithHeadingDecorationOptions(t *testing.T) {
 	})
 }
 
+func TestWithListIndent(t *testing.T) {
+	t.Run("positive value", func(t *testing.T) {
+		ty := New(WithListIndent(4))
+		if ty.theme.ListIndent != 4 {
+			t.Errorf("expected 4, got %d", ty.theme.ListIndent)
+		}
+	})
+
+	t.Run("zero ignored", func(t *testing.T) {
+		ty := New(WithListIndent(0))
+		if ty.theme.ListIndent != DefaultListIndent {
+			t.Errorf("expected default %d, got %d", DefaultListIndent, ty.theme.ListIndent)
+		}
+	})
+
+	t.Run("negative ignored", func(t *testing.T) {
+		ty := New(WithListIndent(-1))
+		if ty.theme.ListIndent != DefaultListIndent {
+			t.Errorf("expected default %d, got %d", DefaultListIndent, ty.theme.ListIndent)
+		}
+	})
+}
+
+func TestWithNestedBulletChars(t *testing.T) {
+	t.Run("custom chars", func(t *testing.T) {
+		chars := []string{"*", "o", "-"}
+		ty := New(WithNestedBulletChars(chars))
+		if len(ty.theme.NestedBulletChars) != 3 {
+			t.Fatalf("expected 3 chars, got %d", len(ty.theme.NestedBulletChars))
+		}
+		for i, c := range chars {
+			if ty.theme.NestedBulletChars[i] != c {
+				t.Errorf("char[%d]: expected %q, got %q", i, c, ty.theme.NestedBulletChars[i])
+			}
+		}
+	})
+
+	t.Run("empty slice ignored", func(t *testing.T) {
+		ty := New(WithNestedBulletChars([]string{}))
+		if len(ty.theme.NestedBulletChars) != len(DefaultNestedBulletChars) {
+			t.Errorf("expected default chars to be preserved")
+		}
+	})
+}
+
+func TestWithHierarchicalNumbers(t *testing.T) {
+	t.Run("enabled", func(t *testing.T) {
+		ty := New(WithHierarchicalNumbers(true))
+		if !ty.theme.HierarchicalNumbers {
+			t.Error("expected HierarchicalNumbers to be true")
+		}
+	})
+
+	t.Run("disabled by default", func(t *testing.T) {
+		ty := New()
+		if ty.theme.HierarchicalNumbers {
+			t.Error("expected HierarchicalNumbers to be false by default")
+		}
+	})
+}
+
 func TestWithCodeFormatter(t *testing.T) {
 	formatter := func(code, language string) string {
 		return "[" + language + "]" + code
