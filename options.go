@@ -12,6 +12,14 @@ func WithTheme(t Theme) Option {
 	}
 }
 
+// WithPalette derives a complete theme from a ColorPalette and sets it.
+// It is a convenience shortcut for WithTheme(ThemeFromPalette(p)).
+func WithPalette(p ColorPalette) Option {
+	return func(ty *Typography) {
+		ty.theme = ThemeFromPalette(p)
+	}
+}
+
 // --- Heading style options ---
 
 // WithH1Style overrides the H1 heading style.

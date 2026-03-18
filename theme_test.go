@@ -6,37 +6,58 @@ import (
 
 func TestDefaultTheme(t *testing.T) {
 	theme := DefaultTheme()
+	assertDefaultTokens(t, theme)
+}
 
-	t.Run("bullet char", func(t *testing.T) {
-		if theme.BulletChar == "" {
-			t.Error("BulletChar should not be empty")
+func assertDefaultTokens(t *testing.T, theme Theme) {
+	t.Helper()
+
+	if theme.BulletChar == "" {
+		t.Error("BulletChar should not be empty")
+	}
+	if theme.HRChar == "" {
+		t.Error("HRChar should not be empty")
+	}
+	if theme.HRWidth <= 0 {
+		t.Errorf("HRWidth should be positive, got %d", theme.HRWidth)
+	}
+	if theme.BlockquoteBar == "" {
+		t.Error("BlockquoteBar should not be empty")
+	}
+	if theme.BulletChar != DefaultBulletChar {
+		t.Errorf("expected bullet %q, got %q", DefaultBulletChar, theme.BulletChar)
+	}
+	if theme.HRWidth != DefaultHRWidth {
+		t.Errorf("expected HRWidth %d, got %d", DefaultHRWidth, theme.HRWidth)
+	}
+}
+
+func TestHasDarkBGEnvOverride(t *testing.T) {
+	t.Run("force dark", func(t *testing.T) {
+		t.Setenv("HERALD_FORCE_DARK", "1")
+		if !hasDarkBG() {
+			t.Error("expected dark when HERALD_FORCE_DARK=1")
 		}
 	})
 
-	t.Run("HR char", func(t *testing.T) {
-		if theme.HRChar == "" {
-			t.Error("HRChar should not be empty")
+	t.Run("force light", func(t *testing.T) {
+		t.Setenv("HERALD_FORCE_DARK", "0")
+		if hasDarkBG() {
+			t.Error("expected light when HERALD_FORCE_DARK=0")
 		}
 	})
 
-	t.Run("HR width", func(t *testing.T) {
-		if theme.HRWidth <= 0 {
-			t.Errorf("HRWidth should be positive, got %d", theme.HRWidth)
+	t.Run("force dark with true", func(t *testing.T) {
+		t.Setenv("HERALD_FORCE_DARK", "true")
+		if !hasDarkBG() {
+			t.Error("expected dark when HERALD_FORCE_DARK=true")
 		}
 	})
 
-	t.Run("blockquote bar", func(t *testing.T) {
-		if theme.BlockquoteBar == "" {
-			t.Error("BlockquoteBar should not be empty")
-		}
-	})
-
-	t.Run("default values", func(t *testing.T) {
-		if theme.BulletChar != "\u2022" {
-			t.Errorf("expected bullet %q, got %q", "\u2022", theme.BulletChar)
-		}
-		if theme.HRWidth != 40 {
-			t.Errorf("expected HRWidth 40, got %d", theme.HRWidth)
+	t.Run("force light with false", func(t *testing.T) {
+		t.Setenv("HERALD_FORCE_DARK", "false")
+		if hasDarkBG() {
+			t.Error("expected light when HERALD_FORCE_DARK=false")
 		}
 	})
 }

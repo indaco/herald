@@ -33,11 +33,21 @@
   </a>
 </p>
 
-Herald maps familiar HTML elements (H1–H6, P, Blockquote, UL, OL, Code, HR, and inline styles) to styled terminal output, built on [lipgloss v2](https://charm.land/lipgloss/v2). It ships with a Rose Pine-inspired default theme and supports full style customization via functional options.
+<p align="center">
+  <b><a href="#quick-start">Quick Start</a></b> |
+  <b><a href="#available-elements">Elements</a></b> |
+  <b><a href="#customization">Customization</a></b> |
+  <b><a href="#built-in-themes">Themes</a></b> |
+  <b><a href="#examples">Examples</a></b>
+</p>
+
+Herald maps familiar HTML elements (H1–H6, P, Blockquote, UL, OL, Code, HR, and inline styles) to styled terminal output, built on [lipgloss v2](https://github.com/charmbracelet/lipgloss). It ships with a Rose Pine-inspired default theme, built-in themes matching the Charm ecosystem (Dracula, Catppuccin, Base16, Charm) for seamless pairing with [huh](https://github.com/charmbracelet/huh) and other Charm-based TUIs, and full style customization via functional options and `ColorPalette`.
 
 <p align="center">
-  <img src="demo.png" alt="herald demo output" width="600" />
+  <img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo.png" alt="herald demo output" width="600" />
 </p>
+
+<p align="center"><em>Default Rose Pine theme (dark and light). Herald also ships with Dracula, Catppuccin, Base16, and Charm themes.</em></p>
 
 ## Installation
 
@@ -231,16 +241,88 @@ fmt.Println(ty.CodeBlock(`func main() { fmt.Println("hello") }`, "go"))
 
 See [`examples/syntax-highlighting/`](examples/syntax-highlighting/) for a chroma-based example, or [`examples/tree-sitter-highlighting/`](examples/tree-sitter-highlighting/) for a tree-sitter-based alternative.
 
-### Custom theme
+### Color palette
 
-Replace the entire theme by constructing a `Theme` struct and passing it with `WithTheme`.
+`ColorPalette` lets you define 9 colors and derive a complete theme from them. All style fields map from this palette; configurable tokens use the same defaults as `DefaultTheme`.
+
+| Field       | Maps to                                              |
+| ----------- | ---------------------------------------------------- |
+| `Primary`   | H1 headings                                          |
+| `Secondary` | H2, list bullets                                     |
+| `Tertiary`  | H3, links                                            |
+| `Accent`    | H4, mark background                                  |
+| `Highlight` | H5, `Abbr`                                           |
+| `Muted`     | H6, blockquote, HR, sub/sup, `DD`                    |
+| `Text`      | Body text, paragraphs, list items, inline code, `DT` |
+| `Surface`   | Background for inline code and `Kbd`                 |
+| `Base`      | Background for code blocks; mark foreground          |
+
+Pass the palette to `New()` via `WithPalette`, or call `ThemeFromPalette` to construct a `Theme` value directly.
 
 ```go
-import (
-    "github.com/indaco/herald"
-    "charm.land/lipgloss/v2"
-)
+// Dracula-inspired palette
+palette := herald.ColorPalette{
+    Primary:   lipgloss.Color("#bd93f9"), // purple
+    Secondary: lipgloss.Color("#ff79c6"), // pink
+    Tertiary:  lipgloss.Color("#8be9fd"), // cyan
+    Accent:    lipgloss.Color("#ffb86c"), // orange
+    Highlight: lipgloss.Color("#ff5555"), // red
+    Muted:     lipgloss.Color("#6272a4"), // comment gray
+    Text:      lipgloss.Color("#f8f8f2"), // foreground
+    Surface:   lipgloss.Color("#44475a"), // current line
+    Base:      lipgloss.Color("#282a36"), // background
+}
 
+ty := herald.New(herald.WithPalette(palette))
+```
+
+You can combine `WithPalette` with other options to override specific fields after the palette is applied:
+
+```go
+ty := herald.New(
+    herald.WithPalette(palette),
+    herald.WithHRWidth(60),
+    herald.WithBulletChar("-"),
+)
+```
+
+### Built-in themes
+
+Herald ships with named themes that match [huh](https://charm.land/huh)'s built-in color palettes. Colors auto-adapt to light/dark terminal backgrounds using `lipgloss.HasDarkBackground`.
+
+| Function            | Palette                                                           |
+| ------------------- | ----------------------------------------------------------------- |
+| `DraculaTheme()`    | [Dracula](https://draculatheme.com)                               |
+| `CatppuccinTheme()` | [Catppuccin](https://catppuccin.com) Mocha (dark) / Latte (light) |
+| `Base16Theme()`     | ANSI base16 terminal colors                                       |
+| `CharmTheme()`      | [Charm](https://charm.sh) brand colors                            |
+
+```go
+ty := herald.New(herald.WithTheme(herald.DraculaTheme()))
+```
+
+Pair with the corresponding huh theme for consistent styling across forms and typography:
+
+```go
+form := huh.NewForm(...).WithTheme(huh.ThemeDracula())
+ty := herald.New(herald.WithTheme(herald.DraculaTheme()))
+```
+
+### Custom theme
+
+The easiest way to customize is to start from an existing theme and modify specific fields:
+
+```go
+custom := herald.DefaultTheme()
+custom.H1 = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("#FF0000")).MarginBottom(1)
+custom.BulletChar = "-"
+
+ty := herald.New(herald.WithTheme(custom))
+```
+
+For a fully custom theme, construct a `Theme` struct directly:
+
+```go
 custom := herald.Theme{
     H1:        lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("#FFFFFF")),
     H2:        lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("#AAAAAA")),
@@ -260,8 +342,6 @@ custom := herald.Theme{
 ty := herald.New(herald.WithTheme(custom))
 ```
 
-`DefaultTheme()` is exported and can serve as a starting point: call it, modify the fields you need, then pass the result to `WithTheme`.
-
 ## Examples
 
 Runnable examples are in the [`examples/`](examples/) directory:
@@ -270,6 +350,8 @@ Runnable examples are in the [`examples/`](examples/) directory:
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------- |
 | [basic](examples/basic/)                                       | All elements with the default Rose Pine theme                                              | `go run ./examples/basic/`                         |
 | [custom-options](examples/custom-options/)                     | Override styles, decoration chars, and tokens via functional options                       | `go run ./examples/custom-options/`                |
+| [palette](examples/palette/)                                   | Generate a full theme from 8 colors using `ColorPalette`                                   | `go run ./examples/palette/`                       |
+| [builtin-themes](examples/builtin-themes/)                     | Built-in themes (Dracula, Catppuccin, Base16, Charm) matching huh                          | `go run ./examples/builtin-themes/`                |
 | [catppuccin-theme](examples/catppuccin-theme/)                 | Build a full theme from the [Catppuccin](https://catppuccin.com) palette (separate module) | `cd examples/catppuccin-theme && go run .`         |
 | [syntax-highlighting](examples/syntax-highlighting/)           | Plug in chroma for syntax-highlighted code blocks (separate module)                        | `cd examples/syntax-highlighting && go run .`      |
 | [tree-sitter-highlighting](examples/tree-sitter-highlighting/) | Plug in tree-sitter for AST-based syntax highlighting (separate module)                    | `cd examples/tree-sitter-highlighting && go run .` |
