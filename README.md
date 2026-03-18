@@ -83,13 +83,13 @@ H1–H3 render with a repeated underline character beneath the text. H4–H6 ren
 
 ### Block elements
 
-| Method             | Description                                               |
-| ------------------ | --------------------------------------------------------- |
-| `P(text)`          | Paragraph                                                 |
-| `Blockquote(text)` | Indented block with a left bar; supports multi-line input |
+| Method                  | Description                                                                                 |
+| ----------------------- | ------------------------------------------------------------------------------------------- |
+| `P(text)`               | Paragraph                                                                                   |
+| `Blockquote(text)`      | Indented block with a left bar; supports multi-line input                                   |
 | `Code(text, lang)`      | Inline code with background highlight; `lang` is optional, used when a CodeFormatter is set |
 | `CodeBlock(text, lang)` | Fenced code block with padding; `lang` is optional, used when a CodeFormatter is set        |
-| `HR()`             | Horizontal rule, configurable width and character         |
+| `HR()`                  | Horizontal rule, configurable width and character                                           |
 
 ```go
 fmt.Println(ty.Blockquote("First line.\nSecond line."))
@@ -229,7 +229,7 @@ ty := herald.New(
 fmt.Println(ty.CodeBlock(`func main() { fmt.Println("hello") }`, "go"))
 ```
 
-See [`examples/syntax-highlighting/`](examples/syntax-highlighting/) for a complete runnable example.
+See [`examples/syntax-highlighting/`](examples/syntax-highlighting/) for a chroma-based example, or [`examples/tree-sitter-highlighting/`](examples/tree-sitter-highlighting/) for a tree-sitter-based alternative.
 
 ### Custom theme
 
@@ -266,14 +266,15 @@ ty := herald.New(herald.WithTheme(custom))
 
 Runnable examples are in the [`examples/`](examples/) directory:
 
-| Example                                        | Description                                                                                | Run                                        |
-| ---------------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------ |
-| [basic](examples/basic/)                       | All elements with the default Rose Pine theme                                              | `go run ./examples/basic/`                 |
-| [custom-options](examples/custom-options/)     | Override styles, decoration chars, and tokens via functional options                       | `go run ./examples/custom-options/`        |
-| [catppuccin-theme](examples/catppuccin-theme/)           | Build a full theme from the [Catppuccin](https://catppuccin.com) palette (separate module) | `cd examples/catppuccin-theme && go run .`       |
-| [syntax-highlighting](examples/syntax-highlighting/) | Plug in chroma for syntax-highlighted code blocks (separate module)                        | `cd examples/syntax-highlighting && go run .` |
+| Example                                                        | Description                                                                                | Run                                                |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------- |
+| [basic](examples/basic/)                                       | All elements with the default Rose Pine theme                                              | `go run ./examples/basic/`                         |
+| [custom-options](examples/custom-options/)                     | Override styles, decoration chars, and tokens via functional options                       | `go run ./examples/custom-options/`                |
+| [catppuccin-theme](examples/catppuccin-theme/)                 | Build a full theme from the [Catppuccin](https://catppuccin.com) palette (separate module) | `cd examples/catppuccin-theme && go run .`         |
+| [syntax-highlighting](examples/syntax-highlighting/)           | Plug in chroma for syntax-highlighted code blocks (separate module)                        | `cd examples/syntax-highlighting && go run .`      |
+| [tree-sitter-highlighting](examples/tree-sitter-highlighting/) | Plug in tree-sitter for AST-based syntax highlighting (separate module)                    | `cd examples/tree-sitter-highlighting && go run .` |
 
-The catppuccin-theme and syntax-highlighting examples each have their own `go.mod` to keep `github.com/catppuccin/go` and `github.com/alecthomas/chroma` out of herald's core dependencies.
+The catppuccin-theme, syntax-highlighting, and tree-sitter-highlighting examples each have their own `go.mod` to keep external dependencies out of herald's core module.
 
 ## License
 
