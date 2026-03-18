@@ -117,6 +117,87 @@ fmt.Println(ty.OL("First", "Second", "Third"))
 
 `UL` uses a bullet character (default `•`). `OL` uses `1.`, `2.`, `3.` markers.
 
+### Nested lists
+
+`NestUL` and `NestOL` render hierarchical lists with configurable indentation, bullet cycling, and mixed nesting.
+
+**Constructors:**
+
+| Function                                | Description                         |
+| --------------------------------------- | ----------------------------------- |
+| `Item(text)`                            | Leaf item (no children)             |
+| `Items(texts...)`                       | Batch-convert strings to leaf items |
+| `ItemWithChildren(text, children...)`   | Item with unordered sub-list        |
+| `ItemWithOLChildren(text, children...)` | Item with ordered sub-list          |
+
+```go
+// Nested unordered list with mixed sub-lists
+fmt.Println(ty.NestUL(
+    herald.Item("Fruits"),
+    herald.ItemWithChildren("Vegetables",
+        herald.Item("Carrots"),
+        herald.Item("Peas"),
+    ),
+    herald.ItemWithOLChildren("Ranked Desserts",
+        herald.Item("Ice cream"),
+        herald.Item("Cake"),
+    ),
+))
+```
+
+```
+• Fruits
+• Vegetables
+  ◦ Carrots
+  ◦ Peas
+• Ranked Desserts
+  1. Ice cream
+  2. Cake
+```
+
+```go
+// Nested ordered list
+fmt.Println(ty.NestOL(
+    herald.Item("Introduction"),
+    herald.ItemWithOLChildren("Main Topics",
+        herald.Item("Architecture"),
+        herald.Item("Design"),
+    ),
+    herald.Item("Conclusion"),
+))
+```
+
+```
+1. Introduction
+2. Main Topics
+  1. Architecture
+  2. Design
+3. Conclusion
+```
+
+Enable `WithHierarchicalNumbers(true)` for outline-style numbering (`2.1.`, `2.2.`):
+
+```go
+ty := herald.New(herald.WithHierarchicalNumbers(true))
+
+fmt.Println(ty.NestOL(
+    herald.Item("Introduction"),
+    herald.ItemWithOLChildren("Main Topics",
+        herald.Item("Architecture"),
+        herald.Item("Design"),
+    ),
+    herald.Item("Conclusion"),
+))
+```
+
+```
+1. Introduction
+2. Main Topics
+  2.1. Architecture
+  2.2. Design
+3. Conclusion
+```
+
 ### Inline styles
 
 | Method                | Renders as                                                                  |
@@ -198,16 +279,19 @@ ty := herald.New(
 
 **Token options** — each accepts a `string` or `int`:
 
-| Option                   | Default | Description                         |
-| ------------------------ | ------- | ----------------------------------- |
-| `WithH1UnderlineChar(c)` | `═`     | Underline character for H1          |
-| `WithH2UnderlineChar(c)` | `─`     | Underline character for H2          |
-| `WithH3UnderlineChar(c)` | `·`     | Underline character for H3          |
-| `WithHeadingBarChar(c)`  | `▎`     | Bar prefix character for H4–H6      |
-| `WithBulletChar(c)`      | `•`     | Bullet character for `UL`           |
-| `WithHRChar(c)`          | `─`     | Character repeated for `HR`         |
-| `WithHRWidth(w)`         | `40`    | Width of `HR` in characters         |
-| `WithBlockquoteBar(c)`   | `│`     | Left bar character for `Blockquote` |
+| Option                         | Default            | Description                                           |
+| ------------------------------ | ------------------ | ----------------------------------------------------- |
+| `WithH1UnderlineChar(c)`       | `═`                | Underline character for H1                            |
+| `WithH2UnderlineChar(c)`       | `─`                | Underline character for H2                            |
+| `WithH3UnderlineChar(c)`       | `·`                | Underline character for H3                            |
+| `WithHeadingBarChar(c)`        | `▎`                | Bar prefix character for H4–H6                        |
+| `WithBulletChar(c)`            | `•`                | Bullet character for `UL`                             |
+| `WithNestedBulletChars(chars)` | `•`, `◦`, `▪`, `▹` | Bullet characters cycling per depth for `NestUL`      |
+| `WithListIndent(n)`            | `2`                | Spaces per nesting level for `NestUL`/`NestOL`        |
+| `WithHierarchicalNumbers(b)`   | `false`            | Outline-style numbering for nested `OL` (e.g. `2.1.`) |
+| `WithHRChar(c)`                | `─`                | Character repeated for `HR`                           |
+| `WithHRWidth(w)`               | `40`               | Width of `HR` in characters                           |
+| `WithBlockquoteBar(c)`         | `│`                | Left bar character for `Blockquote`                   |
 
 ### Code formatting
 
@@ -349,8 +433,9 @@ Runnable examples are in the [`examples/`](examples/) directory:
 | Example                                                        | Description                                                                                | Run                                                |
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------- |
 | [basic](examples/basic/)                                       | All elements with the default Rose Pine theme                                              | `go run ./examples/basic/`                         |
+| [lists](examples/lists/)                                       | Flat, nested, mixed, and hierarchical lists                                                | `go run ./examples/lists/`                         |
 | [custom-options](examples/custom-options/)                     | Override styles, decoration chars, and tokens via functional options                       | `go run ./examples/custom-options/`                |
-| [palette](examples/palette/)                                   | Generate a full theme from 8 colors using `ColorPalette`                                   | `go run ./examples/palette/`                       |
+| [palette](examples/palette/)                                   | Generate a full theme from 9 colors using `ColorPalette`                                   | `go run ./examples/palette/`                       |
 | [builtin-themes](examples/builtin-themes/)                     | Built-in themes (Dracula, Catppuccin, Base16, Charm) matching huh                          | `go run ./examples/builtin-themes/`                |
 | [catppuccin-theme](examples/catppuccin-theme/)                 | Build a full theme from the [Catppuccin](https://catppuccin.com) palette (separate module) | `cd examples/catppuccin-theme && go run .`         |
 | [syntax-highlighting](examples/syntax-highlighting/)           | Plug in chroma for syntax-highlighted code blocks (separate module)                        | `cd examples/syntax-highlighting && go run .`      |

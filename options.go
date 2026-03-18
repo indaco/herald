@@ -198,6 +198,34 @@ func WithBlockquoteBar(c string) Option {
 	return func(ty *Typography) { ty.theme.BlockquoteBar = c }
 }
 
+// --- Nested list options ---
+
+// WithListIndent sets the number of spaces per nesting level for nested lists.
+func WithListIndent(n int) Option {
+	return func(ty *Typography) {
+		if n > 0 {
+			ty.theme.ListIndent = n
+		}
+	}
+}
+
+// WithNestedBulletChars sets the bullet characters that cycle through
+// nesting levels in nested unordered lists.
+func WithNestedBulletChars(chars []string) Option {
+	return func(ty *Typography) {
+		if len(chars) > 0 {
+			ty.theme.NestedBulletChars = chars
+		}
+	}
+}
+
+// WithHierarchicalNumbers enables hierarchical numbering for nested ordered
+// lists (e.g. 1., 1.1, 1.2, 2., 2.1). When false (default), each nested
+// sub-list restarts numbering at 1.
+func WithHierarchicalNumbers(enabled bool) Option {
+	return func(ty *Typography) { ty.theme.HierarchicalNumbers = enabled }
+}
+
 // --- Callback options ---
 
 // WithCodeFormatter sets a callback that receives raw code and a language hint,

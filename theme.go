@@ -55,10 +55,13 @@ type Theme struct {
 	HeadingBarChar  string // left-bar prefix for H4-H6 (e.g. "▎")
 
 	// Configurable tokens
-	BulletChar    string // character used for unordered list bullets
-	HRChar        string // character repeated for horizontal rules
-	HRWidth       int    // width of horizontal rule in characters
-	BlockquoteBar string // left-bar character for blockquotes
+	BulletChar          string   // character used for unordered list bullets
+	NestedBulletChars   []string // bullet chars cycling per depth for nested lists
+	ListIndent          int      // spaces per nesting level for nested lists
+	HierarchicalNumbers bool     // use hierarchical numbering (e.g. 2.1, 2.2) for nested OL
+	HRChar              string   // character repeated for horizontal rules
+	HRWidth             int      // width of horizontal rule in characters
+	BlockquoteBar       string   // left-bar character for blockquotes
 }
 
 // Default token values used by DefaultTheme and ThemeFromPalette.
@@ -68,10 +71,15 @@ const (
 	DefaultH3UnderlineChar = "·"
 	DefaultHeadingBarChar  = "▎"
 	DefaultBulletChar      = "•"
+	DefaultListIndent      = 2
 	DefaultHRChar          = "─"
 	DefaultHRWidth         = 40
 	DefaultBlockquoteBar   = "│"
 )
+
+// DefaultNestedBulletChars is the default set of bullet characters that
+// cycle through nesting levels in nested unordered lists.
+var DefaultNestedBulletChars = []string{"•", "◦", "▪", "▹"}
 
 // hasDarkBG returns whether the terminal has a dark background.
 // It respects the HERALD_FORCE_DARK env var for tooling (e.g. screenshots).

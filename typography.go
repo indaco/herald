@@ -126,6 +126,54 @@ func (t *Typography) OL(items ...string) string {
 	return strings.Join(lines, "\n")
 }
 
+// NestUL renders a nested unordered list from the provided ListItems.
+func (t *Typography) NestUL(items ...ListItem) string {
+	return t.renderNestedList(items, Unordered, 0, "")
+}
+
+// NestOL renders a nested ordered list from the provided ListItems.
+func (t *Typography) NestOL(items ...ListItem) string {
+	return t.renderNestedList(items, Ordered, 0, "")
+}
+
+// renderNestedList recursively renders a list at the given depth.
+// The prefix parameter carries the parent number for hierarchical numbering
+// (e.g. "2" so children become "2.1", "2.2").
+func (t *Typography) renderNestedList(items []ListItem, kind ListKind, depth int, prefix string) string {
+	if len(items) == 0 {
+		return ""
+	}
+
+	indent := strings.Repeat(" ", depth*t.theme.ListIndent)
+	lines := make([]string, 0, len(items))
+
+	for i, item := range items {
+		var marker string
+		var childPrefix string
+		if kind == Ordered {
+			num := fmt.Sprintf("%d", i+1)
+			if t.theme.HierarchicalNumbers && prefix != "" {
+				num = prefix + "." + num
+			}
+			marker = t.theme.ListBullet.Render(num + ".")
+			childPrefix = num
+		} else {
+			chars := t.theme.NestedBulletChars
+			bullet := chars[depth%len(chars)]
+			marker = t.theme.ListBullet.Render(bullet)
+			childPrefix = ""
+		}
+		lines = append(lines, indent+marker+" "+t.theme.ListItem.Render(item.Text))
+
+		if len(item.Children) > 0 {
+			child := t.renderNestedList(item.Children, item.Kind, depth+1, childPrefix)
+			lines = append(lines, child)
+		}
+	}
+
+	return strings.Join(lines, "\n")
+}
+
 // Code renders inline code. If a language is provided and a CodeFormatter is
 // set on the theme, the formatter is applied before wrapping in the style.
 func (t *Typography) Code(text string, lang ...string) string {

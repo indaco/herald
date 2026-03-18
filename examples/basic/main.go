@@ -38,6 +38,32 @@ func main() {
 	fmt.Println(ty.OL("First item", "Second item", "Third item"))
 	fmt.Println()
 
+	// Nested lists
+	fmt.Println(ty.H3("Nested Unordered List"))
+	fmt.Println(ty.NestUL(
+		herald.Item("Fruits"),
+		herald.ItemWithChildren("Vegetables",
+			herald.Item("Carrots"),
+			herald.Item("Peas"),
+		),
+		herald.ItemWithOLChildren("Ranked Desserts",
+			herald.Item("Ice cream"),
+			herald.Item("Cake"),
+		),
+	))
+	fmt.Println()
+
+	fmt.Println(ty.H3("Nested Ordered List"))
+	fmt.Println(ty.NestOL(
+		herald.Item("Introduction"),
+		herald.ItemWithChildren("Main Topics",
+			herald.Item("Architecture"),
+			herald.Item("Design"),
+		),
+		herald.Item("Conclusion"),
+	))
+	fmt.Println()
+
 	// Inline styles
 	fmt.Println(ty.H3("Inline Styles"))
 	fmt.Println(ty.Bold("Bold text"))

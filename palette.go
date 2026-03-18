@@ -133,9 +133,11 @@ func ThemeFromPalette(p ColorPalette) Theme {
 		H3UnderlineChar: DefaultH3UnderlineChar,
 		HeadingBarChar:  DefaultHeadingBarChar,
 
-		BulletChar:    DefaultBulletChar,
-		HRChar:        DefaultHRChar,
-		HRWidth:       DefaultHRWidth,
-		BlockquoteBar: DefaultBlockquoteBar,
+		BulletChar:        DefaultBulletChar,
+		NestedBulletChars: DefaultNestedBulletChars,
+		ListIndent:        DefaultListIndent,
+		HRChar:            DefaultHRChar,
+		HRWidth:           DefaultHRWidth,
+		BlockquoteBar:     DefaultBlockquoteBar,
 	}
 }
