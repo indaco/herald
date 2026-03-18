@@ -1,6 +1,8 @@
 package herald
 
 import (
+	"os"
+
 	"charm.land/lipgloss/v2"
 )
 
@@ -59,121 +61,40 @@ type Theme struct {
 	BlockquoteBar string // left-bar character for blockquotes
 }
 
-// DefaultTheme returns a Theme with sensible default styles that look great
-// in most terminal environments.
-func DefaultTheme() Theme {
-	return Theme{
-		H1: lipgloss.NewStyle().
-			Bold(true).
-			Foreground(lipgloss.Color("#E0DEF4")).
-			MarginBottom(1),
+// Default token values used by DefaultTheme and ThemeFromPalette.
+const (
+	DefaultH1UnderlineChar = "═"
+	DefaultH2UnderlineChar = "─"
+	DefaultH3UnderlineChar = "·"
+	DefaultHeadingBarChar  = "▎"
+	DefaultBulletChar      = "•"
+	DefaultHRChar          = "─"
+	DefaultHRWidth         = 40
+	DefaultBlockquoteBar   = "│"
+)
 
-		H2: lipgloss.NewStyle().
-			Bold(true).
-			Foreground(lipgloss.Color("#C4A7E7")).
-			MarginBottom(1),
-
-		H3: lipgloss.NewStyle().
-			Bold(true).
-			Foreground(lipgloss.Color("#9CCFD8")).
-			MarginBottom(1),
-
-		H4: lipgloss.NewStyle().
-			Bold(true).
-			Foreground(lipgloss.Color("#F6C177")).
-			MarginBottom(1),
-
-		H5: lipgloss.NewStyle().
-			Bold(true).
-			Foreground(lipgloss.Color("#EA9A97")).
-			MarginBottom(1),
-
-		H6: lipgloss.NewStyle().
-			Bold(true).
-			Foreground(lipgloss.Color("#908CAA")).
-			MarginBottom(1),
-
-		Paragraph: lipgloss.NewStyle().
-			MarginBottom(1),
-
-		Blockquote: lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#908CAA")).
-			Italic(true).
-			PaddingLeft(2),
-
-		CodeInline: lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#E0DEF4")).
-			Background(lipgloss.Color("#393552")),
-
-		CodeBlock: lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#E0DEF4")).
-			Background(lipgloss.Color("#2A273F")).
-			Padding(1, 2).
-			MarginBottom(1),
-
-		HR: lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#6E6A86")),
-
-		ListBullet: lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#C4A7E7")),
-
-		ListItem: lipgloss.NewStyle(),
-
-		Bold: lipgloss.NewStyle().
-			Bold(true),
-
-		Italic: lipgloss.NewStyle().
-			Italic(true),
-
-		Underline: lipgloss.NewStyle().
-			Underline(true),
-
-		Strikethrough: lipgloss.NewStyle().
-			Strikethrough(true),
-
-		Small: lipgloss.NewStyle().
-			Faint(true),
-
-		Mark: lipgloss.NewStyle().
-			Background(lipgloss.Color("#F6C177")).
-			Foreground(lipgloss.Color("#191724")),
-
-		Link: lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#9CCFD8")).
-			Underline(true),
-
-		Kbd: lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#E0DEF4")).
-			Background(lipgloss.Color("#393552")).
-			Bold(true).
-			Padding(0, 1),
-
-		Abbr: lipgloss.NewStyle().
-			Underline(true).
-			Foreground(lipgloss.Color("#EA9A97")),
-
-		Sub: lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#908CAA")),
-
-		Sup: lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#908CAA")),
-
-		DT: lipgloss.NewStyle().
-			Bold(true).
-			Foreground(lipgloss.Color("#E0DEF4")),
-
-		DD: lipgloss.NewStyle().
-			PaddingLeft(4).
-			Foreground(lipgloss.Color("#908CAA")),
-
-		H1UnderlineChar: "═",
-		H2UnderlineChar: "─",
-		H3UnderlineChar: "·",
-		HeadingBarChar:  "▎",
-
-		BulletChar:    "\u2022",
-		HRChar:        "\u2500",
-		HRWidth:       40,
-		BlockquoteBar: "\u2502",
+// hasDarkBG returns whether the terminal has a dark background.
+// It respects the HERALD_FORCE_DARK env var for tooling (e.g. screenshots).
+func hasDarkBG() bool {
+	if v := os.Getenv("HERALD_FORCE_DARK"); v != "" {
+		return v == "1" || v == "true"
 	}
+	return lipgloss.HasDarkBackground(os.Stdin, os.Stdout)
+}
+
+// DefaultTheme returns a Theme based on the Rose Pine color palette.
+func DefaultTheme() Theme {
+	lightDark := lipgloss.LightDark(hasDarkBG())
+
+	return ThemeFromPalette(ColorPalette{
+		Primary:   lightDark(lipgloss.Color("#286983"), lipgloss.Color("#E0DEF4")), // pine / text
+		Secondary: lightDark(lipgloss.Color("#7c6f93"), lipgloss.Color("#C4A7E7")), // iris (deeper)
+		Tertiary:  lightDark(lipgloss.Color("#3e8fb0"), lipgloss.Color("#9CCFD8")), // foam (deeper)
+		Accent:    lightDark(lipgloss.Color("#D7827E"), lipgloss.Color("#F6C177")), // rose / gold
+		Highlight: lightDark(lipgloss.Color("#B4637A"), lipgloss.Color("#EA9A97")), // love
+		Muted:     lightDark(lipgloss.Color("#797593"), lipgloss.Color("#6E6A86")), // subtle
+		Text:      lightDark(lipgloss.Color("#575279"), lipgloss.Color("#E0DEF4")), // text
+		Surface:   lightDark(lipgloss.Color("#DFDAD9"), lipgloss.Color("#393552")), // overlay (darker)
+		Base:      lightDark(lipgloss.Color("#FAF4ED"), lipgloss.Color("#191724")), // base
+	})
 }
