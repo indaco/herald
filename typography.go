@@ -126,14 +126,25 @@ func (t *Typography) OL(items ...string) string {
 	return strings.Join(lines, "\n")
 }
 
-// Code renders inline code.
-func (t *Typography) Code(text string) string {
-	return t.theme.CodeInline.Render(text)
+// Code renders inline code. If a language is provided and a CodeFormatter is
+// set on the theme, the formatter is applied before wrapping in the style.
+func (t *Typography) Code(text string, lang ...string) string {
+	content := text
+	if t.theme.CodeFormatter != nil && len(lang) > 0 && lang[0] != "" {
+		content = t.theme.CodeFormatter(text, lang[0])
+	}
+	return t.theme.CodeInline.Render(content)
 }
 
-// CodeBlock renders a fenced code block.
-func (t *Typography) CodeBlock(text string) string {
-	return t.theme.CodeBlock.Render(text)
+// CodeBlock renders a fenced code block. If a language is provided and a
+// CodeFormatter is set on the theme, the formatter is applied before wrapping
+// in the style.
+func (t *Typography) CodeBlock(text string, lang ...string) string {
+	content := text
+	if t.theme.CodeFormatter != nil && len(lang) > 0 && lang[0] != "" {
+		content = t.theme.CodeFormatter(text, lang[0])
+	}
+	return t.theme.CodeBlock.Render(content)
 }
 
 // HR renders a horizontal rule.
