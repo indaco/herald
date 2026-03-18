@@ -192,6 +192,30 @@ func TestWithHeadingDecorationOptions(t *testing.T) {
 	})
 }
 
+func TestWithCodeFormatter(t *testing.T) {
+	formatter := func(code, language string) string {
+		return "[" + language + "]" + code
+	}
+
+	t.Run("sets formatter", func(t *testing.T) {
+		ty := New(WithCodeFormatter(formatter))
+		if ty.theme.CodeFormatter == nil {
+			t.Fatal("expected CodeFormatter to be set, got nil")
+		}
+		got := ty.theme.CodeFormatter("hello", "go")
+		if got != "[go]hello" {
+			t.Errorf("expected %q, got %q", "[go]hello", got)
+		}
+	})
+
+	t.Run("nil by default", func(t *testing.T) {
+		ty := New()
+		if ty.theme.CodeFormatter != nil {
+			t.Error("expected CodeFormatter to be nil by default")
+		}
+	})
+}
+
 func TestMultipleOptions(t *testing.T) {
 	ty := New(
 		WithHRWidth(80),

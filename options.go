@@ -189,3 +189,12 @@ func WithHRWidth(w int) Option {
 func WithBlockquoteBar(c string) Option {
 	return func(ty *Typography) { ty.theme.BlockquoteBar = c }
 }
+
+// --- Callback options ---
+
+// WithCodeFormatter sets a callback that receives raw code and a language hint,
+// returning syntax-highlighted text. The highlighted text is then wrapped in
+// the CodeInline or CodeBlock style for consistent padding/margins.
+func WithCodeFormatter(fn func(code, language string) string) Option {
+	return func(ty *Typography) { ty.theme.CodeFormatter = fn }
+}

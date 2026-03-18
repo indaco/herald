@@ -43,6 +43,9 @@ type Theme struct {
 	DT lipgloss.Style // definition term
 	DD lipgloss.Style // definition description
 
+	// Callbacks
+	CodeFormatter func(code, language string) string // optional syntax highlighter
+
 	// Heading decoration
 	H1UnderlineChar string // character repeated under H1 (e.g. "═")
 	H2UnderlineChar string // character repeated under H2 (e.g. "─")

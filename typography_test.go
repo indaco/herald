@@ -334,6 +334,76 @@ func TestCode(t *testing.T) {
 	}
 }
 
+func TestCodeWithLanguage(t *testing.T) {
+	formatter := func(code, language string) string {
+		return "«" + language + ":" + code + "»"
+	}
+
+	tests := []struct {
+		name      string
+		formatter func(code, language string) string
+		lang      []string
+		text      string
+		contains  string
+		excludes  string
+	}{
+		{
+			name:      "no formatter no lang",
+			formatter: nil,
+			lang:      nil,
+			text:      "x := 1",
+			contains:  "x := 1",
+		},
+		{
+			name:      "formatter but no lang",
+			formatter: formatter,
+			lang:      nil,
+			text:      "x := 1",
+			contains:  "x := 1",
+			excludes:  "«",
+		},
+		{
+			name:      "formatter with empty lang",
+			formatter: formatter,
+			lang:      []string{""},
+			text:      "x := 1",
+			contains:  "x := 1",
+			excludes:  "«",
+		},
+		{
+			name:      "formatter with lang",
+			formatter: formatter,
+			lang:      []string{"go"},
+			text:      "x := 1",
+			contains:  "«go:x := 1»",
+		},
+		{
+			name:      "nil formatter with lang",
+			formatter: nil,
+			lang:      []string{"go"},
+			text:      "x := 1",
+			contains:  "x := 1",
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			var opts []Option
+			if tc.formatter != nil {
+				opts = append(opts, WithCodeFormatter(tc.formatter))
+			}
+			ty := New(opts...)
+			result := stripANSI(ty.Code(tc.text, tc.lang...))
+			if !strings.Contains(result, tc.contains) {
+				t.Errorf("Code: expected %q in %q", tc.contains, result)
+			}
+			if tc.excludes != "" && strings.Contains(result, tc.excludes) {
+				t.Errorf("Code: did not expect %q in %q", tc.excludes, result)
+			}
+		})
+	}
+}
+
 func TestCodeBlock(t *testing.T) {
 	ty := newTestTypography()
 
@@ -341,6 +411,68 @@ func TestCodeBlock(t *testing.T) {
 	result := ty.CodeBlock(code)
 	if !strings.Contains(stripANSI(result), "func main()") {
 		t.Errorf("CodeBlock should contain source code, got %q", stripANSI(result))
+	}
+}
+
+func TestCodeBlockWithLanguage(t *testing.T) {
+	formatter := func(code, language string) string {
+		return "«" + language + ":" + code + "»"
+	}
+
+	tests := []struct {
+		name      string
+		formatter func(code, language string) string
+		lang      []string
+		text      string
+		contains  string
+		excludes  string
+	}{
+		{
+			name:      "no formatter no lang",
+			formatter: nil,
+			lang:      nil,
+			text:      "fmt.Println()",
+			contains:  "fmt.Println()",
+		},
+		{
+			name:      "formatter but no lang",
+			formatter: formatter,
+			lang:      nil,
+			text:      "fmt.Println()",
+			contains:  "fmt.Println()",
+			excludes:  "«",
+		},
+		{
+			name:      "formatter with lang",
+			formatter: formatter,
+			lang:      []string{"go"},
+			text:      "fmt.Println()",
+			contains:  "«go:fmt.Println()»",
+		},
+		{
+			name:      "nil formatter with lang",
+			formatter: nil,
+			lang:      []string{"go"},
+			text:      "fmt.Println()",
+			contains:  "fmt.Println()",
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			var opts []Option
+			if tc.formatter != nil {
+				opts = append(opts, WithCodeFormatter(tc.formatter))
+			}
+			ty := New(opts...)
+			result := stripANSI(ty.CodeBlock(tc.text, tc.lang...))
+			if !strings.Contains(result, tc.contains) {
+				t.Errorf("CodeBlock: expected %q in %q", tc.contains, result)
+			}
+			if tc.excludes != "" && strings.Contains(result, tc.excludes) {
+				t.Errorf("CodeBlock: did not expect %q in %q", tc.excludes, result)
+			}
+		})
 	}
 }
 
