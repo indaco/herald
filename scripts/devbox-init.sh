@@ -32,6 +32,7 @@ h2 "Go Tools"
 if command_exists go; then
     install_go_tool "modernize" "golang.org/x/tools/gopls/internal/analysis/modernize/cmd/modernize@latest"
     install_go_tool "govulncheck" "golang.org/x/vuln/cmd/govulncheck@latest"
+    install_go_tool "freeze" "github.com/charmbracelet/freeze@latest"
 
     # goreportcard-cli requires manual installation:
     # git clone https://github.com/gojp/goreportcard.git && cd goreportcard && make install && go install ./cmd/goreportcard-cli
