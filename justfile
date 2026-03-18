@@ -92,6 +92,9 @@ deps-update:
     {{ go }} get -u ./...
     {{ go }} mod tidy
 
-# Generate demo screenshot for README
+# Generate demo screenshot for README (side-by-side dark/light)
 demo-screenshot:
-    {{ go }} run ./examples/basic/ | {{ freeze }} --output demo.png --theme "Catppuccin Mocha" --padding 20 --window=false
+    HERALD_FORCE_DARK=1 {{ go }} run ./examples/basic/ | {{ freeze }} --output demo-dark.png --theme "Catppuccin Mocha" --padding 20 --window
+    HERALD_FORCE_DARK=0 {{ go }} run ./examples/basic/ | {{ freeze }} --output demo-light.png --theme "Catppuccin Latte" --background "#FFFFFF" --padding 20 --window
+    magick demo-dark.png demo-light.png +append \( +clone -background black -shadow 60x20+0+10 \) +swap -background none -layers merge +repage demo.png
+    rm -f demo-dark.png demo-light.png
