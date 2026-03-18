@@ -6,27 +6,8 @@ logger := "scripts/lib/logger.sh"
 # Go commands
 
 go := "go"
-gobuild := go + " build"
 goclean := go + " clean"
-
-# Binary name
-
-app_name := "sley"
-
-# Directories
-
-build_dir := "build"
-cmd_dir := "cmd/" + app_name
-
-# Build optimization flags
-# -s: Omit the symbol table and debug information
-# -w: Omit the DWARF symbol table
-
-ldflags := "-s -w"
-
-# -trimpath: Remove file system paths from binary
-
-buildflags := "-trimpath"
+freeze := "freeze"
 
 # Default - show help
 default:
@@ -35,7 +16,6 @@ default:
 # Clean the build directory and Go cache
 clean:
     @. {{ logger }} && log_info "Clean the build directory and Go cache"
-    rm -rf {{ build_dir }}
     rm -f coverage.out coverage.html
     {{ goclean }} -cache
 
@@ -43,7 +23,7 @@ clean:
 
 # Format code
 fmt:
-    @. {{ logger }} && log_info "Running fmt and gofumpt"
+    @. {{ logger }} && log_info "Running fmt"
     {{ go }} fmt ./...
 
 # Run go-modernize with auto-fix
@@ -111,3 +91,7 @@ deps-update:
     @. {{ logger }} && log_info "Running go update deps"
     {{ go }} get -u ./...
     {{ go }} mod tidy
+
+# Generate demo screenshot for README
+demo-screenshot:
+    {{ go }} run ./examples/basic/ | {{ freeze }} --output demo.png --theme "Catppuccin Mocha" --padding 20 --window=false
