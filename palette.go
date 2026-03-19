@@ -17,8 +17,8 @@ type ColorPalette struct {
 	Highlight color.Color // H5, abbreviations
 	Muted     color.Color // H6, comments, sub/sup, blockquote, DD, HR
 	Text      color.Color // default body text, paragraphs, list items, DT
-	Surface   color.Color // background for code inline, kbd
-	Base      color.Color // background for code blocks, mark foreground
+	Surface   color.Color // background for kbd
+	Base      color.Color // background for inline code, code blocks, mark foreground
 }
 
 // ThemeFromPalette constructs a complete Theme by mapping palette colors to
