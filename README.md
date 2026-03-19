@@ -41,10 +41,12 @@
   <b><a href="#examples">Examples</a></b>
 </p>
 
-Herald maps familiar HTML elements (H1–H6, P, Blockquote, UL, OL, Code, HR, Alerts, and inline styles) to styled terminal output, built on [lipgloss v2](https://github.com/charmbracelet/lipgloss). It ships with a Rose Pine-inspired default theme, built-in themes matching the Charm ecosystem (Dracula, Catppuccin, Base16, Charm) for seamless pairing with [huh](https://github.com/charmbracelet/huh) and other Charm-based TUIs, and full style customization via functional options and `ColorPalette`.
+Herald maps familiar HTML elements (H1–H6, P, Blockquote, UL, OL, Code, HR, Alerts, and inline styles) to styled terminal output, built on [lipgloss v2](https://github.com/charmbracelet/lipgloss).
+
+It ships with a Rose Pine-inspired default theme, built-in themes matching the Charm ecosystem (Dracula, Catppuccin, Base16, Charm) for seamless pairing with [huh](https://github.com/charmbracelet/huh) and other Charm-based TUIs, and full style customization via functional options and `ColorPalette`.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo.png" alt="herald demo output" width="600" />
+  <img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-hero.png" alt="herald demo output" width="600" />
 </p>
 
 <p align="center"><em>Default Rose Pine theme (dark and light). Herald also ships with Dracula, Catppuccin, Base16, and Charm themes.</em></p>
@@ -80,6 +82,13 @@ func main() {
 
 ### Headings
 
+<details>
+<summary><b>Preview</b></summary>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-headings.png" alt="headings demo" width="600" />
+</p>
+</details>
+
 H1–H3 render with a repeated underline character beneath the text. H4–H6 render with a left bar prefix.
 
 | Method     | Decoration | Default character |
@@ -93,6 +102,13 @@ H1–H3 render with a repeated underline character beneath the text. H4–H6 ren
 
 ### Block elements
 
+<details>
+<summary><b>Preview</b></summary>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-blocks.png" alt="blocks demo" width="600" />
+</p>
+</details>
+
 | Method                  | Description                                                                                 |
 | ----------------------- | ------------------------------------------------------------------------------------------- |
 | `P(text)`               | Paragraph                                                                                   |
@@ -100,15 +116,30 @@ H1–H3 render with a repeated underline character beneath the text. H4–H6 ren
 | `Code(text, lang)`      | Inline code with background highlight; `lang` is optional, used when a CodeFormatter is set |
 | `CodeBlock(text, lang)` | Fenced code block with padding; `lang` is optional, used when a CodeFormatter is set        |
 | `HR()`                  | Horizontal rule, configurable width and character                                           |
+| `DL(pairs)`             | Definition list from `[][2]string` pairs (term, description)                                |
+| `DT(text)`              | Definition term (standalone)                                                                |
+| `DD(text)`              | Definition description (standalone)                                                         |
 
 ```go
 fmt.Println(ty.Blockquote("First line.\nSecond line."))
 fmt.Println(ty.Code("os.Exit(1)"))
 fmt.Println(ty.CodeBlock("func main() {\n\tfmt.Println(\"hello\")\n}"))
 fmt.Println(ty.HR())
+
+fmt.Println(ty.DL([][2]string{
+    {"Go", "A statically typed, compiled language"},
+    {"Rust", "A systems programming language"},
+}))
 ```
 
 ### Lists
+
+<details>
+<summary><b>Preview</b></summary>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-lists.png" alt="lists demo" width="600" />
+</p>
+</details>
 
 ```go
 fmt.Println(ty.UL("Apples", "Bananas", "Cherries"))
@@ -145,7 +176,7 @@ fmt.Println(ty.NestUL(
 ))
 ```
 
-```
+```text
 • Fruits
 • Vegetables
   ◦ Carrots
@@ -167,7 +198,7 @@ fmt.Println(ty.NestOL(
 ))
 ```
 
-```
+```text
 1. Introduction
 2. Main Topics
   1. Architecture
@@ -190,7 +221,7 @@ fmt.Println(ty.NestOL(
 ))
 ```
 
-```
+```text
 1. Introduction
 2. Main Topics
   2.1. Architecture
@@ -199,6 +230,13 @@ fmt.Println(ty.NestOL(
 ```
 
 ### Inline styles
+
+<details>
+<summary><b>Preview</b></summary>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-inline.png" alt="inline styles demo" width="600" />
+</p>
+</details>
 
 | Method                | Renders as                                                                  |
 | --------------------- | --------------------------------------------------------------------------- |
@@ -224,12 +262,19 @@ fmt.Println(ty.Sub("2") + "O" + ty.Sup("n"))
 
 ### Alerts
 
+<details>
+<summary><b>Preview</b></summary>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-alerts.png" alt="alerts demo" width="600" />
+</p>
+</details>
+
 GitHub-style alert callouts with colored bars, icons, and labels. Five types are supported: Note, Tip, Important, Warning, and Caution.
 
 | Method            | Icon | Color  | Description                       |
 | ----------------- | ---- | ------ | --------------------------------- |
-| `Note(text)`      | `ℹ`  | Blue   | Useful information for the reader |
-| `Tip(text)`       | `✦`  | Green  | Helpful advice                    |
+| `Note(text)`      | `○`  | Blue   | Useful information for the reader |
+| `Tip(text)`       | `▸`  | Green  | Helpful advice                    |
 | `Important(text)` | `‼`  | Purple | Key information                   |
 | `Warning(text)`   | `⚠`  | Amber  | Urgent attention needed           |
 | `Caution(text)`   | `◇`  | Red    | Risk or negative outcomes         |
@@ -242,8 +287,8 @@ fmt.Println(ty.Warning("Urgent info that needs immediate attention."))
 fmt.Println(ty.Caution("Advises about risks or negative outcomes."))
 ```
 
-```
-│ ℹ Note
+```text
+│ ○ Note
 │ Useful information that users should know.
 
 │ ⚠ Warning
@@ -254,21 +299,6 @@ You can also use the generic `Alert` method with an `AlertType`:
 
 ```go
 fmt.Println(ty.Alert(herald.AlertNote, "Generic alert call."))
-```
-
-### Definition lists
-
-`DL` accepts a slice of `[2]string` pairs (term, description). `DT` and `DD` are available for individual rendering.
-
-```go
-fmt.Println(ty.DL([][2]string{
-    {"Go", "A statically typed, compiled language"},
-    {"Rust", "A systems programming language"},
-}))
-
-// Or individually:
-fmt.Println(ty.DT("Term"))
-fmt.Println(ty.DD("The description for that term."))
 ```
 
 ## Customization
@@ -495,7 +525,7 @@ Runnable examples are in the [`examples/`](examples/) directory:
 
 | Example                                                              | Description                                                                                | Run                                                   |
 | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------- |
-| [00_basic](examples/00_basic/)                                       | All elements with the default Rose Pine theme                                              | `go run ./examples/00_basic/`                         |
+| [00_default-theme](examples/00_default-theme/)                       | All elements with the default Rose Pine theme                                              | `go run ./examples/00_default-theme/`                 |
 | [01_lists](examples/01_lists/)                                       | Flat, nested, mixed, and hierarchical lists                                                | `go run ./examples/01_lists/`                         |
 | [02_alerts](examples/02_alerts/)                                     | GitHub-style alert callouts (Note, Tip, Important, Warning, Caution)                       | `go run ./examples/02_alerts/`                        |
 | [03_custom-options](examples/03_custom-options/)                     | Override styles, decoration chars, and tokens via functional options                       | `go run ./examples/03_custom-options/`                |
@@ -505,7 +535,7 @@ Runnable examples are in the [`examples/`](examples/) directory:
 | [07_syntax-highlighting](examples/07_syntax-highlighting/)           | Plug in chroma for syntax-highlighted code blocks (separate module)                        | `cd examples/07_syntax-highlighting && go run .`      |
 | [08_tree-sitter-highlighting](examples/08_tree-sitter-highlighting/) | Plug in tree-sitter for AST-based syntax highlighting (separate module)                    | `cd examples/08_tree-sitter-highlighting && go run .` |
 
-The 06_catppuccin-theme, 07_syntax-highlighting, and 08_tree-sitter-highlighting examples each have their own `go.mod` to keep external dependencies out of herald's core module.
+The _06_catppuccin-theme_, _07_syntax-highlighting_, and _08_tree-sitter-highlighting_ examples each have their own `go.mod` to keep external dependencies out of herald's core module.
 
 ## License
 
