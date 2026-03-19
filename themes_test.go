@@ -59,6 +59,7 @@ func assertThemeValid(t *testing.T, theme Theme) {
 			{"Sup", theme.Sup},
 			{"DT", theme.DT},
 			{"DD", theme.DD},
+			{"CodeLineNumber", theme.CodeLineNumber},
 		}
 
 		for i := range styles {
@@ -96,6 +97,12 @@ func assertThemeValid(t *testing.T, theme Theme) {
 		}
 		if theme.BlockquoteBar != DefaultBlockquoteBar {
 			t.Errorf("BlockquoteBar: expected %q, got %q", DefaultBlockquoteBar, theme.BlockquoteBar)
+		}
+		if theme.CodeLineNumberSep != DefaultCodeLineNumberSep {
+			t.Errorf("CodeLineNumberSep: expected %q, got %q", DefaultCodeLineNumberSep, theme.CodeLineNumberSep)
+		}
+		if theme.ShowLineNumbers {
+			t.Error("ShowLineNumbers should be false by default")
 		}
 	})
 

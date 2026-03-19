@@ -114,7 +114,7 @@ H1–H3 render with a repeated underline character beneath the text. H4–H6 ren
 | `P(text)`               | Paragraph                                                                                   |
 | `Blockquote(text)`      | Indented block with a left bar; supports multi-line input                                   |
 | `Code(text, lang)`      | Inline code with background highlight; `lang` is optional, used when a CodeFormatter is set |
-| `CodeBlock(text, lang)` | Fenced code block with padding; `lang` is optional, used when a CodeFormatter is set        |
+| `CodeBlock(text, lang)` | Fenced code block with padding; optional line numbers and syntax highlighting               |
 | `HR()`                  | Horizontal rule, configurable width and character                                           |
 | `DL(pairs)`             | Definition list from `[][2]string` pairs (term, description)                                |
 | `DT(text)`              | Definition term (standalone)                                                                |
@@ -319,28 +319,29 @@ ty := herald.New(
 
 **Style options** — each accepts a `lipgloss.Style`:
 
-| Option                        | Targets                |
-| ----------------------------- | ---------------------- |
-| `WithH1Style` – `WithH6Style` | Heading levels 1–6     |
-| `WithParagraphStyle`          | `P`                    |
-| `WithBlockquoteStyle`         | `Blockquote`           |
-| `WithCodeInlineStyle`         | `Code`                 |
-| `WithCodeBlockStyle`          | `CodeBlock`            |
-| `WithHRStyle`                 | `HR`                   |
-| `WithBoldStyle`               | `Bold`                 |
-| `WithItalicStyle`             | `Italic`               |
-| `WithUnderlineStyle`          | `Underline`            |
-| `WithStrikethroughStyle`      | `Strikethrough`        |
-| `WithSmallStyle`              | `Small`                |
-| `WithMarkStyle`               | `Mark`                 |
-| `WithLinkStyle`               | `Link`                 |
-| `WithKbdStyle`                | `Kbd`                  |
-| `WithAbbrStyle`               | `Abbr`                 |
-| `WithListBulletStyle`         | Bullet/number marker   |
-| `WithListItemStyle`           | List item text         |
-| `WithDTStyle`                 | Definition term        |
-| `WithDDStyle`                 | Definition description |
-| `WithAlertStyle(type, style)` | Alert of given type    |
+| Option                        | Targets                 |
+| ----------------------------- | ----------------------- |
+| `WithH1Style` – `WithH6Style` | Heading levels 1–6      |
+| `WithParagraphStyle`          | `P`                     |
+| `WithBlockquoteStyle`         | `Blockquote`            |
+| `WithCodeInlineStyle`         | `Code`                  |
+| `WithCodeBlockStyle`          | `CodeBlock`             |
+| `WithCodeLineNumberStyle`     | Code block line numbers |
+| `WithHRStyle`                 | `HR`                    |
+| `WithBoldStyle`               | `Bold`                  |
+| `WithItalicStyle`             | `Italic`                |
+| `WithUnderlineStyle`          | `Underline`             |
+| `WithStrikethroughStyle`      | `Strikethrough`         |
+| `WithSmallStyle`              | `Small`                 |
+| `WithMarkStyle`               | `Mark`                  |
+| `WithLinkStyle`               | `Link`                  |
+| `WithKbdStyle`                | `Kbd`                   |
+| `WithAbbrStyle`               | `Abbr`                  |
+| `WithListBulletStyle`         | Bullet/number marker    |
+| `WithListItemStyle`           | List item text          |
+| `WithDTStyle`                 | Definition term         |
+| `WithDDStyle`                 | Definition description  |
+| `WithAlertStyle(type, style)` | Alert of given type     |
 
 **Token options** — each accepts a `string` or `int`:
 
@@ -357,6 +358,8 @@ ty := herald.New(
 | `WithHRChar(c)`                | `─`                | Character repeated for `HR`                           |
 | `WithHRWidth(w)`               | `40`               | Width of `HR` in characters                           |
 | `WithBlockquoteBar(c)`         | `│`                | Left bar character for `Blockquote`                   |
+| `WithCodeLineNumbers(b)`       | `false`            | Show line numbers in `CodeBlock`                      |
+| `WithCodeLineNumberSep(c)`     | `│`                | Separator between line numbers and code               |
 | `WithAlertBar(c)`              | `│`                | Left bar character for alerts                         |
 | `WithAlertIcon(type, icon)`    | per-type           | Override icon for a specific alert type               |
 | `WithAlertLabel(type, label)`  | per-type           | Override label for a specific alert type              |
@@ -393,6 +396,34 @@ fmt.Println(ty.CodeBlock(`func main() { fmt.Println("hello") }`, "go"))
 
 See [`examples/07_syntax-highlighting/`](examples/07_syntax-highlighting/) for a chroma-based example, or [`examples/08_tree-sitter-highlighting/`](examples/08_tree-sitter-highlighting/) for a tree-sitter-based alternative.
 
+### Line numbers in code blocks
+
+Enable line numbers with `WithCodeLineNumbers(true)`. Line numbers are right-aligned, styled with `CodeLineNumber` (defaults to the `Muted` palette color), and separated from code by `CodeLineNumberSep` (default `│`). Line numbers are added after the `CodeFormatter` runs, so they work with syntax highlighting.
+
+```go
+ty := herald.New(
+    herald.WithCodeLineNumbers(true),
+)
+
+fmt.Println(ty.CodeBlock("func main() {\n\tfmt.Println(\"hello\")\n}", "go"))
+```
+
+```text
+1│ func main() {
+2│     fmt.Println("hello")
+3│ }
+```
+
+Customize the separator and style:
+
+```go
+ty := herald.New(
+    herald.WithCodeLineNumbers(true),
+    herald.WithCodeLineNumberSep(":"),
+    herald.WithCodeLineNumberStyle(lipgloss.NewStyle().Foreground(lipgloss.Color("#888888"))),
+)
+```
+
 ### Color palette
 
 `ColorPalette` lets you define 9 colors and derive a complete theme from them. All style fields map from this palette; configurable tokens use the same defaults as `DefaultTheme`.
@@ -404,10 +435,10 @@ See [`examples/07_syntax-highlighting/`](examples/07_syntax-highlighting/) for a
 | `Tertiary`  | H3, links                                            |
 | `Accent`    | H4, mark background                                  |
 | `Highlight` | H5, `Abbr`                                           |
-| `Muted`     | H6, blockquote, HR, sub/sup, `DD`                    |
+| `Muted`     | H6, blockquote, HR, sub/sup, `DD`, line numbers      |
 | `Text`      | Body text, paragraphs, list items, inline code, `DT` |
-| `Surface`   | Background for inline code and `Kbd`                 |
-| `Base`      | Background for code blocks; mark foreground          |
+| `Surface`   | Background for `Kbd`                                 |
+| `Base`      | Background for inline code, code blocks; mark fg     |
 
 Pass the palette to `New()` via `WithPalette`, or call `ThemeFromPalette` to construct a `Theme` value directly.
 

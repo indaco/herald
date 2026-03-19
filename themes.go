@@ -45,7 +45,7 @@ func CatppuccinTheme() Theme {
 		Tertiary:  lightDark(lipgloss.Color("#179299"), lipgloss.Color("#94e2d5")),
 		Accent:    lightDark(lipgloss.Color("#ea76cb"), lipgloss.Color("#f5c2e7")),
 		Highlight: lightDark(lipgloss.Color("#e64553"), lipgloss.Color("#eba0ac")),
-		Muted:     lightDark(lipgloss.Color("#7c7f93"), lipgloss.Color("#6c7086")),
+		Muted:     lightDark(lipgloss.Color("#9ca0b0"), lipgloss.Color("#6c7086")),
 		Text:      lightDark(lipgloss.Color("#4c4f69"), lipgloss.Color("#cdd6f4")),
 		Surface:   lightDark(lipgloss.Color("#ccd0da"), lipgloss.Color("#313244")),
 		Base:      lightDark(lipgloss.Color("#eff1f5"), lipgloss.Color("#1e1e2e")),

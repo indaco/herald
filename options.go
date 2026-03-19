@@ -277,6 +277,23 @@ func WithAlertPalette(ap AlertPalette) Option {
 	}
 }
 
+// --- Code block line number options ---
+
+// WithCodeLineNumbers enables or disables line numbers in code blocks.
+func WithCodeLineNumbers(enabled bool) Option {
+	return func(ty *Typography) { ty.theme.ShowLineNumbers = enabled }
+}
+
+// WithCodeLineNumberStyle overrides the style for code block line numbers.
+func WithCodeLineNumberStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.CodeLineNumber = s }
+}
+
+// WithCodeLineNumberSep sets the separator between line numbers and code content.
+func WithCodeLineNumberSep(sep string) Option {
+	return func(ty *Typography) { ty.theme.CodeLineNumberSep = sep }
+}
+
 // --- Callback options ---
 
 // WithCodeFormatter sets a callback that receives raw code and a language hint,

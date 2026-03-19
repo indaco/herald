@@ -54,6 +54,11 @@ type Theme struct {
 	H3UnderlineChar string // character repeated under H3 (e.g. "·")
 	HeadingBarChar  string // left-bar prefix for H4-H6 (e.g. "▎")
 
+	// Code block line numbers
+	CodeLineNumber    lipgloss.Style // style for line number text
+	CodeLineNumberSep string         // separator between line number and code (e.g. "│")
+	ShowLineNumbers   bool           // whether to render line numbers in CodeBlock
+
 	// Configurable tokens
 	BulletChar          string   // character used for unordered list bullets
 	NestedBulletChars   []string // bullet chars cycling per depth for nested lists
@@ -70,16 +75,17 @@ type Theme struct {
 
 // Default token values used by DefaultTheme and ThemeFromPalette.
 const (
-	DefaultH1UnderlineChar = "═"
-	DefaultH2UnderlineChar = "─"
-	DefaultH3UnderlineChar = "·"
-	DefaultHeadingBarChar  = "▎"
-	DefaultBulletChar      = "•"
-	DefaultListIndent      = 2
-	DefaultHRChar          = "─"
-	DefaultHRWidth         = 40
-	DefaultBlockquoteBar   = "│"
-	DefaultAlertBar        = "│"
+	DefaultH1UnderlineChar   = "═"
+	DefaultH2UnderlineChar   = "─"
+	DefaultH3UnderlineChar   = "·"
+	DefaultHeadingBarChar    = "▎"
+	DefaultBulletChar        = "•"
+	DefaultListIndent        = 2
+	DefaultHRChar            = "─"
+	DefaultHRWidth           = 40
+	DefaultBlockquoteBar     = "│"
+	DefaultAlertBar          = "│"
+	DefaultCodeLineNumberSep = "│"
 )
 
 // DefaultNestedBulletChars is the default set of bullet characters that
@@ -105,7 +111,7 @@ func DefaultTheme() Theme {
 		Tertiary:  lightDark(lipgloss.Color("#3e8fb0"), lipgloss.Color("#9CCFD8")), // foam (deeper)
 		Accent:    lightDark(lipgloss.Color("#D7827E"), lipgloss.Color("#F6C177")), // rose / gold
 		Highlight: lightDark(lipgloss.Color("#B4637A"), lipgloss.Color("#EA9A97")), // love
-		Muted:     lightDark(lipgloss.Color("#797593"), lipgloss.Color("#6E6A86")), // subtle
+		Muted:     lightDark(lipgloss.Color("#9893A5"), lipgloss.Color("#6E6A86")), // subtle
 		Text:      lightDark(lipgloss.Color("#575279"), lipgloss.Color("#E0DEF4")), // text
 		Surface:   lightDark(lipgloss.Color("#DFDAD9"), lipgloss.Color("#393552")), // overlay (darker)
 		Base:      lightDark(lipgloss.Color("#FAF4ED"), lipgloss.Color("#191724")), // base

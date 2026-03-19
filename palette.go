@@ -65,7 +65,7 @@ func ThemeFromPalette(p ColorPalette) Theme {
 
 		CodeInline: lipgloss.NewStyle().
 			Foreground(p.Text).
-			Background(p.Surface),
+			Background(p.Base),
 
 		CodeBlock: lipgloss.NewStyle().
 			Foreground(p.Text).
@@ -139,6 +139,9 @@ func ThemeFromPalette(p ColorPalette) Theme {
 		HRChar:            DefaultHRChar,
 		HRWidth:           DefaultHRWidth,
 		BlockquoteBar:     DefaultBlockquoteBar,
+
+		CodeLineNumber:    lipgloss.NewStyle().Foreground(p.Muted).Background(p.Base),
+		CodeLineNumberSep: DefaultCodeLineNumberSep,
 
 		AlertBar: DefaultAlertBar,
 		Alerts: DefaultAlertConfigs(AlertPalette{
