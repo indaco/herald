@@ -109,20 +109,18 @@ H1–H3 render with a repeated underline character beneath the text. H4–H6 ren
 </p>
 </details>
 
-| Method                  | Description                                                                                 |
-| ----------------------- | ------------------------------------------------------------------------------------------- |
-| `P(text)`               | Paragraph                                                                                   |
-| `Blockquote(text)`      | Indented block with a left bar; supports multi-line input                                   |
-| `Code(text, lang)`      | Inline code with background highlight; `lang` is optional, used when a CodeFormatter is set |
-| `CodeBlock(text, lang)` | Fenced code block with padding; optional line numbers and syntax highlighting               |
-| `HR()`                  | Horizontal rule, configurable width and character                                           |
-| `DL(pairs)`             | Definition list from `[][2]string` pairs (term, description)                                |
-| `DT(text)`              | Definition term (standalone)                                                                |
-| `DD(text)`              | Definition description (standalone)                                                         |
+| Method                  | Description                                                                   |
+| ----------------------- | ----------------------------------------------------------------------------- |
+| `P(text)`               | Paragraph                                                                     |
+| `Blockquote(text)`      | Indented block with a left bar; supports multi-line input                     |
+| `CodeBlock(text, lang)` | Fenced code block with padding; optional line numbers and syntax highlighting |
+| `HR()`                  | Horizontal rule, configurable width and character                             |
+| `DL(pairs)`             | Definition list from `[][2]string` pairs (term, description)                  |
+| `DT(text)`              | Definition term (standalone)                                                  |
+| `DD(text)`              | Definition description (standalone)                                           |
 
 ```go
 fmt.Println(ty.Blockquote("First line.\nSecond line."))
-fmt.Println(ty.Code("os.Exit(1)"))
 fmt.Println(ty.CodeBlock("func main() {\n\tfmt.Println(\"hello\")\n}"))
 fmt.Println(ty.HR())
 
@@ -238,19 +236,20 @@ fmt.Println(ty.NestOL(
 </p>
 </details>
 
-| Method                | Renders as                                                                  |
-| --------------------- | --------------------------------------------------------------------------- |
-| `Bold(text)`          | Bold                                                                        |
-| `Italic(text)`        | Italic                                                                      |
-| `Underline(text)`     | Underlined                                                                  |
-| `Strikethrough(text)` | Strikethrough                                                               |
-| `Small(text)`         | Faint                                                                       |
-| `Mark(text)`          | Highlighted background                                                      |
-| `Link(label, url)`    | Styled link; `url` is optional — when both differ, renders as `label (url)` |
-| `Kbd(text)`           | Keyboard key indicator                                                      |
-| `Abbr(abbr, desc)`    | Abbreviation; `desc` is optional, appended in parentheses                   |
-| `Sub(text)`           | Subscript, prefixed with `_`                                                |
-| `Sup(text)`           | Superscript, prefixed with `^`                                              |
+| Method                | Renders as                                                                                  |
+| --------------------- | ------------------------------------------------------------------------------------------- |
+| `Code(text, lang)`    | Inline code with background highlight; `lang` is optional, used when a CodeFormatter is set |
+| `Bold(text)`          | Bold                                                                                        |
+| `Italic(text)`        | Italic                                                                                      |
+| `Underline(text)`     | Underlined                                                                                  |
+| `Strikethrough(text)` | Strikethrough                                                                               |
+| `Small(text)`         | Faint                                                                                       |
+| `Mark(text)`          | Highlighted background                                                                      |
+| `Link(label, url)`    | Styled link; `url` is optional — when both differ, renders as `label (url)`                 |
+| `Kbd(text)`           | Keyboard key indicator                                                                      |
+| `Abbr(abbr, desc)`    | Abbreviation; `desc` is optional, appended in parentheses                                   |
+| `Sub(text)`           | Subscript, prefixed with `_`                                                                |
+| `Sup(text)`           | Superscript, prefixed with `^`                                                              |
 
 ```go
 fmt.Println(ty.Bold("important") + " and " + ty.Italic("nuanced"))
@@ -498,12 +497,16 @@ ty := herald.New(
 
 Herald ships with named themes that match [huh](https://charm.land/huh)'s built-in color palettes. Colors auto-adapt to light/dark terminal backgrounds using `lipgloss.HasDarkBackground`.
 
-| Function            | Palette                                                           |
-| ------------------- | ----------------------------------------------------------------- |
-| `DraculaTheme()`    | [Dracula](https://draculatheme.com)                               |
-| `CatppuccinTheme()` | [Catppuccin](https://catppuccin.com) Mocha (dark) / Latte (light) |
-| `Base16Theme()`     | ANSI base16 terminal colors                                       |
-| `CharmTheme()`      | [Charm](https://charm.sh) brand colors                            |
+<table align="center">
+  <tr>
+    <td align="center" valign="middle"><code>DraculaTheme()</code><br/><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-dracula.png" alt="Dracula theme demo" width="280" /></td>
+    <td align="center" valign="middle"><code>CatppuccinTheme()</code><br/><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-catppuccin.png" alt="Catppuccin theme demo" width="280" /></td>
+  </tr>
+  <tr>
+    <td align="center" valign="middle"><code>Base16Theme()</code><br/><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-base16.png" alt="Base16 theme demo" width="280" /></td>
+    <td align="center" valign="middle"><code>CharmTheme()</code><br/><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-charm.png" alt="Charm theme demo" width="280" /></td>
+  </tr>
+</table>
 
 ```go
 ty := herald.New(herald.WithTheme(herald.DraculaTheme()))

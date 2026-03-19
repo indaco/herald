@@ -1,4 +1,4 @@
-// Block-level elements: paragraph, blockquote, code, code block, HR, and definition list.
+// Block-level elements: paragraph, blockquote, code block, HR, and definition list.
 // Run: go run ./examples/demos/blocks/
 package main
 
@@ -15,13 +15,12 @@ func main() {
 	fmt.Println(ty.Blockquote("A wise person once said something profound.\nAnd then said more on a second line."))
 	fmt.Println()
 
-	fmt.Println(ty.Code("fmt.Println()"))
-	fmt.Println()
 	fmt.Println(ty.CodeBlock("func main() {\n\tfmt.Println(\"Hello, World!\")\n}"))
 
 	// Code block with line numbers
 	tyLN := herald.New(herald.WithCodeLineNumbers(true))
 	fmt.Println(tyLN.CodeBlock("package main\n\nimport \"fmt\"\n\nfunc main() {\n\tfmt.Println(\"Hello, World!\")\n}"))
+	fmt.Println()
 
 	fmt.Println(ty.HR())
 	fmt.Println()

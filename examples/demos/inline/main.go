@@ -17,6 +17,7 @@ func main() {
 	fmt.Println(ty.Strikethrough("Strikethrough text"))
 	fmt.Println(ty.Small("Small/faint text"))
 	fmt.Println(ty.Mark("Highlighted text"))
+	fmt.Println(ty.Code("inline code"))
 	fmt.Println(ty.Kbd("Ctrl") + " + " + ty.Kbd("C"))
 	fmt.Println(ty.Sub("subscript") + " and " + ty.Sup("superscript"))
 	fmt.Println()

@@ -106,6 +106,20 @@ _capture-demo section:
         +swap -background none -layers merge +repage assets/demos/demo-{{ section }}.png
     rm -f assets/demos/demo-{{ section }}-dark.png assets/demos/demo-{{ section }}-light.png
 
+# Capture and compose a single dark+light theme demo PNG
+_capture-theme-demo name:
+    mkdir -p assets/demos
+    HERALD_FORCE_DARK=1 {{ go }} run ./examples/demos/builtin-themes/{{ name }}/ \
+        | {{ freeze }} --output assets/demos/demo-theme-{{ name }}-dark.png \
+            --theme "Catppuccin Mocha" --padding 20 --window
+    HERALD_FORCE_DARK=0 {{ go }} run ./examples/demos/builtin-themes/{{ name }}/ \
+        | {{ freeze }} --output assets/demos/demo-theme-{{ name }}-light.png \
+            --theme "Catppuccin Latte" --background "#FFFFFF" --padding 20 --window
+    magick assets/demos/demo-theme-{{ name }}-dark.png assets/demos/demo-theme-{{ name }}-light.png \
+        +append \( +clone -background black -shadow 60x20+0+10 \) \
+        +swap -background none -layers merge +repage assets/demos/demo-theme-{{ name }}.png
+    rm -f assets/demos/demo-theme-{{ name }}-dark.png assets/demos/demo-theme-{{ name }}-light.png
+
 # Generate all demo screenshots
 demo-screenshot:
     just _capture-demo hero
@@ -114,3 +128,8 @@ demo-screenshot:
     just _capture-demo lists
     just _capture-demo alerts
     just _capture-demo inline
+    just _capture-theme-demo dracula
+    just _capture-theme-demo catppuccin
+    just _capture-theme-demo base16
+    just _capture-theme-demo charm
+
