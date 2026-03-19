@@ -111,7 +111,7 @@ func DefaultTheme() Theme {
 		Tertiary:  lightDark(lipgloss.Color("#3e8fb0"), lipgloss.Color("#9CCFD8")), // foam (deeper)
 		Accent:    lightDark(lipgloss.Color("#D7827E"), lipgloss.Color("#F6C177")), // rose / gold
 		Highlight: lightDark(lipgloss.Color("#B4637A"), lipgloss.Color("#EA9A97")), // love
-		Muted:     lightDark(lipgloss.Color("#797593"), lipgloss.Color("#6E6A86")), // subtle
+		Muted:     lightDark(lipgloss.Color("#9893A5"), lipgloss.Color("#6E6A86")), // subtle
 		Text:      lightDark(lipgloss.Color("#575279"), lipgloss.Color("#E0DEF4")), // text
 		Surface:   lightDark(lipgloss.Color("#DFDAD9"), lipgloss.Color("#393552")), // overlay (darker)
 		Base:      lightDark(lipgloss.Color("#FAF4ED"), lipgloss.Color("#191724")), // base

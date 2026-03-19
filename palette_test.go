@@ -150,8 +150,8 @@ func TestThemeFromPaletteColorMapping(t *testing.T) {
 			wantFg: p.Muted,
 		},
 		{
-			name: "CodeInline uses Text on Surface", style: theme.CodeInline,
-			wantFg: p.Text, wantBg: p.Surface, checkBg: true,
+			name: "CodeInline uses Text on Base", style: theme.CodeInline,
+			wantFg: p.Text, wantBg: p.Base, checkBg: true,
 		},
 		{
 			name: "CodeBlock uses Text on Base", style: theme.CodeBlock,

@@ -435,10 +435,10 @@ ty := herald.New(
 | `Tertiary`  | H3, links                                            |
 | `Accent`    | H4, mark background                                  |
 | `Highlight` | H5, `Abbr`                                           |
-| `Muted`     | H6, blockquote, HR, sub/sup, `DD`                    |
+| `Muted`     | H6, blockquote, HR, sub/sup, `DD`, line numbers      |
 | `Text`      | Body text, paragraphs, list items, inline code, `DT` |
-| `Surface`   | Background for inline code and `Kbd`                 |
-| `Base`      | Background for code blocks; mark foreground          |
+| `Surface`   | Background for `Kbd`                                 |
+| `Base`      | Background for inline code, code blocks; mark fg     |
 
 Pass the palette to `New()` via `WithPalette`, or call `ThemeFromPalette` to construct a `Theme` value directly.
 

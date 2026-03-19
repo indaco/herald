@@ -65,7 +65,7 @@ func ThemeFromPalette(p ColorPalette) Theme {
 
 		CodeInline: lipgloss.NewStyle().
 			Foreground(p.Text).
-			Background(p.Surface),
+			Background(p.Base),
 
 		CodeBlock: lipgloss.NewStyle().
 			Foreground(p.Text).
