@@ -92,9 +92,25 @@ deps-update:
     {{ go }} get -u ./...
     {{ go }} mod tidy
 
-# Generate demo screenshot for README (side-by-side dark/light)
+# Capture and compose a single dark+light demo PNG
+_capture-demo section:
+    mkdir -p assets/demos
+    HERALD_FORCE_DARK=1 {{ go }} run ./examples/demos/{{ section }}/ \
+        | {{ freeze }} --output assets/demos/demo-{{ section }}-dark.png \
+            --theme "Catppuccin Mocha" --padding 20 --window
+    HERALD_FORCE_DARK=0 {{ go }} run ./examples/demos/{{ section }}/ \
+        | {{ freeze }} --output assets/demos/demo-{{ section }}-light.png \
+            --theme "Catppuccin Latte" --background "#FFFFFF" --padding 20 --window
+    magick assets/demos/demo-{{ section }}-dark.png assets/demos/demo-{{ section }}-light.png \
+        +append \( +clone -background black -shadow 60x20+0+10 \) \
+        +swap -background none -layers merge +repage assets/demos/demo-{{ section }}.png
+    rm -f assets/demos/demo-{{ section }}-dark.png assets/demos/demo-{{ section }}-light.png
+
+# Generate all demo screenshots
 demo-screenshot:
-    HERALD_FORCE_DARK=1 {{ go }} run ./examples/basic/ | {{ freeze }} --output demo-dark.png --theme "Catppuccin Mocha" --padding 20 --window
-    HERALD_FORCE_DARK=0 {{ go }} run ./examples/basic/ | {{ freeze }} --output demo-light.png --theme "Catppuccin Latte" --background "#FFFFFF" --padding 20 --window
-    magick demo-dark.png demo-light.png +append \( +clone -background black -shadow 60x20+0+10 \) +swap -background none -layers merge +repage demo.png
-    rm -f demo-dark.png demo-light.png
+    just _capture-demo hero
+    just _capture-demo headings
+    just _capture-demo blocks
+    just _capture-demo lists
+    just _capture-demo alerts
+    just _capture-demo inline

@@ -38,3 +38,6 @@ coverage.txt
 # goreleaser:
 build
 dist/
+
+# screenshots
+assets/
