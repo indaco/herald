@@ -62,6 +62,10 @@ type Theme struct {
 	HRChar              string   // character repeated for horizontal rules
 	HRWidth             int      // width of horizontal rule in characters
 	BlockquoteBar       string   // left-bar character for blockquotes
+
+	// Alert elements
+	Alerts   map[AlertType]AlertConfig // per-type icon, label, and style
+	AlertBar string                    // left-bar character for alerts
 }
 
 // Default token values used by DefaultTheme and ThemeFromPalette.
@@ -75,6 +79,7 @@ const (
 	DefaultHRChar          = "─"
 	DefaultHRWidth         = 40
 	DefaultBlockquoteBar   = "│"
+	DefaultAlertBar        = "│"
 )
 
 // DefaultNestedBulletChars is the default set of bullet characters that
@@ -94,7 +99,7 @@ func hasDarkBG() bool {
 func DefaultTheme() Theme {
 	lightDark := lipgloss.LightDark(hasDarkBG())
 
-	return ThemeFromPalette(ColorPalette{
+	theme := ThemeFromPalette(ColorPalette{
 		Primary:   lightDark(lipgloss.Color("#286983"), lipgloss.Color("#E0DEF4")), // pine / text
 		Secondary: lightDark(lipgloss.Color("#7c6f93"), lipgloss.Color("#C4A7E7")), // iris (deeper)
 		Tertiary:  lightDark(lipgloss.Color("#3e8fb0"), lipgloss.Color("#9CCFD8")), // foam (deeper)
@@ -105,4 +110,16 @@ func DefaultTheme() Theme {
 		Surface:   lightDark(lipgloss.Color("#DFDAD9"), lipgloss.Color("#393552")), // overlay (darker)
 		Base:      lightDark(lipgloss.Color("#FAF4ED"), lipgloss.Color("#191724")), // base
 	})
+
+	// Override alerts with Rose Pine-specific colors:
+	// Note=foam/blue, Tip=pine/green, Important=iris/purple, Warning=gold/amber, Caution=love/red
+	theme.Alerts = DefaultAlertConfigs(AlertPalette{
+		Note:      lightDark(lipgloss.Color("#3e8fb0"), lipgloss.Color("#9CCFD8")), // foam
+		Tip:       lightDark(lipgloss.Color("#286983"), lipgloss.Color("#31748F")), // pine
+		Important: lightDark(lipgloss.Color("#7c6f93"), lipgloss.Color("#C4A7E7")), // iris
+		Warning:   lightDark(lipgloss.Color("#D7827E"), lipgloss.Color("#F6C177")), // gold
+		Caution:   lightDark(lipgloss.Color("#B4637A"), lipgloss.Color("#EB6F92")), // love
+	})
+
+	return theme
 }

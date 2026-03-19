@@ -10,7 +10,7 @@ import (
 func DraculaTheme() Theme {
 	lightDark := lipgloss.LightDark(hasDarkBG())
 
-	return ThemeFromPalette(ColorPalette{
+	theme := ThemeFromPalette(ColorPalette{
 		Primary:   lightDark(lipgloss.Color("#282a36"), lipgloss.Color("#f8f8f2")),
 		Secondary: lightDark(lipgloss.Color("#6d3fc0"), lipgloss.Color("#bd93f9")),
 		Tertiary:  lightDark(lipgloss.Color("#1e9651"), lipgloss.Color("#50fa7b")),
@@ -21,6 +21,16 @@ func DraculaTheme() Theme {
 		Surface:   lightDark(lipgloss.Color("#e8e6ef"), lipgloss.Color("#44475a")),
 		Base:      lightDark(lipgloss.Color("#f8f8f2"), lipgloss.Color("#282a36")),
 	})
+
+	theme.Alerts = DefaultAlertConfigs(AlertPalette{
+		Note:      lightDark(lipgloss.Color("#1e6e99"), lipgloss.Color("#8be9fd")), // cyan
+		Tip:       lightDark(lipgloss.Color("#1e9651"), lipgloss.Color("#50fa7b")), // green
+		Important: lightDark(lipgloss.Color("#6d3fc0"), lipgloss.Color("#bd93f9")), // purple
+		Warning:   lightDark(lipgloss.Color("#b07d2b"), lipgloss.Color("#f1fa8c")), // yellow
+		Caution:   lightDark(lipgloss.Color("#c44040"), lipgloss.Color("#ff5555")), // red
+	})
+
+	return theme
 }
 
 // CatppuccinTheme returns a Theme based on the Catppuccin color palette.
@@ -29,7 +39,7 @@ func DraculaTheme() Theme {
 func CatppuccinTheme() Theme {
 	lightDark := lipgloss.LightDark(hasDarkBG())
 
-	return ThemeFromPalette(ColorPalette{
+	theme := ThemeFromPalette(ColorPalette{
 		Primary:   lightDark(lipgloss.Color("#4c4f69"), lipgloss.Color("#cdd6f4")),
 		Secondary: lightDark(lipgloss.Color("#8839ef"), lipgloss.Color("#cba6f7")),
 		Tertiary:  lightDark(lipgloss.Color("#179299"), lipgloss.Color("#94e2d5")),
@@ -40,6 +50,16 @@ func CatppuccinTheme() Theme {
 		Surface:   lightDark(lipgloss.Color("#ccd0da"), lipgloss.Color("#313244")),
 		Base:      lightDark(lipgloss.Color("#eff1f5"), lipgloss.Color("#1e1e2e")),
 	})
+
+	theme.Alerts = DefaultAlertConfigs(AlertPalette{
+		Note:      lightDark(lipgloss.Color("#1e66f5"), lipgloss.Color("#89b4fa")), // blue
+		Tip:       lightDark(lipgloss.Color("#40a02b"), lipgloss.Color("#a6e3a1")), // green
+		Important: lightDark(lipgloss.Color("#8839ef"), lipgloss.Color("#cba6f7")), // mauve
+		Warning:   lightDark(lipgloss.Color("#fe640b"), lipgloss.Color("#fab387")), // peach
+		Caution:   lightDark(lipgloss.Color("#d20f39"), lipgloss.Color("#f38ba8")), // red
+	})
+
+	return theme
 }
 
 // Base16Theme returns a Theme based on ANSI base16 terminal colors.
@@ -48,7 +68,7 @@ func CatppuccinTheme() Theme {
 func Base16Theme() Theme {
 	lightDark := lipgloss.LightDark(hasDarkBG())
 
-	return ThemeFromPalette(ColorPalette{
+	theme := ThemeFromPalette(ColorPalette{
 		Primary:   lightDark(lipgloss.Color("0"), lipgloss.Color("7")),  // black / white
 		Secondary: lightDark(lipgloss.Color("4"), lipgloss.Color("6")),  // blue / cyan
 		Tertiary:  lightDark(lipgloss.Color("2"), lipgloss.Color("2")),  // green
@@ -59,6 +79,16 @@ func Base16Theme() Theme {
 		Surface:   lightDark(lipgloss.Color("15"), lipgloss.Color("8")), // bright white / bright black
 		Base:      lightDark(lipgloss.Color("7"), lipgloss.Color("0")),  // white / black
 	})
+
+	theme.Alerts = DefaultAlertConfigs(AlertPalette{
+		Note:      lightDark(lipgloss.Color("4"), lipgloss.Color("4")), // blue
+		Tip:       lightDark(lipgloss.Color("2"), lipgloss.Color("2")), // green
+		Important: lightDark(lipgloss.Color("5"), lipgloss.Color("5")), // magenta
+		Warning:   lightDark(lipgloss.Color("3"), lipgloss.Color("3")), // yellow
+		Caution:   lightDark(lipgloss.Color("1"), lipgloss.Color("1")), // red
+	})
+
+	return theme
 }
 
 // CharmTheme returns a Theme based on Charm's brand color palette.
@@ -67,7 +97,7 @@ func Base16Theme() Theme {
 func CharmTheme() Theme {
 	lightDark := lipgloss.LightDark(hasDarkBG())
 
-	return ThemeFromPalette(ColorPalette{
+	theme := ThemeFromPalette(ColorPalette{
 		Primary:   lightDark(lipgloss.Color("235"), lipgloss.Color("#FFFDF5")),
 		Secondary: lightDark(lipgloss.Color("#5A56E0"), lipgloss.Color("#7571F9")),
 		Tertiary:  lightDark(lipgloss.Color("#02BA84"), lipgloss.Color("#02BF87")),
@@ -78,4 +108,14 @@ func CharmTheme() Theme {
 		Surface:   lightDark(lipgloss.Color("254"), lipgloss.Color("238")),
 		Base:      lightDark(lipgloss.Color("252"), lipgloss.Color("236")),
 	})
+
+	theme.Alerts = DefaultAlertConfigs(AlertPalette{
+		Note:      lightDark(lipgloss.Color("#2563EB"), lipgloss.Color("#60A5FA")), // charm blue
+		Tip:       lightDark(lipgloss.Color("#02BA84"), lipgloss.Color("#02BF87")), // charm green
+		Important: lightDark(lipgloss.Color("#5A56E0"), lipgloss.Color("#7571F9")), // charm purple
+		Warning:   lightDark(lipgloss.Color("#C740B0"), lipgloss.Color("#F780E2")), // charm pink/warm
+		Caution:   lightDark(lipgloss.Color("#C7304E"), lipgloss.Color("#ED567A")), // charm red
+	})
+
+	return theme
 }

@@ -139,5 +139,14 @@ func ThemeFromPalette(p ColorPalette) Theme {
 		HRChar:            DefaultHRChar,
 		HRWidth:           DefaultHRWidth,
 		BlockquoteBar:     DefaultBlockquoteBar,
+
+		AlertBar: DefaultAlertBar,
+		Alerts: DefaultAlertConfigs(AlertPalette{
+			Note:      p.Tertiary,  // blue/cyan
+			Tip:       p.Tertiary,  // green in some palettes
+			Important: p.Secondary, // purple
+			Warning:   p.Accent,    // yellow/amber
+			Caution:   p.Highlight, // red
+		}),
 	}
 }
