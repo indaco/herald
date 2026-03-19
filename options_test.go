@@ -277,6 +277,38 @@ func TestWithCodeFormatter(t *testing.T) {
 	})
 }
 
+func TestWithCodeLineNumbers(t *testing.T) {
+	t.Run("enables line numbers", func(t *testing.T) {
+		ty := New(WithCodeLineNumbers(true))
+		if !ty.theme.ShowLineNumbers {
+			t.Error("expected ShowLineNumbers to be true")
+		}
+	})
+
+	t.Run("disabled by default", func(t *testing.T) {
+		ty := New()
+		if ty.theme.ShowLineNumbers {
+			t.Error("expected ShowLineNumbers to be false by default")
+		}
+	})
+}
+
+func TestWithCodeLineNumberStyle(t *testing.T) {
+	style := lipgloss.NewStyle().Foreground(lipgloss.Color("#FF0000"))
+	ty := New(WithCodeLineNumberStyle(style))
+	result := ty.theme.CodeLineNumber.Render("1")
+	if result == "" {
+		t.Error("expected non-empty render from CodeLineNumber style")
+	}
+}
+
+func TestWithCodeLineNumberSep(t *testing.T) {
+	ty := New(WithCodeLineNumberSep(":"))
+	if ty.theme.CodeLineNumberSep != ":" {
+		t.Errorf("expected separator %q, got %q", ":", ty.theme.CodeLineNumberSep)
+	}
+}
+
 func TestMultipleOptions(t *testing.T) {
 	ty := New(
 		WithHRWidth(80),

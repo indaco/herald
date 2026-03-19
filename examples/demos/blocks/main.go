@@ -19,6 +19,10 @@ func main() {
 	fmt.Println()
 	fmt.Println(ty.CodeBlock("func main() {\n\tfmt.Println(\"Hello, World!\")\n}"))
 
+	// Code block with line numbers
+	tyLN := herald.New(herald.WithCodeLineNumbers(true))
+	fmt.Println(tyLN.CodeBlock("package main\n\nimport \"fmt\"\n\nfunc main() {\n\tfmt.Println(\"Hello, World!\")\n}"))
+
 	fmt.Println(ty.HR())
 	fmt.Println()
 

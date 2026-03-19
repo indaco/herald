@@ -54,6 +54,11 @@ type Theme struct {
 	H3UnderlineChar string // character repeated under H3 (e.g. "·")
 	HeadingBarChar  string // left-bar prefix for H4-H6 (e.g. "▎")
 
+	// Code block line numbers
+	CodeLineNumber    lipgloss.Style // style for line number text
+	CodeLineNumberSep string         // separator between line number and code (e.g. "│")
+	ShowLineNumbers   bool           // whether to render line numbers in CodeBlock
+
 	// Configurable tokens
 	BulletChar          string   // character used for unordered list bullets
 	NestedBulletChars   []string // bullet chars cycling per depth for nested lists
@@ -70,16 +75,17 @@ type Theme struct {
 
 // Default token values used by DefaultTheme and ThemeFromPalette.
 const (
-	DefaultH1UnderlineChar = "═"
-	DefaultH2UnderlineChar = "─"
-	DefaultH3UnderlineChar = "·"
-	DefaultHeadingBarChar  = "▎"
-	DefaultBulletChar      = "•"
-	DefaultListIndent      = 2
-	DefaultHRChar          = "─"
-	DefaultHRWidth         = 40
-	DefaultBlockquoteBar   = "│"
-	DefaultAlertBar        = "│"
+	DefaultH1UnderlineChar   = "═"
+	DefaultH2UnderlineChar   = "─"
+	DefaultH3UnderlineChar   = "·"
+	DefaultHeadingBarChar    = "▎"
+	DefaultBulletChar        = "•"
+	DefaultListIndent        = 2
+	DefaultHRChar            = "─"
+	DefaultHRWidth           = 40
+	DefaultBlockquoteBar     = "│"
+	DefaultAlertBar          = "│"
+	DefaultCodeLineNumberSep = "│"
 )
 
 // DefaultNestedBulletChars is the default set of bullet characters that

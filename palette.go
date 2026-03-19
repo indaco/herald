@@ -140,6 +140,9 @@ func ThemeFromPalette(p ColorPalette) Theme {
 		HRWidth:           DefaultHRWidth,
 		BlockquoteBar:     DefaultBlockquoteBar,
 
+		CodeLineNumber:    lipgloss.NewStyle().Foreground(p.Muted).Background(p.Base),
+		CodeLineNumberSep: DefaultCodeLineNumberSep,
+
 		AlertBar: DefaultAlertBar,
 		Alerts: DefaultAlertConfigs(AlertPalette{
 			Note:      p.Tertiary,  // blue/cyan

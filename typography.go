@@ -186,13 +186,55 @@ func (t *Typography) Code(text string, lang ...string) string {
 
 // CodeBlock renders a fenced code block. If a language is provided and a
 // CodeFormatter is set on the theme, the formatter is applied before wrapping
-// in the style.
+// in the style. When ShowLineNumbers is true, line numbers are prepended to
+// each line after formatting.
 func (t *Typography) CodeBlock(text string, lang ...string) string {
 	content := text
 	if t.theme.CodeFormatter != nil && len(lang) > 0 && lang[0] != "" {
 		content = t.theme.CodeFormatter(text, lang[0])
 	}
+	if t.theme.ShowLineNumbers {
+		return t.codeBlockWithLineNumbers(content)
+	}
 	return t.theme.CodeBlock.Render(content)
+}
+
+// codeBlockWithLineNumbers renders a code block with a line number gutter.
+// It builds two separate columns (numbers+separator and code) and joins them
+// horizontally so that each column is independently styled, avoiding nested
+// Render calls that break background propagation.
+func (t *Typography) codeBlockWithLineNumbers(content string) string {
+	lines := strings.Split(content, "\n")
+	width := len(fmt.Sprintf("%d", len(lines)))
+
+	bg := t.theme.CodeBlock.GetBackground()
+
+	// Build the gutter column: right-aligned numbers + separator.
+	gutter := make([]string, len(lines))
+	for i := range lines {
+		gutter[i] = fmt.Sprintf("%*d", width, i+1) + t.theme.CodeLineNumberSep
+	}
+	gutterStyle := t.theme.CodeLineNumber.
+		Background(bg).
+		PaddingTop(1).
+		PaddingBottom(1).
+		PaddingLeft(2).
+		MarginBottom(t.theme.CodeBlock.GetMarginBottom())
+
+	// Build the code column with matching background and right padding.
+	codeStyle := lipgloss.NewStyle().
+		Foreground(t.theme.CodeBlock.GetForeground()).
+		Background(bg).
+		PaddingTop(1).
+		PaddingBottom(1).
+		PaddingRight(2).
+		PaddingLeft(1).
+		MarginBottom(t.theme.CodeBlock.GetMarginBottom())
+
+	return lipgloss.JoinHorizontal(lipgloss.Top,
+		gutterStyle.Render(strings.Join(gutter, "\n")),
+		codeStyle.Render(content),
+	)
 }
 
 // HR renders a horizontal rule.

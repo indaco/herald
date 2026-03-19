@@ -476,6 +476,70 @@ func TestCodeBlockWithLanguage(t *testing.T) {
 	}
 }
 
+func TestCodeBlockLineNumbers(t *testing.T) {
+	t.Run("disabled by default", func(t *testing.T) {
+		ty := New()
+		result := stripANSI(ty.CodeBlock("line one\nline two"))
+		if strings.Contains(result, "1│") || strings.Contains(result, "1"+DefaultCodeLineNumberSep) {
+			t.Errorf("line numbers should be off by default, got %q", result)
+		}
+	})
+
+	t.Run("enabled shows line numbers", func(t *testing.T) {
+		ty := New(WithCodeLineNumbers(true))
+		result := stripANSI(ty.CodeBlock("aaa\nbbb\nccc"))
+		if !strings.Contains(result, "1"+DefaultCodeLineNumberSep+" aaa") {
+			t.Errorf("expected line 1 with separator, got %q", result)
+		}
+		if !strings.Contains(result, "3"+DefaultCodeLineNumberSep+" ccc") {
+			t.Errorf("expected line 3 with separator, got %q", result)
+		}
+	})
+
+	t.Run("multi-digit line numbers are right-aligned", func(t *testing.T) {
+		lines := make([]string, 12)
+		for i := range lines {
+			lines[i] = "x"
+		}
+		ty := New(WithCodeLineNumbers(true))
+		result := stripANSI(ty.CodeBlock(strings.Join(lines, "\n")))
+		// Single-digit lines should be padded: " 1│"
+		if !strings.Contains(result, " 1"+DefaultCodeLineNumberSep) {
+			t.Errorf("expected padded single-digit line number, got %q", result)
+		}
+		if !strings.Contains(result, "12"+DefaultCodeLineNumberSep) {
+			t.Errorf("expected line 12, got %q", result)
+		}
+	})
+
+	t.Run("custom separator", func(t *testing.T) {
+		ty := New(WithCodeLineNumbers(true), WithCodeLineNumberSep(":"))
+		result := stripANSI(ty.CodeBlock("hello"))
+		if !strings.Contains(result, "1: hello") {
+			t.Errorf("expected custom separator ':', got %q", result)
+		}
+	})
+
+	t.Run("with formatter", func(t *testing.T) {
+		formatter := func(code, lang string) string {
+			return "[" + code + "]"
+		}
+		ty := New(WithCodeLineNumbers(true), WithCodeFormatter(formatter))
+		result := stripANSI(ty.CodeBlock("x := 1", "go"))
+		if !strings.Contains(result, "1"+DefaultCodeLineNumberSep+" [x := 1]") {
+			t.Errorf("line numbers should wrap formatted content, got %q", result)
+		}
+	})
+
+	t.Run("single line", func(t *testing.T) {
+		ty := New(WithCodeLineNumbers(true))
+		result := stripANSI(ty.CodeBlock("only one line"))
+		if !strings.Contains(result, "1"+DefaultCodeLineNumberSep+" only one line") {
+			t.Errorf("expected single line number, got %q", result)
+		}
+	})
+}
+
 // ---------------------------------------------------------------------------
 // HR
 // ---------------------------------------------------------------------------
