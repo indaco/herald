@@ -497,12 +497,16 @@ ty := herald.New(
 
 Herald ships with named themes that match [huh](https://charm.land/huh)'s built-in color palettes. Colors auto-adapt to light/dark terminal backgrounds using `lipgloss.HasDarkBackground`.
 
-| Function            | Palette                                                           |
-| ------------------- | ----------------------------------------------------------------- |
-| `DraculaTheme()`    | [Dracula](https://draculatheme.com)                               |
-| `CatppuccinTheme()` | [Catppuccin](https://catppuccin.com) Mocha (dark) / Latte (light) |
-| `Base16Theme()`     | ANSI base16 terminal colors                                       |
-| `CharmTheme()`      | [Charm](https://charm.sh) brand colors                            |
+<table align="center">
+  <tr>
+    <td align="center" valign="middle"><code>DraculaTheme()</code><br/><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-dracula.png" alt="Dracula theme demo" width="280" /></td>
+    <td align="center" valign="middle"><code>CatppuccinTheme()</code><br/><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-catppuccin.png" alt="Catppuccin theme demo" width="280" /></td>
+  </tr>
+  <tr>
+    <td align="center" valign="middle"><code>Base16Theme()</code><br/><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-base16.png" alt="Base16 theme demo" width="280" /></td>
+    <td align="center" valign="middle"><code>CharmTheme()</code><br/><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-charm.png" alt="Charm theme demo" width="280" /></td>
+  </tr>
+</table>
 
 ```go
 ty := herald.New(herald.WithTheme(herald.DraculaTheme()))
