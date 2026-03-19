@@ -1,11 +1,11 @@
-module github.com/indaco/herald/examples/catppuccin-theme
+module github.com/indaco/herald/examples/08_tree-sitter-highlighting
 
 go 1.25.0
 
 require (
 	charm.land/lipgloss/v2 v2.0.2
-	github.com/catppuccin/go v0.3.0
 	github.com/indaco/herald v0.0.0
+	github.com/smacker/go-tree-sitter v0.0.0-20240827094217-dd81d9e9be82
 )
 
 require (

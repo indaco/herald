@@ -6,7 +6,7 @@
 //
 // Run from the repository root:
 //
-//	cd examples/catppuccin-theme && go run .
+//	cd examples/06_catppuccin-theme && go run .
 package main
 
 import (

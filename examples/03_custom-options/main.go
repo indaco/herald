@@ -1,6 +1,6 @@
 // Customizing herald with functional options: override individual styles,
 // decoration characters, and tokens without replacing the entire theme.
-// Run: go run ./examples/custom-options/
+// Run: go run ./examples/03_custom-options/
 package main
 
 import (

@@ -5,7 +5,7 @@
 //
 // Run from the repository root:
 //
-//	cd examples/syntax-highlighting && go run .
+//	cd examples/07_syntax-highlighting && go run .
 package main
 
 import (

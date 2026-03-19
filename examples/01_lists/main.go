@@ -1,5 +1,5 @@
 // Demonstrates flat lists, nested lists, mixed nesting, and hierarchical numbering.
-// Run: go run ./examples/lists/
+// Run: go run ./examples/01_lists/
 package main
 
 import (

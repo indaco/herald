@@ -1,6 +1,6 @@
 // Using herald's built-in named themes that match huh's color palettes.
 // Colors auto-adapt to light/dark terminal backgrounds.
-// Run: go run ./examples/builtin-themes/
+// Run: go run ./examples/05_builtin-themes/
 package main
 
 import (

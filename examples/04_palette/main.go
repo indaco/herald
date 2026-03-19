@@ -1,5 +1,5 @@
 // Using ColorPalette to create a consistent theme from just 8 colors.
-// Run: go run ./examples/palette/
+// Run: go run ./examples/04_palette/
 package main
 
 import (

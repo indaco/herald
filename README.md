@@ -41,7 +41,7 @@
   <b><a href="#examples">Examples</a></b>
 </p>
 
-Herald maps familiar HTML elements (H1–H6, P, Blockquote, UL, OL, Code, HR, and inline styles) to styled terminal output, built on [lipgloss v2](https://github.com/charmbracelet/lipgloss). It ships with a Rose Pine-inspired default theme, built-in themes matching the Charm ecosystem (Dracula, Catppuccin, Base16, Charm) for seamless pairing with [huh](https://github.com/charmbracelet/huh) and other Charm-based TUIs, and full style customization via functional options and `ColorPalette`.
+Herald maps familiar HTML elements (H1–H6, P, Blockquote, UL, OL, Code, HR, Alerts, and inline styles) to styled terminal output, built on [lipgloss v2](https://github.com/charmbracelet/lipgloss). It ships with a Rose Pine-inspired default theme, built-in themes matching the Charm ecosystem (Dracula, Catppuccin, Base16, Charm) for seamless pairing with [huh](https://github.com/charmbracelet/huh) and other Charm-based TUIs, and full style customization via functional options and `ColorPalette`.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo.png" alt="herald demo output" width="600" />
@@ -222,6 +222,40 @@ fmt.Println(ty.Abbr("CSS", "Cascading Style Sheets"))
 fmt.Println(ty.Sub("2") + "O" + ty.Sup("n"))
 ```
 
+### Alerts
+
+GitHub-style alert callouts with colored bars, icons, and labels. Five types are supported: Note, Tip, Important, Warning, and Caution.
+
+| Method            | Icon | Color  | Description                       |
+| ----------------- | ---- | ------ | --------------------------------- |
+| `Note(text)`      | `ℹ`  | Blue   | Useful information for the reader |
+| `Tip(text)`       | `✦`  | Green  | Helpful advice                    |
+| `Important(text)` | `‼`  | Purple | Key information                   |
+| `Warning(text)`   | `⚠`  | Amber  | Urgent attention needed           |
+| `Caution(text)`   | `◇`  | Red    | Risk or negative outcomes         |
+
+```go
+fmt.Println(ty.Note("Useful information that users should know."))
+fmt.Println(ty.Tip("Helpful advice for doing things better."))
+fmt.Println(ty.Important("Key information users need to know."))
+fmt.Println(ty.Warning("Urgent info that needs immediate attention."))
+fmt.Println(ty.Caution("Advises about risks or negative outcomes."))
+```
+
+```
+│ ℹ Note
+│ Useful information that users should know.
+
+│ ⚠ Warning
+│ Urgent info that needs immediate attention.
+```
+
+You can also use the generic `Alert` method with an `AlertType`:
+
+```go
+fmt.Println(ty.Alert(herald.AlertNote, "Generic alert call."))
+```
+
 ### Definition lists
 
 `DL` accepts a slice of `[2]string` pairs (term, description). `DT` and `DD` are available for individual rendering.
@@ -276,6 +310,7 @@ ty := herald.New(
 | `WithListItemStyle`           | List item text         |
 | `WithDTStyle`                 | Definition term        |
 | `WithDDStyle`                 | Definition description |
+| `WithAlertStyle(type, style)` | Alert of given type    |
 
 **Token options** — each accepts a `string` or `int`:
 
@@ -292,6 +327,9 @@ ty := herald.New(
 | `WithHRChar(c)`                | `─`                | Character repeated for `HR`                           |
 | `WithHRWidth(w)`               | `40`               | Width of `HR` in characters                           |
 | `WithBlockquoteBar(c)`         | `│`                | Left bar character for `Blockquote`                   |
+| `WithAlertBar(c)`              | `│`                | Left bar character for alerts                         |
+| `WithAlertIcon(type, icon)`    | per-type           | Override icon for a specific alert type               |
+| `WithAlertLabel(type, label)`  | per-type           | Override label for a specific alert type              |
 
 ### Code formatting
 
@@ -323,7 +361,7 @@ ty := herald.New(
 fmt.Println(ty.CodeBlock(`func main() { fmt.Println("hello") }`, "go"))
 ```
 
-See [`examples/syntax-highlighting/`](examples/syntax-highlighting/) for a chroma-based example, or [`examples/tree-sitter-highlighting/`](examples/tree-sitter-highlighting/) for a tree-sitter-based alternative.
+See [`examples/07_syntax-highlighting/`](examples/07_syntax-highlighting/) for a chroma-based example, or [`examples/08_tree-sitter-highlighting/`](examples/08_tree-sitter-highlighting/) for a tree-sitter-based alternative.
 
 ### Color palette
 
@@ -358,6 +396,31 @@ palette := herald.ColorPalette{
 }
 
 ty := herald.New(herald.WithPalette(palette))
+```
+
+#### Alert palette
+
+`AlertPalette` lets you override the 5 alert colors independently from the main `ColorPalette`:
+
+```go
+ty := herald.New(
+    herald.WithAlertPalette(herald.AlertPalette{
+        Note:      lipgloss.Color("#0969DA"),
+        Tip:       lipgloss.Color("#1A7F37"),
+        Important: lipgloss.Color("#8250DF"),
+        Warning:   lipgloss.Color("#9A6700"),
+        Caution:   lipgloss.Color("#CF222E"),
+    }),
+)
+```
+
+Individual alert icons and labels can also be customized:
+
+```go
+ty := herald.New(
+    herald.WithAlertIcon(herald.AlertTip, "💡"),
+    herald.WithAlertLabel(herald.AlertNote, "Info"),
+)
 ```
 
 You can combine `WithPalette` with other options to override specific fields after the palette is applied:
@@ -430,18 +493,19 @@ ty := herald.New(herald.WithTheme(custom))
 
 Runnable examples are in the [`examples/`](examples/) directory:
 
-| Example                                                        | Description                                                                                | Run                                                |
-| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------- |
-| [basic](examples/basic/)                                       | All elements with the default Rose Pine theme                                              | `go run ./examples/basic/`                         |
-| [lists](examples/lists/)                                       | Flat, nested, mixed, and hierarchical lists                                                | `go run ./examples/lists/`                         |
-| [custom-options](examples/custom-options/)                     | Override styles, decoration chars, and tokens via functional options                       | `go run ./examples/custom-options/`                |
-| [palette](examples/palette/)                                   | Generate a full theme from 9 colors using `ColorPalette`                                   | `go run ./examples/palette/`                       |
-| [builtin-themes](examples/builtin-themes/)                     | Built-in themes (Dracula, Catppuccin, Base16, Charm) matching huh                          | `go run ./examples/builtin-themes/`                |
-| [catppuccin-theme](examples/catppuccin-theme/)                 | Build a full theme from the [Catppuccin](https://catppuccin.com) palette (separate module) | `cd examples/catppuccin-theme && go run .`         |
-| [syntax-highlighting](examples/syntax-highlighting/)           | Plug in chroma for syntax-highlighted code blocks (separate module)                        | `cd examples/syntax-highlighting && go run .`      |
-| [tree-sitter-highlighting](examples/tree-sitter-highlighting/) | Plug in tree-sitter for AST-based syntax highlighting (separate module)                    | `cd examples/tree-sitter-highlighting && go run .` |
+| Example                                                              | Description                                                                                | Run                                                   |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------- |
+| [00_basic](examples/00_basic/)                                       | All elements with the default Rose Pine theme                                              | `go run ./examples/00_basic/`                         |
+| [01_lists](examples/01_lists/)                                       | Flat, nested, mixed, and hierarchical lists                                                | `go run ./examples/01_lists/`                         |
+| [02_alerts](examples/02_alerts/)                                     | GitHub-style alert callouts (Note, Tip, Important, Warning, Caution)                       | `go run ./examples/02_alerts/`                        |
+| [03_custom-options](examples/03_custom-options/)                     | Override styles, decoration chars, and tokens via functional options                       | `go run ./examples/03_custom-options/`                |
+| [04_palette](examples/04_palette/)                                   | Generate a full theme from 9 colors using `ColorPalette`                                   | `go run ./examples/04_palette/`                       |
+| [05_builtin-themes](examples/05_builtin-themes/)                     | Built-in themes (Dracula, Catppuccin, Base16, Charm) matching huh                          | `go run ./examples/05_builtin-themes/`                |
+| [06_catppuccin-theme](examples/06_catppuccin-theme/)                 | Build a full theme from the [Catppuccin](https://catppuccin.com) palette (separate module) | `cd examples/06_catppuccin-theme && go run .`         |
+| [07_syntax-highlighting](examples/07_syntax-highlighting/)           | Plug in chroma for syntax-highlighted code blocks (separate module)                        | `cd examples/07_syntax-highlighting && go run .`      |
+| [08_tree-sitter-highlighting](examples/08_tree-sitter-highlighting/) | Plug in tree-sitter for AST-based syntax highlighting (separate module)                    | `cd examples/08_tree-sitter-highlighting && go run .` |
 
-The catppuccin-theme, syntax-highlighting, and tree-sitter-highlighting examples each have their own `go.mod` to keep external dependencies out of herald's core module.
+The 06_catppuccin-theme, 07_syntax-highlighting, and 08_tree-sitter-highlighting examples each have their own `go.mod` to keep external dependencies out of herald's core module.
 
 ## License
 

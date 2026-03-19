@@ -1,5 +1,5 @@
 // Basic usage of herald with the default Rose Pine theme.
-// Run: go run ./examples/basic/
+// Run: go run ./examples/00_basic/
 package main
 
 import (
@@ -82,6 +82,19 @@ func main() {
 	fmt.Println(ty.Link("Go website", "https://go.dev"))
 	fmt.Println(ty.Abbr("HTML"))
 	fmt.Println(ty.Abbr("CSS", "Cascading Style Sheets"))
+	fmt.Println()
+
+	// Alerts
+	fmt.Println(ty.H3("Alerts"))
+	fmt.Println(ty.Note("Useful information that users should know, even when skimming content."))
+	fmt.Println()
+	fmt.Println(ty.Tip("Helpful advice for doing things better or more easily."))
+	fmt.Println()
+	fmt.Println(ty.Important("Key information users need to know to achieve their goal."))
+	fmt.Println()
+	fmt.Println(ty.Warning("Urgent info that needs immediate user attention to avoid problems."))
+	fmt.Println()
+	fmt.Println(ty.Caution("Advises about risks or negative outcomes of certain actions."))
 	fmt.Println()
 
 	// Definition list

@@ -5,7 +5,7 @@
 //
 // Run from the repository root:
 //
-//	cd examples/tree-sitter-highlighting && go run .
+//	cd examples/08_tree-sitter-highlighting && go run .
 package main
 
 import (
