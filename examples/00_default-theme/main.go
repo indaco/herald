@@ -23,8 +23,6 @@ func main() {
 	fmt.Println(ty.P("This is a paragraph. It wraps text with the paragraph style."))
 	fmt.Println(ty.Blockquote("A wise person once said something profound.\nAnd then said more on a second line."))
 	fmt.Println()
-	fmt.Println(ty.Code("fmt.Println()"))
-	fmt.Println()
 	fmt.Println(ty.CodeBlock("func main() {\n\tfmt.Println(\"Hello, World!\")\n}"))
 	fmt.Println(ty.HR())
 	fmt.Println()
@@ -66,6 +64,7 @@ func main() {
 
 	// Inline styles
 	fmt.Println(ty.H3("Inline Styles"))
+	fmt.Println(ty.Code("fmt.Println()"))
 	fmt.Println(ty.Bold("Bold text"))
 	fmt.Println(ty.Italic("Italic text"))
 	fmt.Println(ty.Underline("Underlined text"))

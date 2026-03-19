@@ -21,8 +21,6 @@ func main() {
 	fmt.Println()
 
 	// Code
-	fmt.Println(ty.Code("go get github.com/indaco/herald"))
-	fmt.Println()
 	fmt.Println(ty.CodeBlock("ty := herald.New()\nfmt.Println(ty.H1(\"Hello, World!\"))"))
 
 	fmt.Println(ty.HR())
