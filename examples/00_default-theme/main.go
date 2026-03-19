@@ -1,5 +1,5 @@
-// Basic usage of herald with the default Rose Pine theme.
-// Run: go run ./examples/00_basic/
+// herald with the default Rose Pine theme.
+// Run: go run ./examples/00_default-theme/
 package main
 
 import (
