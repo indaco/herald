@@ -28,8 +28,8 @@ type AlertConfig struct {
 // Default icon constants for each alert type. All are plain Unicode (no emoji)
 // for broad terminal compatibility.
 const (
-	DefaultAlertNoteIcon      = "ℹ"
-	DefaultAlertTipIcon       = "✦"
+	DefaultAlertNoteIcon      = "○"
+	DefaultAlertTipIcon       = "▸"
 	DefaultAlertImportantIcon = "‼"
 	DefaultAlertWarningIcon   = "⚠"
 	DefaultAlertCautionIcon   = "◇"
