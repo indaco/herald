@@ -69,15 +69,15 @@ func Base16Theme() Theme {
 	lightDark := lipgloss.LightDark(hasDarkBG())
 
 	theme := ThemeFromPalette(ColorPalette{
-		Primary:   lightDark(lipgloss.Color("0"), lipgloss.Color("7")),  // black / white
-		Secondary: lightDark(lipgloss.Color("4"), lipgloss.Color("6")),  // blue / cyan
-		Tertiary:  lightDark(lipgloss.Color("2"), lipgloss.Color("2")),  // green
-		Accent:    lightDark(lipgloss.Color("5"), lipgloss.Color("3")),  // magenta / yellow
-		Highlight: lightDark(lipgloss.Color("1"), lipgloss.Color("1")),  // red
-		Muted:     lightDark(lipgloss.Color("8"), lipgloss.Color("8")),  // bright black
-		Text:      lightDark(lipgloss.Color("0"), lipgloss.Color("7")),  // black / white
-		Surface:   lightDark(lipgloss.Color("15"), lipgloss.Color("8")), // bright white / bright black
-		Base:      lightDark(lipgloss.Color("7"), lipgloss.Color("0")),  // white / black
+		Primary:   lightDark(lipgloss.Color("0"), lipgloss.Color("7")), // black / white
+		Secondary: lightDark(lipgloss.Color("4"), lipgloss.Color("6")), // blue / cyan
+		Tertiary:  lightDark(lipgloss.Color("2"), lipgloss.Color("2")), // green
+		Accent:    lightDark(lipgloss.Color("5"), lipgloss.Color("3")), // magenta / yellow
+		Highlight: lightDark(lipgloss.Color("1"), lipgloss.Color("1")), // red
+		Muted:     lightDark(lipgloss.Color("8"), lipgloss.Color("8")), // bright black
+		Text:      lightDark(lipgloss.Color("0"), lipgloss.Color("7")), // black / white
+		Surface:   lightDark(lipgloss.Color("7"), lipgloss.Color("8")), // white / bright black
+		Base:      lightDark(lipgloss.Color("7"), lipgloss.Color("0")), // white / black
 	})
 
 	theme.Alerts = DefaultAlertConfigs(AlertPalette{
@@ -106,7 +106,7 @@ func CharmTheme() Theme {
 		Muted:     lightDark(lipgloss.Color("243"), lipgloss.Color("243")),
 		Text:      lightDark(lipgloss.Color("235"), lipgloss.Color("#FFFDF5")),
 		Surface:   lightDark(lipgloss.Color("254"), lipgloss.Color("238")),
-		Base:      lightDark(lipgloss.Color("252"), lipgloss.Color("236")),
+		Base:      lightDark(lipgloss.Color("255"), lipgloss.Color("236")),
 	})
 
 	theme.Alerts = DefaultAlertConfigs(AlertPalette{
