@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). The changelog is generated and managed by [sley](https://github.com/indaco/sley).
 
+## v0.4.0 - 2026-03-19
+
+### 🚀 Enhancements
+
+- add line number support in code blocks ([aef197d](https://github.com/indaco/herald/commit/aef197d)) ([#7](https://github.com/indaco/herald/pull/7))
+
+### 🩹 Fixes
+
+- theme colors ([5604a94](https://github.com/indaco/herald/commit/5604a94)) ([#8](https://github.com/indaco/herald/pull/8))
+
+### 📖 Documentation
+
+- add demos for built in themes ([cfdf21e](https://github.com/indaco/herald/commit/cfdf21e)) ([#9](https://github.com/indaco/herald/pull/9))
+
+**Full Changelog:** [v0.3.0...v0.4.0](https://github.com/indaco/herald/compare/v0.3.0...v0.4.0)
+
+### ❤️ Contributors
+
+- [@indaco](https://github.com/indaco)
+
 ## v0.3.0 - 2026-03-19
 
 ### 🚀 Enhancements

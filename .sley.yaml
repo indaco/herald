@@ -19,3 +19,4 @@ plugins:
     use-default-icons: true
     contributors:
       enabled: true
+      show-name: false
