@@ -273,6 +273,52 @@ func (t *Typography) Sup(text string) string {
 }
 
 // ---------------------------------------------------------------------------
+// Alerts
+// ---------------------------------------------------------------------------
+
+// Alert renders a GitHub-style alert callout. The header line (bar + icon +
+// label) is bold + colored; content lines have a colored bar but unstyled
+// text, matching GitHub's visual style. If the alert type is not configured,
+// it falls back to blockquote rendering.
+func (t *Typography) Alert(at AlertType, text string) string {
+	cfg, ok := t.theme.Alerts[at]
+	if !ok {
+		return t.Blockquote(text)
+	}
+
+	bar := t.theme.AlertBar
+	style := cfg.Style
+
+	// Header: bar + icon + label, rendered bold + colored
+	headerStyle := style.Bold(true)
+	header := headerStyle.Render(bar + " " + cfg.Icon + " " + cfg.Label)
+
+	// Content: colored bar + unstyled text (matching GitHub alerts)
+	lines := strings.Split(text, "\n")
+	content := make([]string, len(lines))
+	for i, line := range lines {
+		content[i] = style.Render(bar) + " " + line
+	}
+
+	return header + "\n" + strings.Join(content, "\n")
+}
+
+// Note renders a blue informational alert.
+func (t *Typography) Note(text string) string { return t.Alert(AlertNote, text) }
+
+// Tip renders a green helpful-hint alert.
+func (t *Typography) Tip(text string) string { return t.Alert(AlertTip, text) }
+
+// Important renders a purple important-information alert.
+func (t *Typography) Important(text string) string { return t.Alert(AlertImportant, text) }
+
+// Warning renders a yellow/amber warning alert.
+func (t *Typography) Warning(text string) string { return t.Alert(AlertWarning, text) }
+
+// Caution renders a red caution/danger alert.
+func (t *Typography) Caution(text string) string { return t.Alert(AlertCaution, text) }
+
+// ---------------------------------------------------------------------------
 // Definition list
 // ---------------------------------------------------------------------------
 

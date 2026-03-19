@@ -226,6 +226,57 @@ func WithHierarchicalNumbers(enabled bool) Option {
 	return func(ty *Typography) { ty.theme.HierarchicalNumbers = enabled }
 }
 
+// --- Alert options ---
+
+// WithAlertStyle overrides the style for a specific alert type.
+func WithAlertStyle(at AlertType, s lipgloss.Style) Option {
+	return func(ty *Typography) {
+		if ty.theme.Alerts == nil {
+			ty.theme.Alerts = make(map[AlertType]AlertConfig)
+		}
+		cfg := ty.theme.Alerts[at]
+		cfg.Style = s
+		ty.theme.Alerts[at] = cfg
+	}
+}
+
+// WithAlertIcon overrides the icon for a specific alert type.
+func WithAlertIcon(at AlertType, icon string) Option {
+	return func(ty *Typography) {
+		if ty.theme.Alerts == nil {
+			ty.theme.Alerts = make(map[AlertType]AlertConfig)
+		}
+		cfg := ty.theme.Alerts[at]
+		cfg.Icon = icon
+		ty.theme.Alerts[at] = cfg
+	}
+}
+
+// WithAlertLabel overrides the label for a specific alert type.
+func WithAlertLabel(at AlertType, label string) Option {
+	return func(ty *Typography) {
+		if ty.theme.Alerts == nil {
+			ty.theme.Alerts = make(map[AlertType]AlertConfig)
+		}
+		cfg := ty.theme.Alerts[at]
+		cfg.Label = label
+		ty.theme.Alerts[at] = cfg
+	}
+}
+
+// WithAlertBar sets the left-bar character for alerts.
+func WithAlertBar(c string) Option {
+	return func(ty *Typography) { ty.theme.AlertBar = c }
+}
+
+// WithAlertPalette rebuilds all alert configs from the given AlertPalette,
+// using default icons and labels.
+func WithAlertPalette(ap AlertPalette) Option {
+	return func(ty *Typography) {
+		ty.theme.Alerts = DefaultAlertConfigs(ap)
+	}
+}
+
 // --- Callback options ---
 
 // WithCodeFormatter sets a callback that receives raw code and a language hint,
