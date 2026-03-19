@@ -109,20 +109,18 @@ H1–H3 render with a repeated underline character beneath the text. H4–H6 ren
 </p>
 </details>
 
-| Method                  | Description                                                                                 |
-| ----------------------- | ------------------------------------------------------------------------------------------- |
-| `P(text)`               | Paragraph                                                                                   |
-| `Blockquote(text)`      | Indented block with a left bar; supports multi-line input                                   |
-| `Code(text, lang)`      | Inline code with background highlight; `lang` is optional, used when a CodeFormatter is set |
-| `CodeBlock(text, lang)` | Fenced code block with padding; optional line numbers and syntax highlighting               |
-| `HR()`                  | Horizontal rule, configurable width and character                                           |
-| `DL(pairs)`             | Definition list from `[][2]string` pairs (term, description)                                |
-| `DT(text)`              | Definition term (standalone)                                                                |
-| `DD(text)`              | Definition description (standalone)                                                         |
+| Method                  | Description                                                                   |
+| ----------------------- | ----------------------------------------------------------------------------- |
+| `P(text)`               | Paragraph                                                                     |
+| `Blockquote(text)`      | Indented block with a left bar; supports multi-line input                     |
+| `CodeBlock(text, lang)` | Fenced code block with padding; optional line numbers and syntax highlighting |
+| `HR()`                  | Horizontal rule, configurable width and character                             |
+| `DL(pairs)`             | Definition list from `[][2]string` pairs (term, description)                  |
+| `DT(text)`              | Definition term (standalone)                                                  |
+| `DD(text)`              | Definition description (standalone)                                           |
 
 ```go
 fmt.Println(ty.Blockquote("First line.\nSecond line."))
-fmt.Println(ty.Code("os.Exit(1)"))
 fmt.Println(ty.CodeBlock("func main() {\n\tfmt.Println(\"hello\")\n}"))
 fmt.Println(ty.HR())
 
@@ -238,19 +236,20 @@ fmt.Println(ty.NestOL(
 </p>
 </details>
 
-| Method                | Renders as                                                                  |
-| --------------------- | --------------------------------------------------------------------------- |
-| `Bold(text)`          | Bold                                                                        |
-| `Italic(text)`        | Italic                                                                      |
-| `Underline(text)`     | Underlined                                                                  |
-| `Strikethrough(text)` | Strikethrough                                                               |
-| `Small(text)`         | Faint                                                                       |
-| `Mark(text)`          | Highlighted background                                                      |
-| `Link(label, url)`    | Styled link; `url` is optional — when both differ, renders as `label (url)` |
-| `Kbd(text)`           | Keyboard key indicator                                                      |
-| `Abbr(abbr, desc)`    | Abbreviation; `desc` is optional, appended in parentheses                   |
-| `Sub(text)`           | Subscript, prefixed with `_`                                                |
-| `Sup(text)`           | Superscript, prefixed with `^`                                              |
+| Method                | Renders as                                                                                  |
+| --------------------- | ------------------------------------------------------------------------------------------- |
+| `Code(text, lang)`    | Inline code with background highlight; `lang` is optional, used when a CodeFormatter is set |
+| `Bold(text)`          | Bold                                                                                        |
+| `Italic(text)`        | Italic                                                                                      |
+| `Underline(text)`     | Underlined                                                                                  |
+| `Strikethrough(text)` | Strikethrough                                                                               |
+| `Small(text)`         | Faint                                                                                       |
+| `Mark(text)`          | Highlighted background                                                                      |
+| `Link(label, url)`    | Styled link; `url` is optional — when both differ, renders as `label (url)`                 |
+| `Kbd(text)`           | Keyboard key indicator                                                                      |
+| `Abbr(abbr, desc)`    | Abbreviation; `desc` is optional, appended in parentheses                                   |
+| `Sub(text)`           | Subscript, prefixed with `_`                                                                |
+| `Sup(text)`           | Superscript, prefixed with `^`                                                              |
 
 ```go
 fmt.Println(ty.Bold("important") + " and " + ty.Italic("nuanced"))
