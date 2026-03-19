@@ -29,7 +29,7 @@ fi
 
 # Run tests
 printf "${YELLOW}Running tests...${RESET}\n"
-if $CMD_PREFIX just test; then
+if $CMD_PREFIX just test-race; then
     printf "${GREEN}Tests passed${RESET}\n"
 else
     printf "${RED}Tests failed!${RESET}\n" >&2
