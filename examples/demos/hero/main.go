@@ -38,6 +38,15 @@ func main() {
 	))
 	fmt.Println()
 
+	// Table
+	fmt.Println(ty.Table([][]string{
+		{"Name", "Role", "Status"},
+		{"Alice", "Admin", "Active"},
+		{"Bob", "Editor", "Idle"},
+		{"Charlie", "Viewer", "Active"},
+	}))
+	fmt.Println()
+
 	// Inline styles (single line showcase)
 	fmt.Println(
 		ty.Bold("Bold") + "  " +
