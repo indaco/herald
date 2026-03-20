@@ -42,7 +42,7 @@
   <b><a href="#examples">Examples</a></b>
 </p>
 
-herald maps familiar HTML elements (H1–H6, P, Blockquote, UL, OL, Code, HR, Alerts, and inline styles) to styled terminal output, built on [lipgloss v2](https://github.com/charmbracelet/lipgloss).
+herald maps familiar HTML elements (H1–H6, P, Blockquote, UL, OL, Code, HR, Tables, Alerts, and inline styles) to styled terminal output, built on [lipgloss v2](https://github.com/charmbracelet/lipgloss).
 
 It ships with a Rose Pine-inspired default theme, built-in themes matching the Charm ecosystem (Dracula, Catppuccin, Base16, Charm), and full style customization via functional options and ColorPalette. Works with any CLI or TUI - and if you use [huh](https://github.com/charmbracelet/huh) or other Charm-based libraries, the built-in themes pair seamlessly with theirs out of the box.
 
@@ -110,15 +110,17 @@ H1–H3 render with a repeated underline character beneath the text. H4–H6 ren
 </p>
 </details>
 
-| Method                  | Description                                                                   |
-| ----------------------- | ----------------------------------------------------------------------------- |
-| `P(text)`               | Paragraph                                                                     |
-| `Blockquote(text)`      | Indented block with a left bar; supports multi-line input                     |
-| `CodeBlock(text, lang)` | Fenced code block with padding; optional line numbers and syntax highlighting |
-| `HR()`                  | Horizontal rule, configurable width and character                             |
-| `DL(pairs)`             | Definition list from `[][2]string` pairs (term, description)                  |
-| `DT(text)`              | Definition term (standalone)                                                  |
-| `DD(text)`              | Definition description (standalone)                                           |
+| Method                         | Description                                                                   |
+| ------------------------------ | ----------------------------------------------------------------------------- |
+| `P(text)`                      | Paragraph                                                                     |
+| `Blockquote(text)`             | Indented block with a left bar; supports multi-line input                     |
+| `CodeBlock(text, lang)`        | Fenced code block with padding; optional line numbers and syntax highlighting |
+| `HR()`                         | Horizontal rule, configurable width and character                             |
+| `DL(pairs)`                    | Definition list from `[][2]string` pairs (term, description)                  |
+| `DT(text)`                     | Definition term (standalone)                                                  |
+| `DD(text)`                     | Definition description (standalone)                                           |
+| `Table(rows)`                  | Table from `[][]string`; first row is the header                              |
+| `TableWithOpts(rows, opts...)` | Table with per-table options (alignment, captions, footer, etc.)              |
 
 ```go
 fmt.Println(ty.Blockquote("First line.\nSecond line."))
@@ -130,6 +132,71 @@ fmt.Println(ty.DL([][2]string{
     {"Rust", "A systems programming language"},
 }))
 ```
+
+### Tables
+
+`Table` renders a table from a `[][]string` slice. The first row is treated as the header. Two border presets are available: `BoxBorderSet()` (default, full Unicode box-drawing) and `MinimalBorderSet()` (no outer border).
+
+```go
+fmt.Println(ty.Table([][]string{
+    {"Name", "Role", "Status"},
+    {"Alice", "Admin", "Active"},
+    {"Bob", "Editor", "Idle"},
+}))
+```
+
+**Bordered (default):**
+
+```text
+┌───────┬───────┬────────┐
+│ Name  │ Role  │ Status │
+├───────┼───────┼────────┤
+│ Alice │ Admin │ Active │
+│ Bob   │ Editor│ Idle   │
+└───────┴───────┴────────┘
+```
+
+**Minimal:**
+
+```go
+ty := herald.New(herald.WithTableBorderSet(herald.MinimalBorderSet()))
+```
+
+```text
+ Name  │ Role  │ Status
+───────┼───────┼────────
+ Alice │ Admin │ Active
+ Bob   │ Editor│ Idle
+```
+
+`TableWithOpts` accepts per-table options for column alignment, row separators, striped rows, captions, and footer rows:
+
+```go
+// Column alignment, footer row, and caption
+fmt.Println(ty.TableWithOpts([][]string{
+    {"Item", "Qty", "Price"},
+    {"Widget", "10", "$9.99"},
+    {"Gadget", "5", "$24.50"},
+    {"Total", "15", "$34.49"},
+},
+    herald.WithCaption("Order Summary"),
+    herald.WithFooterRow(true),
+    herald.WithColumnAlign(1, herald.AlignRight),
+    herald.WithColumnAlign(2, herald.AlignRight),
+))
+```
+
+| Table option                  | Description                                           |
+| ----------------------------- | ----------------------------------------------------- |
+| `WithColumnAlign(col, align)` | Set alignment for a column (`AlignLeft/Center/Right`) |
+| `WithColumnAligns(aligns...)` | Set alignments for all columns positionally           |
+| `WithRowSeparators(true)`     | Horizontal lines between body rows                    |
+| `WithStripedRows(true)`       | Alternating row background for readability            |
+| `WithCaption(text)`           | Caption above the table                               |
+| `WithCaptionBottom(text)`     | Caption below the table                               |
+| `WithFooterRow(true)`         | Treat last row as a styled footer with separator      |
+| `WithMaxColumnWidth(n)`       | Truncate all columns to `n` chars with `…`            |
+| `WithColumnMaxWidth(col, n)`  | Truncate a specific column (overrides global max)     |
 
 ### Lists
 
@@ -341,28 +408,36 @@ ty := herald.New(
 | `WithListItemStyle`           | List item text          |
 | `WithDTStyle`                 | Definition term         |
 | `WithDDStyle`                 | Definition description  |
+| `WithTableHeaderStyle`        | Table header cells      |
+| `WithTableCellStyle`          | Table body cells        |
+| `WithTableStripedCellStyle`   | Alternating body rows   |
+| `WithTableFooterStyle`        | Table footer row        |
+| `WithTableCaptionStyle`       | Table caption text      |
+| `WithTableBorderStyle`        | Table border characters |
 | `WithAlertStyle(type, style)` | Alert of given type     |
 
-**Token options** — each accepts a `string` or `int`:
+**Token options** - each accepts a `string` or `int`:
 
-| Option                         | Default            | Description                                           |
-| ------------------------------ | ------------------ | ----------------------------------------------------- |
-| `WithH1UnderlineChar(c)`       | `═`                | Underline character for H1                            |
-| `WithH2UnderlineChar(c)`       | `─`                | Underline character for H2                            |
-| `WithH3UnderlineChar(c)`       | `·`                | Underline character for H3                            |
-| `WithHeadingBarChar(c)`        | `▎`                | Bar prefix character for H4–H6                        |
-| `WithBulletChar(c)`            | `•`                | Bullet character for `UL`                             |
-| `WithNestedBulletChars(chars)` | `•`, `◦`, `▪`, `▹` | Bullet characters cycling per depth for `NestUL`      |
-| `WithListIndent(n)`            | `2`                | Spaces per nesting level for `NestUL`/`NestOL`        |
-| `WithHierarchicalNumbers(b)`   | `false`            | Outline-style numbering for nested `OL` (e.g. `2.1.`) |
-| `WithHRChar(c)`                | `─`                | Character repeated for `HR`                           |
-| `WithHRWidth(w)`               | `40`               | Width of `HR` in characters                           |
-| `WithBlockquoteBar(c)`         | `│`                | Left bar character for `Blockquote`                   |
-| `WithCodeLineNumbers(b)`       | `false`            | Show line numbers in `CodeBlock`                      |
-| `WithCodeLineNumberSep(c)`     | `│`                | Separator between line numbers and code               |
-| `WithAlertBar(c)`              | `│`                | Left bar character for alerts                         |
-| `WithAlertIcon(type, icon)`    | per-type           | Override icon for a specific alert type               |
-| `WithAlertLabel(type, label)`  | per-type           | Override label for a specific alert type              |
+| Option                         | Default            | Description                                                 |
+| ------------------------------ | ------------------ | ----------------------------------------------------------- |
+| `WithH1UnderlineChar(c)`       | `═`                | Underline character for H1                                  |
+| `WithH2UnderlineChar(c)`       | `─`                | Underline character for H2                                  |
+| `WithH3UnderlineChar(c)`       | `·`                | Underline character for H3                                  |
+| `WithHeadingBarChar(c)`        | `▎`                | Bar prefix character for H4–H6                              |
+| `WithBulletChar(c)`            | `•`                | Bullet character for `UL`                                   |
+| `WithNestedBulletChars(chars)` | `•`, `◦`, `▪`, `▹` | Bullet characters cycling per depth for `NestUL`            |
+| `WithListIndent(n)`            | `2`                | Spaces per nesting level for `NestUL`/`NestOL`              |
+| `WithHierarchicalNumbers(b)`   | `false`            | Outline-style numbering for nested `OL` (e.g. `2.1.`)       |
+| `WithHRChar(c)`                | `─`                | Character repeated for `HR`                                 |
+| `WithHRWidth(w)`               | `40`               | Width of `HR` in characters                                 |
+| `WithBlockquoteBar(c)`         | `│`                | Left bar character for `Blockquote`                         |
+| `WithCodeLineNumbers(b)`       | `false`            | Show line numbers in `CodeBlock`                            |
+| `WithCodeLineNumberSep(c)`     | `│`                | Separator between line numbers and code                     |
+| `WithTableBorderSet(bs)`       | `BoxBorderSet()`   | Border character set (`BoxBorderSet` or `MinimalBorderSet`) |
+| `WithTableCellPad(n)`          | `1`                | Spaces of padding inside each table cell                    |
+| `WithAlertBar(c)`              | `│`                | Left bar character for alerts                               |
+| `WithAlertIcon(type, icon)`    | per-type           | Override icon for a specific alert type                     |
+| `WithAlertLabel(type, label)`  | per-type           | Override label for a specific alert type                    |
 
 ### Code formatting
 
@@ -428,17 +503,17 @@ ty := herald.New(
 
 `ColorPalette` lets you define 9 colors and derive a complete theme from them. All style fields map from this palette; configurable tokens use the same defaults as `DefaultTheme`.
 
-| Field       | Maps to                                              |
-| ----------- | ---------------------------------------------------- |
-| `Primary`   | H1 headings                                          |
-| `Secondary` | H2, list bullets                                     |
-| `Tertiary`  | H3, links                                            |
-| `Accent`    | H4, mark background                                  |
-| `Highlight` | H5, `Abbr`                                           |
-| `Muted`     | H6, blockquote, HR, sub/sup, `DD`, line numbers      |
-| `Text`      | Body text, paragraphs, list items, inline code, `DT` |
-| `Surface`   | Background for `Kbd`                                 |
-| `Base`      | Background for inline code, code blocks; mark fg     |
+| Field       | Maps to                                                                   |
+| ----------- | ------------------------------------------------------------------------- |
+| `Primary`   | H1 headings                                                               |
+| `Secondary` | H2, list bullets                                                          |
+| `Tertiary`  | H3, links                                                                 |
+| `Accent`    | H4, mark background                                                       |
+| `Highlight` | H5, `Abbr`                                                                |
+| `Muted`     | H6, blockquote, HR, sub/sup, `DD`, line numbers, table border, caption    |
+| `Text`      | Body text, paragraphs, list items, inline code, `DT`, table cells, footer |
+| `Surface`   | Background for `Kbd`, striped table rows                                  |
+| `Base`      | Background for inline code, code blocks; mark fg                          |
 
 Pass the palette to `New()` via `WithPalette`, or call `ThemeFromPalette` to construct a `Theme` value directly.
 
