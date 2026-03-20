@@ -226,6 +226,53 @@ func WithHierarchicalNumbers(enabled bool) Option {
 	return func(ty *Typography) { ty.theme.HierarchicalNumbers = enabled }
 }
 
+// --- Table options ---
+
+// WithTableHeaderStyle overrides the table header cell style.
+func WithTableHeaderStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.TableHeader = s }
+}
+
+// WithTableCellStyle overrides the table body cell style.
+func WithTableCellStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.TableCell = s }
+}
+
+// WithTableStripedCellStyle overrides the style for alternating body rows
+// when striped rows are enabled.
+func WithTableStripedCellStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.TableStripedCell = s }
+}
+
+// WithTableFooterStyle overrides the table footer row style.
+func WithTableFooterStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.TableFooter = s }
+}
+
+// WithTableCaptionStyle overrides the table caption style.
+func WithTableCaptionStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.TableCaption = s }
+}
+
+// WithTableBorderStyle overrides the style applied to table border characters.
+func WithTableBorderStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.TableBorder = s }
+}
+
+// WithTableBorderSet sets the box-drawing character set for tables.
+func WithTableBorderSet(bs TableBorderSet) Option {
+	return func(ty *Typography) { ty.theme.TableBorderSet = bs }
+}
+
+// WithTableCellPad sets the number of spaces of padding inside each table cell.
+func WithTableCellPad(n int) Option {
+	return func(ty *Typography) {
+		if n >= 0 {
+			ty.theme.TableCellPad = n
+		}
+	}
+}
+
 // --- Alert options ---
 
 // WithAlertStyle overrides the style for a specific alert type.

@@ -68,9 +68,89 @@ type Theme struct {
 	HRWidth             int      // width of horizontal rule in characters
 	BlockquoteBar       string   // left-bar character for blockquotes
 
+	// Table elements
+	TableHeader      lipgloss.Style // style for header cell text (e.g. bold + primary color)
+	TableCell        lipgloss.Style // style for body cell text
+	TableStripedCell lipgloss.Style // style for alternating (odd) body rows when striping is enabled
+	TableFooter      lipgloss.Style // style for footer row cells
+	TableCaption     lipgloss.Style // style for table caption text
+	TableBorder      lipgloss.Style // style (color) applied to border characters
+	TableBorderSet   TableBorderSet // box-drawing character set
+	TableCellPad     int            // spaces of padding inside each cell (default 1)
+
 	// Alert elements
 	Alerts   map[AlertType]AlertConfig // per-type icon, label, and style
 	AlertBar string                    // left-bar character for alerts
+}
+
+// TableBorderSet holds all box-drawing characters needed to render a table.
+type TableBorderSet struct {
+	Top            string // horizontal line for top border
+	Bottom         string // horizontal line for bottom border
+	Left           string // vertical line for left border
+	Right          string // vertical line for right border
+	Header         string // horizontal line separating header from body
+	Row            string // horizontal line between rows (optional, empty = no row separators)
+	TopLeft        string // top-left corner
+	TopRight       string // top-right corner
+	BottomLeft     string // bottom-left corner
+	BottomRight    string // bottom-right corner
+	TopJunction    string // top edge junction (┬)
+	BottomJunction string // bottom edge junction (┴)
+	LeftJunction   string // left edge junction (├)
+	RightJunction  string // right edge junction (┤)
+	Cross          string // interior junction (┼)
+	HeaderLeft     string // header-row left junction
+	HeaderRight    string // header-row right junction
+	HeaderCross    string // header-row interior junction
+	FooterLeft     string // footer-row left junction
+	FooterRight    string // footer-row right junction
+	FooterCross    string // footer-row interior junction
+}
+
+// BoxBorderSet returns a TableBorderSet using full Unicode box-drawing characters.
+func BoxBorderSet() TableBorderSet {
+	return TableBorderSet{
+		Top:            "─",
+		Bottom:         "─",
+		Left:           "│",
+		Right:          "│",
+		Header:         "─",
+		Row:            "─",
+		TopLeft:        "┌",
+		TopRight:       "┐",
+		BottomLeft:     "└",
+		BottomRight:    "┘",
+		TopJunction:    "┬",
+		BottomJunction: "┴",
+		LeftJunction:   "├",
+		RightJunction:  "┤",
+		Cross:          "┼",
+		HeaderLeft:     "├",
+		HeaderRight:    "┤",
+		HeaderCross:    "┼",
+		FooterLeft:     "├",
+		FooterRight:    "┤",
+		FooterCross:    "┼",
+	}
+}
+
+// MinimalBorderSet returns a TableBorderSet with no outer borders — only column
+// separators and a header underline.
+func MinimalBorderSet() TableBorderSet {
+	return TableBorderSet{
+		Left:        "",
+		Right:       "",
+		Header:      "─",
+		Row:         "─",
+		HeaderLeft:  "",
+		HeaderRight: "",
+		HeaderCross: "┼",
+		FooterLeft:  "",
+		FooterRight: "",
+		FooterCross: "┼",
+		Cross:       "┼",
+	}
 }
 
 // Default token values used by DefaultTheme and ThemeFromPalette.
@@ -86,6 +166,7 @@ const (
 	DefaultBlockquoteBar     = "│"
 	DefaultAlertBar          = "│"
 	DefaultCodeLineNumberSep = "│"
+	DefaultTableCellPad      = 1
 )
 
 // DefaultNestedBulletChars is the default set of bullet characters that

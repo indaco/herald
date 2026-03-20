@@ -361,6 +361,391 @@ func (t *Typography) Warning(text string) string { return t.Alert(AlertWarning, 
 func (t *Typography) Caution(text string) string { return t.Alert(AlertCaution, text) }
 
 // ---------------------------------------------------------------------------
+// Table
+// ---------------------------------------------------------------------------
+
+// Alignment represents the horizontal alignment of text within a table cell.
+type Alignment int
+
+const (
+	// AlignLeft aligns cell content to the left (default).
+	AlignLeft Alignment = iota
+	// AlignCenter centers cell content horizontally.
+	AlignCenter
+	// AlignRight aligns cell content to the right.
+	AlignRight
+)
+
+// TableOption is a functional option for per-table configuration.
+// It is distinct from Option, which configures the Typography instance.
+type TableOption func(*tableConfig)
+
+// CaptionPosition specifies where a table caption is rendered.
+type CaptionPosition int
+
+const (
+	// CaptionTop renders the caption above the table.
+	CaptionTop CaptionPosition = iota
+	// CaptionBottom renders the caption below the table.
+	CaptionBottom
+)
+
+// tableConfig holds per-table settings applied via TableOption.
+type tableConfig struct {
+	alignments      map[int]Alignment // column index -> alignment
+	rowSeparators   bool              // draw horizontal lines between body rows
+	stripedRows     bool              // alternate row styles for readability
+	caption         string            // optional caption text
+	captionPosition CaptionPosition   // top or bottom
+	footerRow       bool              // treat last row as a footer
+	maxColWidth     int               // global max column width (0 = unlimited)
+	maxColWidths    map[int]int       // per-column max widths (overrides global)
+}
+
+// WithColumnAlign sets the alignment for a specific column (0-indexed).
+// Columns without an explicit alignment default to AlignLeft.
+func WithColumnAlign(col int, align Alignment) TableOption {
+	return func(cfg *tableConfig) {
+		if cfg.alignments == nil {
+			cfg.alignments = make(map[int]Alignment)
+		}
+		cfg.alignments[col] = align
+	}
+}
+
+// WithRowSeparators enables horizontal separator lines between every body row.
+func WithRowSeparators(enabled bool) TableOption {
+	return func(cfg *tableConfig) {
+		cfg.rowSeparators = enabled
+	}
+}
+
+// WithStripedRows enables alternating row background styles for readability.
+// Odd body rows use the TableStripedCell style instead of TableCell.
+func WithStripedRows(enabled bool) TableOption {
+	return func(cfg *tableConfig) {
+		cfg.stripedRows = enabled
+	}
+}
+
+// WithCaption adds a caption above the table.
+func WithCaption(text string) TableOption {
+	return func(cfg *tableConfig) {
+		cfg.caption = text
+		cfg.captionPosition = CaptionTop
+	}
+}
+
+// WithCaptionBottom adds a caption below the table.
+func WithCaptionBottom(text string) TableOption {
+	return func(cfg *tableConfig) {
+		cfg.caption = text
+		cfg.captionPosition = CaptionBottom
+	}
+}
+
+// WithFooterRow treats the last row as a footer with a distinct separator
+// and the TableFooter style.
+func WithFooterRow(enabled bool) TableOption {
+	return func(cfg *tableConfig) {
+		cfg.footerRow = enabled
+	}
+}
+
+// WithMaxColumnWidth sets a global maximum visible width for all columns.
+// Cells exceeding this width are truncated with "…". A value of 0 disables
+// truncation. Per-column limits set via WithColumnMaxWidth take precedence.
+func WithMaxColumnWidth(n int) TableOption {
+	return func(cfg *tableConfig) {
+		cfg.maxColWidth = n
+	}
+}
+
+// WithColumnMaxWidth sets the maximum visible width for a specific column
+// (0-indexed). Cells exceeding this width are truncated with "…".
+// This overrides the global WithMaxColumnWidth for the given column.
+func WithColumnMaxWidth(col, n int) TableOption {
+	return func(cfg *tableConfig) {
+		if cfg.maxColWidths == nil {
+			cfg.maxColWidths = make(map[int]int)
+		}
+		cfg.maxColWidths[col] = n
+	}
+}
+
+// WithColumnAligns sets the alignment for columns 0, 1, 2, ... in order.
+// Columns beyond the length of the slice default to AlignLeft.
+func WithColumnAligns(aligns ...Alignment) TableOption {
+	return func(cfg *tableConfig) {
+		if cfg.alignments == nil {
+			cfg.alignments = make(map[int]Alignment)
+		}
+		for i, a := range aligns {
+			cfg.alignments[i] = a
+		}
+	}
+}
+
+// truncateCell truncates a string to maxWidth visible characters, appending "…"
+// if truncation occurs. Returns the original string if it fits.
+func truncateCell(s string, maxWidth int) string {
+	if maxWidth <= 0 || lipgloss.Width(s) <= maxWidth {
+		return s
+	}
+	runes := []rune(s)
+	// Reserve 1 character for the ellipsis.
+	for i := len(runes); i > 0; i-- {
+		candidate := string(runes[:i]) + "…"
+		if lipgloss.Width(candidate) <= maxWidth {
+			return candidate
+		}
+	}
+	return "…"
+}
+
+// truncateRows returns a copy of rows with cells truncated according to the
+// config's max column width settings. The original rows are not modified.
+func truncateRows(rows [][]string, cfg *tableConfig) [][]string {
+	if cfg.maxColWidth <= 0 && len(cfg.maxColWidths) == 0 {
+		return rows
+	}
+	out := make([][]string, len(rows))
+	for i, row := range rows {
+		newRow := make([]string, len(row))
+		for c, cell := range row {
+			maxW := cfg.maxColWidth
+			if w, ok := cfg.maxColWidths[c]; ok {
+				maxW = w
+			}
+			if maxW > 0 {
+				newRow[c] = truncateCell(cell, maxW)
+			} else {
+				newRow[c] = cell
+			}
+		}
+		out[i] = newRow
+	}
+	return out
+}
+
+// tableColumnWidths computes the maximum cell width per column across all rows.
+func tableColumnWidths(rows [][]string, cols int) []int {
+	widths := make([]int, cols)
+	for _, row := range rows {
+		for c := range cols {
+			cell := ""
+			if c < len(row) {
+				cell = row[c]
+			}
+			if w := lipgloss.Width(cell); w > widths[c] {
+				widths[c] = w
+			}
+		}
+	}
+	return widths
+}
+
+// tableHLine builds a horizontal separator line for a table.
+func (t *Typography) tableHLine(colWidths []int, pad int, left, fill, junction, right string) string {
+	segments := make([]string, len(colWidths))
+	for c, w := range colWidths {
+		segments[c] = strings.Repeat(fill, w+pad*2)
+	}
+	return t.theme.TableBorder.Render(left + strings.Join(segments, junction) + right)
+}
+
+// alignCell pads a rendered cell string to the given total width according to
+// the specified alignment. The returned string has exactly totalWidth visible
+// characters (excluding the surrounding padStr added by the caller).
+func alignCell(rendered string, cellWidth, totalWidth int, align Alignment) string {
+	gap := totalWidth - cellWidth
+	if gap <= 0 {
+		return rendered
+	}
+	switch align {
+	case AlignRight:
+		return strings.Repeat(" ", gap) + rendered
+	case AlignCenter:
+		left := gap / 2
+		right := gap - left
+		return strings.Repeat(" ", left) + rendered + strings.Repeat(" ", right)
+	default: // AlignLeft
+		return rendered + strings.Repeat(" ", gap)
+	}
+}
+
+// tableRow renders a single data row with cell content and vertical separators.
+func (t *Typography) tableRow(row []string, style lipgloss.Style, colWidths []int, padStr string, bordered bool, aligns map[int]Alignment) string {
+	bs := t.theme.TableBorderSet
+	cols := len(colWidths)
+	cells := make([]string, cols)
+	for c := range cols {
+		cell := ""
+		if c < len(row) {
+			cell = row[c]
+		}
+		rendered := style.Render(cell)
+		cellWidth := lipgloss.Width(cell)
+		align := AlignLeft
+		if a, ok := aligns[c]; ok {
+			align = a
+		}
+		cells[c] = padStr + alignCell(rendered, cellWidth, colWidths[c], align) + padStr
+	}
+
+	sep, end := "", ""
+	if bordered {
+		sep = t.theme.TableBorder.Render(bs.Left)
+		end = t.theme.TableBorder.Render(bs.Right)
+	}
+	inner := t.theme.TableBorder.Render("│")
+	return sep + strings.Join(cells, inner) + end
+}
+
+// Table renders a table from a slice of rows. The first row is treated as the
+// header. Each row is a slice of cell strings. Rows may have different lengths;
+// shorter rows are padded with empty cells. Returns an empty string if rows is
+// nil or empty.
+func (t *Typography) Table(rows [][]string) string {
+	return t.renderTable(rows, &tableConfig{})
+}
+
+// TableWithOpts renders a table like Table but accepts per-table options such
+// as column alignment. The first row is treated as the header.
+//
+//	t.TableWithOpts(rows,
+//	    herald.WithColumnAlign(0, herald.AlignCenter),
+//	    herald.WithColumnAlign(2, herald.AlignRight),
+//	)
+func (t *Typography) TableWithOpts(rows [][]string, opts ...TableOption) string {
+	cfg := &tableConfig{}
+	for _, o := range opts {
+		o(cfg)
+	}
+	return t.renderTable(rows, cfg)
+}
+
+// tableMaxCols returns the maximum number of columns across all rows.
+func tableMaxCols(rows [][]string) int {
+	cols := 0
+	for _, row := range rows {
+		if len(row) > cols {
+			cols = len(row)
+		}
+	}
+	return cols
+}
+
+// renderTable is the shared implementation for Table and TableWithOpts.
+func (t *Typography) renderTable(rows [][]string, cfg *tableConfig) string {
+	if len(rows) == 0 {
+		return ""
+	}
+
+	cols := tableMaxCols(rows)
+	if cols == 0 {
+		return ""
+	}
+
+	// Apply auto-truncation before computing widths.
+	rows = truncateRows(rows, cfg)
+
+	aligns := cfg.alignments
+	if aligns == nil {
+		aligns = make(map[int]Alignment)
+	}
+
+	bs := t.theme.TableBorderSet
+	pad := t.theme.TableCellPad
+	padStr := strings.Repeat(" ", pad)
+	colWidths := tableColumnWidths(rows, cols)
+	bordered := bs.TopLeft != ""
+
+	// Determine body range and footer row.
+	bodyEnd := len(rows)
+	hasFooter := cfg.footerRow && len(rows) > 2
+	if hasFooter {
+		bodyEnd = len(rows) - 1
+	}
+
+	var sb strings.Builder
+
+	// Caption (top).
+	t.writeCaption(&sb, cfg, CaptionTop, false)
+
+	// Top border.
+	if bordered {
+		sb.WriteString(t.tableHLine(colWidths, pad, bs.TopLeft, bs.Top, bs.TopJunction, bs.TopRight))
+		sb.WriteByte('\n')
+	}
+
+	// Header row.
+	sb.WriteString(t.tableRow(rows[0], t.theme.TableHeader, colWidths, padStr, bordered, aligns))
+	sb.WriteByte('\n')
+	sb.WriteString(t.tableHLine(colWidths, pad, bs.HeaderLeft, bs.Header, bs.HeaderCross, bs.HeaderRight))
+
+	// Body rows.
+	hasRowSep := cfg.rowSeparators && bs.Row != ""
+	t.renderTableBody(rows[1:bodyEnd], &sb, colWidths, padStr, bordered, aligns, hasRowSep, cfg.stripedRows)
+
+	// Footer row.
+	if hasFooter {
+		sb.WriteByte('\n')
+		sb.WriteString(t.tableHLine(colWidths, pad, bs.FooterLeft, bs.Header, bs.FooterCross, bs.FooterRight))
+		sb.WriteByte('\n')
+		sb.WriteString(t.tableRow(rows[len(rows)-1], t.theme.TableFooter, colWidths, padStr, bordered, aligns))
+	}
+
+	// Bottom border.
+	if bordered {
+		sb.WriteByte('\n')
+		sb.WriteString(t.tableHLine(colWidths, pad, bs.BottomLeft, bs.Bottom, bs.BottomJunction, bs.BottomRight))
+	}
+
+	// Caption (bottom).
+	t.writeCaption(&sb, cfg, CaptionBottom, true)
+
+	return sb.String()
+}
+
+// writeCaption writes the table caption to the builder if it matches the
+// given position. When newlineBefore is true, a newline is prepended.
+func (t *Typography) writeCaption(sb *strings.Builder, cfg *tableConfig, pos CaptionPosition, newlineBefore bool) {
+	if cfg.caption == "" || cfg.captionPosition != pos {
+		return
+	}
+	if newlineBefore {
+		sb.WriteByte('\n')
+	}
+	sb.WriteString(t.theme.TableCaption.Render(cfg.caption))
+	if !newlineBefore {
+		sb.WriteByte('\n')
+	}
+}
+
+// renderTableBody writes body rows to the builder, handling row separators and
+// striped row styling.
+func (t *Typography) renderTableBody(bodyRows [][]string, sb *strings.Builder, colWidths []int, padStr string, bordered bool, aligns map[int]Alignment, hasRowSep, striped bool) {
+	bs := t.theme.TableBorderSet
+	for i, row := range bodyRows {
+		sb.WriteByte('\n')
+		if hasRowSep && i > 0 {
+			left, right := bs.LeftJunction, bs.RightJunction
+			if !bordered {
+				left, right = "", ""
+			}
+			sb.WriteString(t.tableHLine(colWidths, t.theme.TableCellPad, left, bs.Row, bs.Cross, right))
+			sb.WriteByte('\n')
+		}
+		style := t.theme.TableCell
+		if striped && i%2 == 1 {
+			style = t.theme.TableStripedCell
+		}
+		sb.WriteString(t.tableRow(row, style, colWidths, padStr, bordered, aligns))
+	}
+}
+
+// ---------------------------------------------------------------------------
 // Definition list
 // ---------------------------------------------------------------------------
 
