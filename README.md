@@ -44,7 +44,7 @@
 
 herald maps familiar HTML elements (H1–H6, P, Blockquote, UL, OL, Code, HR, Alerts, and inline styles) to styled terminal output, built on [lipgloss v2](https://github.com/charmbracelet/lipgloss).
 
-It ships with a Rose Pine-inspired default theme, built-in themes matching the Charm ecosystem (Dracula, Catppuccin, Base16, Charm) for seamless pairing with [huh](https://github.com/charmbracelet/huh) and other Charm-based TUIs, and full style customization via functional options and `ColorPalette`.
+It ships with a Rose Pine-inspired default theme, built-in themes matching the Charm ecosystem (Dracula, Catppuccin, Base16, Charm), and full style customization via functional options and ColorPalette. Works with any CLI or TUI - and if you use [huh](https://github.com/charmbracelet/huh) or other Charm-based libraries, the built-in themes pair seamlessly with theirs out of the box.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-hero.png" alt="herald demo output" width="600" />
