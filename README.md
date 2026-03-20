@@ -38,10 +38,11 @@
   <b><a href="#available-elements">Elements</a></b> |
   <b><a href="#customization">Customization</a></b> |
   <b><a href="#built-in-themes">Themes</a></b> |
+  <b><a href="#pairing-with-huh">Pairing with huh</a></b> |
   <b><a href="#examples">Examples</a></b>
 </p>
 
-Herald maps familiar HTML elements (H1–H6, P, Blockquote, UL, OL, Code, HR, Alerts, and inline styles) to styled terminal output, built on [lipgloss v2](https://github.com/charmbracelet/lipgloss).
+herald maps familiar HTML elements (H1–H6, P, Blockquote, UL, OL, Code, HR, Alerts, and inline styles) to styled terminal output, built on [lipgloss v2](https://github.com/charmbracelet/lipgloss).
 
 It ships with a Rose Pine-inspired default theme, built-in themes matching the Charm ecosystem (Dracula, Catppuccin, Base16, Charm) for seamless pairing with [huh](https://github.com/charmbracelet/huh) and other Charm-based TUIs, and full style customization via functional options and `ColorPalette`.
 
@@ -245,7 +246,7 @@ fmt.Println(ty.NestOL(
 | `Strikethrough(text)` | Strikethrough                                                                               |
 | `Small(text)`         | Faint                                                                                       |
 | `Mark(text)`          | Highlighted background                                                                      |
-| `Link(label, url)`    | Styled link; `url` is optional — when both differ, renders as `label (url)`                 |
+| `Link(label, url)`    | Styled link; `url` is optional - when both differ, renders as `label (url)`                 |
 | `Kbd(text)`           | Keyboard key indicator                                                                      |
 | `Abbr(abbr, desc)`    | Abbreviation; `desc` is optional, appended in parentheses                                   |
 | `Sub(text)`           | Subscript, prefixed with `_`                                                                |
@@ -316,7 +317,7 @@ ty := herald.New(
 )
 ```
 
-**Style options** — each accepts a `lipgloss.Style`:
+**Style options** - each accepts a `lipgloss.Style`:
 
 | Option                        | Targets                 |
 | ----------------------------- | ----------------------- |
@@ -515,8 +516,11 @@ ty := herald.New(herald.WithTheme(herald.DraculaTheme()))
 Pair with the corresponding huh theme for consistent styling across forms and typography:
 
 ```go
-form := huh.NewForm(...).WithTheme(huh.ThemeDracula())
+// herald output layer
 ty := herald.New(herald.WithTheme(herald.DraculaTheme()))
+
+// huh prompt layer — themes match exactly
+form := huh.NewForm(...).WithTheme(huh.ThemeFunc(huh.ThemeDracula))
 ```
 
 ### Custom theme
@@ -553,6 +557,35 @@ custom := herald.Theme{
 ty := herald.New(herald.WithTheme(custom))
 ```
 
+## Pairing with huh
+
+herald is designed to complement [huh](https://github.com/charmbracelet/huh) - a form and prompt library for the terminal. Together they cover the full output story of a CLI: herald handles formatted display (instructions, section headers, results, documentation), while huh handles user input.
+
+Since both are built on lipgloss, herald ships with themes that match huh's built-in palettes exactly. You get visual consistency across your entire CLI without any manual style coordination.
+
+```go
+ty := herald.New(herald.WithTheme(herald.DraculaTheme()))
+
+fmt.Println(ty.H1("Project Setup"))
+fmt.Println(ty.P("Answer a few questions to scaffold your project."))
+
+form := huh.NewForm(
+    huh.NewGroup(
+        huh.NewInput().Title("Project name").Value(&name),
+        huh.NewSelect[string]().Title("Language").Options(...).Value(&lang),
+    ),
+).WithTheme(huh.ThemeFunc(huh.ThemeDracula))
+form.Run()
+
+fmt.Println(ty.H2("Summary"))
+fmt.Println(ty.DL([][2]string{
+    {"Name", name},
+    {"Language", lang},
+}))
+```
+
+See [`examples/10_huh-pairing/`](./examples/10_huh-pairing) for a runnable example.
+
 ## Examples
 
 Runnable examples are in the [`examples/`](examples/) directory:
@@ -568,8 +601,10 @@ Runnable examples are in the [`examples/`](examples/) directory:
 | [06_catppuccin-theme](examples/06_catppuccin-theme/)                 | Build a full theme from the [Catppuccin](https://catppuccin.com) palette (separate module) | `cd examples/06_catppuccin-theme && go run .`         |
 | [07_syntax-highlighting](examples/07_syntax-highlighting/)           | Plug in chroma for syntax-highlighted code blocks (separate module)                        | `cd examples/07_syntax-highlighting && go run .`      |
 | [08_tree-sitter-highlighting](examples/08_tree-sitter-highlighting/) | Plug in tree-sitter for AST-based syntax highlighting (separate module)                    | `cd examples/08_tree-sitter-highlighting && go run .` |
+| [09_table](examples/09_table/)                                       | Table rendering: bordered, minimal, alignment, striped rows, captions, and footer          | `go run ./examples/09_table/`                         |
+| [10_huh-pairing](examples/10_huh-pairing/)                           | Using herald with huh for interactive TUI forms                                            | `cd examples/10_huh-pairing && go run .`              |
 
-The _06_catppuccin-theme_, _07_syntax-highlighting_, and _08_tree-sitter-highlighting_ examples each have their own `go.mod` to keep external dependencies out of herald's core module.
+The _06_catppuccin-theme_, _07_syntax-highlighting_, _08_tree-sitter-highlighting_, and _10_huh-pairing_ examples each have their own `go.mod` to keep external dependencies out of herald's core module.
 
 ## License
 
