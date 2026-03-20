@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). The changelog is generated and managed by [sley](https://github.com/indaco/sley).
 
+## v0.5.0 - 2026-03-20
+
+### 🚀 Enhancements
+
+- add table rendering ([4160ab7](https://github.com/indaco/herald/commit/4160ab7)) ([#12](https://github.com/indaco/herald/pull/12))
+
+### 📖 Documentation
+
+- **README:** reorganize sections and fix consistency issues ([63888f6](https://github.com/indaco/herald/commit/63888f6)) ([#13](https://github.com/indaco/herald/pull/13))
+- **README:** updated with improved theme and customization details ([42a5228](https://github.com/indaco/herald/commit/42a5228))
+- add Pairing with huh section and example ([ca290ab](https://github.com/indaco/herald/commit/ca290ab)) ([#11](https://github.com/indaco/herald/pull/11))
+
+### 🏡 Chores
+
+- **examples:** add example with github.com/odvcencio/gotreesitter ([6123760](https://github.com/indaco/herald/commit/6123760)) ([#15](https://github.com/indaco/herald/pull/15))
+- **examples:** rename syntax highlighting examples for consistency ([21a0350](https://github.com/indaco/herald/commit/21a0350)) ([#14](https://github.com/indaco/herald/pull/14))
+- add charm/huh example and update README ([82beef9](https://github.com/indaco/herald/commit/82beef9)) ([#10](https://github.com/indaco/herald/pull/10))
+- update pre-push githook to use test-race recipe ([67fd08f](https://github.com/indaco/herald/commit/67fd08f))
+- update devbox-init.sh available commands to match justfile recipes ([8569017](https://github.com/indaco/herald/commit/8569017))
+
+**Full Changelog:** [v0.4.0...v0.5.0](https://github.com/indaco/herald/compare/v0.4.0...v0.5.0)
+
+### ❤️ Contributors
+
+- [@indaco](https://github.com/indaco)
+
 ## v0.4.0 - 2026-03-19
 
 ### 🚀 Enhancements
