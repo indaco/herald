@@ -143,6 +143,19 @@ func ThemeFromPalette(p ColorPalette) Theme {
 		CodeLineNumber:    lipgloss.NewStyle().Foreground(p.Muted).Background(p.Base),
 		CodeLineNumberSep: DefaultCodeLineNumberSep,
 
+		TableHeader: lipgloss.NewStyle().
+			Bold(true).
+			Foreground(p.Primary),
+		TableCell:        lipgloss.NewStyle().Foreground(p.Text),
+		TableStripedCell: lipgloss.NewStyle().Foreground(p.Text).Background(p.Surface),
+		TableFooter: lipgloss.NewStyle().
+			Bold(true).
+			Foreground(p.Text),
+		TableCaption:   lipgloss.NewStyle().Foreground(p.Muted).Italic(true),
+		TableBorder:    lipgloss.NewStyle().Foreground(p.Muted),
+		TableBorderSet: BoxBorderSet(),
+		TableCellPad:   DefaultTableCellPad,
+
 		AlertBar: DefaultAlertBar,
 		Alerts: DefaultAlertConfigs(AlertPalette{
 			Note:      p.Tertiary,  // blue/cyan

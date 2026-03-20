@@ -128,8 +128,8 @@ demo-screenshot:
     just _capture-demo lists
     just _capture-demo alerts
     just _capture-demo inline
+    just _capture-demo tables
     just _capture-theme-demo dracula
     just _capture-theme-demo catppuccin
     just _capture-theme-demo base16
     just _capture-theme-demo charm
-

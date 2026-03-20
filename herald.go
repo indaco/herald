@@ -1,5 +1,4 @@
-// Package herald provides a reusable TUI typography library inspired by CSS
-// frameworks such as Tailwind Typography, Bootstrap, and Pico CSS.
+// Package herald provides a reusable TUI typography library.
 //
 // It offers HTML-analogous rendering functions (H1-H6, P, Blockquote, lists,
 // inline styles, etc.) that output styled strings via lipgloss v2.
