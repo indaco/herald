@@ -681,21 +681,20 @@ See [`examples/10_huh-pairing/`](./examples/10_huh-pairing) for a runnable examp
 
 Runnable examples are in the [`examples/`](examples/) directory:
 
-| Example                                                                            | Description                                                                                | Run                                                          |
-| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
-| [00_default-theme](examples/00_default-theme/)                                     | All elements with the default Rose Pine theme                                              | `go run ./examples/00_default-theme/`                        |
-| [01_lists](examples/01_lists/)                                                     | Flat, nested, mixed, and hierarchical lists                                                | `go run ./examples/01_lists/`                                |
-| [02_alerts](examples/02_alerts/)                                                   | GitHub-style alert callouts (Note, Tip, Important, Warning, Caution)                       | `go run ./examples/02_alerts/`                               |
-| [03_custom-options](examples/03_custom-options/)                                   | Override styles, decoration chars, and tokens via functional options                       | `go run ./examples/03_custom-options/`                       |
-| [04_palette](examples/04_palette/)                                                 | Generate a full theme from 9 colors using `ColorPalette`                                   | `go run ./examples/04_palette/`                              |
-| [05_builtin-themes](examples/05_builtin-themes/)                                   | Built-in themes (Dracula, Catppuccin, Base16, Charm) matching huh                          | `go run ./examples/05_builtin-themes/`                       |
-| [06_catppuccin-theme](examples/06_catppuccin-theme/)                               | Build a full theme from the [Catppuccin](https://catppuccin.com) palette (separate module) | `cd examples/06_catppuccin-theme && go run .`                |
-| [07_chroma-syntax-highlighting](examples/07_chroma-syntax-highlighting/)           | Plug in chroma for syntax-highlighted code blocks (separate module)                        | `cd examples/07_chroma-syntax-highlighting && go run .`      |
-| [08_tree-sitter-syntax-highlighting](examples/08_tree-sitter-syntax-highlighting/) | Plug in tree-sitter for AST-based syntax highlighting (separate module)                    | `cd examples/08_tree-sitter-syntax-highlighting && go run .` |
-| [09_table](examples/09_table/)                                                     | Table rendering: bordered, minimal, alignment, striped rows, captions, and footer          | `go run ./examples/09_table/`                                |
-| [10_huh-pairing](examples/10_huh-pairing/)                                         | Using herald with huh for interactive TUI forms                                            | `cd examples/10_huh-pairing && go run .`                     |
-
-The _06_catppuccin-theme_, _07_chroma-syntax-highlighting_, _08_tree-sitter-syntax-highlighting_, and _10_huh-pairing_ examples each have their own `go.mod` to keep external dependencies out of herald's core module.
+| Example                                                                              | Description                                                                                | Run                                                           |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------- |
+| [00_default-theme](examples/00_default-theme/)                                       | All elements with the default Rose Pine theme                                              | `go run ./examples/00_default-theme/`                         |
+| [01_lists](examples/01_lists/)                                                       | Flat, nested, mixed, and hierarchical lists                                                | `go run ./examples/01_lists/`                                 |
+| [02_alerts](examples/02_alerts/)                                                     | GitHub-style alert callouts (Note, Tip, Important, Warning, Caution)                       | `go run ./examples/02_alerts/`                                |
+| [03_custom-options](examples/03_custom-options/)                                     | Override styles, decoration chars, and tokens via functional options                       | `go run ./examples/03_custom-options/`                        |
+| [04_palette](examples/04_palette/)                                                   | Generate a full theme from 9 colors using `ColorPalette`                                   | `go run ./examples/04_palette/`                               |
+| [05_builtin-themes](examples/05_builtin-themes/)                                     | Built-in themes (Dracula, Catppuccin, Base16, Charm) matching huh                          | `go run ./examples/05_builtin-themes/`                        |
+| [06_catppuccin-theme](examples/06_catppuccin-theme/)                                 | Build a full theme from the [Catppuccin](https://catppuccin.com) palette (separate module) | `cd examples/06_catppuccin-theme && go run .`                 |
+| [07_chroma-syntax-highlighting](examples/07_chroma-syntax-highlighting/)             | Plug in chroma for syntax-highlighted code blocks (separate module)                        | `cd examples/07_chroma-syntax-highlighting && go run .`       |
+| [08_tree-sitter-syntax-highlighting](examples/08_tree-sitter-syntax-highlighting/)   | Plug in tree-sitter for AST-based syntax highlighting (separate module)                    | `cd examples/08_tree-sitter-syntax-highlighting && go run .`  |
+| [09_table](examples/09_table/)                                                       | Table rendering: bordered, minimal, alignment, striped rows, captions, and footer          | `go run ./examples/09_table/`                                 |
+| [10_huh-pairing](examples/10_huh-pairing/)                                           | Using herald with huh for interactive TUI forms                                            | `cd examples/10_huh-pairing && go run .`                      |
+| [11_gotreesitter-syntax-highlighting](examples/11_gotreesitter-syntax-highlighting/) | Pure-Go tree-sitter highlighting via gotreesitter (separate module)                        | `cd examples/11_gotreesitter-syntax-highlighting && go run .` |
 
 ## License
 
