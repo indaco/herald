@@ -37,14 +37,16 @@
   <b><a href="#quick-start">Quick Start</a></b> |
   <b><a href="#available-elements">Elements</a></b> |
   <b><a href="#customization">Customization</a></b> |
-  <b><a href="#built-in-themes">Themes</a></b> |
+  <b><a href="#built-in-themes">Built-in Themes</a></b> |
   <b><a href="#pairing-with-huh">Pairing with huh</a></b> |
   <b><a href="#examples">Examples</a></b>
 </p>
 
 herald maps familiar HTML elements (H1–H6, P, Blockquote, UL, OL, Code, HR, Tables, Alerts, and inline styles) to styled terminal output, built on [lipgloss v2](https://github.com/charmbracelet/lipgloss).
 
-It ships with a Rose Pine-inspired default theme, built-in themes matching the Charm ecosystem (Dracula, Catppuccin, Base16, Charm), and full style customization via functional options and ColorPalette. Works with any CLI or TUI - and if you use [huh](https://github.com/charmbracelet/huh) or other Charm-based libraries, the built-in themes pair seamlessly with theirs out of the box.
+It ships with a Rose Pine-inspired default theme, built-in themes matching the Charm ecosystem (Dracula, Catppuccin, Base16, Charm), and full style customization via functional options and ColorPalette.
+
+Works with any CLI or TUI - and if you use [huh](https://github.com/charmbracelet/huh) or other Charm-based libraries, the built-in themes pair seamlessly with theirs out of the box.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-hero.png" alt="herald demo output" width="600" />
@@ -101,6 +103,12 @@ H1–H3 render with a repeated underline character beneath the text. H4–H6 ren
 | `H5(text)` | bar prefix | `▎`               |
 | `H6(text)` | bar prefix | `▎`               |
 
+```go
+fmt.Println(ty.H1("Main Title"))
+fmt.Println(ty.H2("Section"))
+fmt.Println(ty.H4("Subsection"))
+```
+
 ### Block elements
 
 <details>
@@ -110,17 +118,15 @@ H1–H3 render with a repeated underline character beneath the text. H4–H6 ren
 </p>
 </details>
 
-| Method                         | Description                                                                   |
-| ------------------------------ | ----------------------------------------------------------------------------- |
-| `P(text)`                      | Paragraph                                                                     |
-| `Blockquote(text)`             | Indented block with a left bar; supports multi-line input                     |
-| `CodeBlock(text, lang)`        | Fenced code block with padding; optional line numbers and syntax highlighting |
-| `HR()`                         | Horizontal rule, configurable width and character                             |
-| `DL(pairs)`                    | Definition list from `[][2]string` pairs (term, description)                  |
-| `DT(text)`                     | Definition term (standalone)                                                  |
-| `DD(text)`                     | Definition description (standalone)                                           |
-| `Table(rows)`                  | Table from `[][]string`; first row is the header                              |
-| `TableWithOpts(rows, opts...)` | Table with per-table options (alignment, captions, footer, etc.)              |
+| Method                  | Description                                                                   |
+| ----------------------- | ----------------------------------------------------------------------------- |
+| `P(text)`               | Paragraph                                                                     |
+| `Blockquote(text)`      | Indented block with a left bar; supports multi-line input                     |
+| `CodeBlock(text, lang)` | Fenced code block with padding; optional line numbers and syntax highlighting |
+| `HR()`                  | Horizontal rule, configurable width and character                             |
+| `DL(pairs)`             | Definition list from `[][2]string` pairs (term, description)                  |
+| `DT(text)`              | Definition term (standalone)                                                  |
+| `DD(text)`              | Definition description (standalone)                                           |
 
 ```go
 fmt.Println(ty.Blockquote("First line.\nSecond line."))
@@ -133,70 +139,45 @@ fmt.Println(ty.DL([][2]string{
 }))
 ```
 
-### Tables
+### Inline styles
 
-`Table` renders a table from a `[][]string` slice. The first row is treated as the header. Two border presets are available: `BoxBorderSet()` (default, full Unicode box-drawing) and `MinimalBorderSet()` (no outer border).
+<details>
+<summary><b>Preview</b></summary>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-inline.png" alt="inline styles demo" width="600" />
+</p>
+</details>
+
+| Method                | Renders as                                                                                  |
+| --------------------- | ------------------------------------------------------------------------------------------- |
+| `Code(text, lang)`    | Inline code with background highlight; `lang` is optional, used when a CodeFormatter is set |
+| `Bold(text)`          | Bold                                                                                        |
+| `Italic(text)`        | Italic                                                                                      |
+| `Underline(text)`     | Underlined                                                                                  |
+| `Strikethrough(text)` | Strikethrough                                                                               |
+| `Small(text)`         | Faint                                                                                       |
+| `Mark(text)`          | Highlighted background                                                                      |
+| `Link(label, url)`    | Styled link; `url` is optional - when both differ, renders as `label (url)`                 |
+| `Kbd(text)`           | Keyboard key indicator                                                                      |
+| `Abbr(abbr, desc)`    | Abbreviation; `desc` is optional, appended in parentheses                                   |
+| `Sub(text)`           | Subscript, prefixed with `_`                                                                |
+| `Sup(text)`           | Superscript, prefixed with `^`                                                              |
 
 ```go
-fmt.Println(ty.Table([][]string{
-    {"Name", "Role", "Status"},
-    {"Alice", "Admin", "Active"},
-    {"Bob", "Editor", "Idle"},
-}))
+fmt.Println(ty.Bold("important") + " and " + ty.Italic("nuanced"))
+fmt.Println(ty.Kbd("Ctrl") + " + " + ty.Kbd("C"))
+fmt.Println(ty.Link("Go website", "https://go.dev"))
+fmt.Println(ty.Abbr("CSS", "Cascading Style Sheets"))
+fmt.Println(ty.Sub("2") + "O" + ty.Sup("n"))
 ```
-
-**Bordered (default):**
 
 ```text
-┌───────┬───────┬────────┐
-│ Name  │ Role  │ Status │
-├───────┼───────┼────────┤
-│ Alice │ Admin │ Active │
-│ Bob   │ Editor│ Idle   │
-└───────┴───────┴────────┘
+important and nuanced
+[Ctrl] + [C]
+Go website (https://go.dev)
+CSS (Cascading Style Sheets)
+_2O^n
 ```
-
-**Minimal:**
-
-```go
-ty := herald.New(herald.WithTableBorderSet(herald.MinimalBorderSet()))
-```
-
-```text
- Name  │ Role  │ Status
-───────┼───────┼────────
- Alice │ Admin │ Active
- Bob   │ Editor│ Idle
-```
-
-`TableWithOpts` accepts per-table options for column alignment, row separators, striped rows, captions, and footer rows:
-
-```go
-// Column alignment, footer row, and caption
-fmt.Println(ty.TableWithOpts([][]string{
-    {"Item", "Qty", "Price"},
-    {"Widget", "10", "$9.99"},
-    {"Gadget", "5", "$24.50"},
-    {"Total", "15", "$34.49"},
-},
-    herald.WithCaption("Order Summary"),
-    herald.WithFooterRow(true),
-    herald.WithColumnAlign(1, herald.AlignRight),
-    herald.WithColumnAlign(2, herald.AlignRight),
-))
-```
-
-| Table option                  | Description                                           |
-| ----------------------------- | ----------------------------------------------------- |
-| `WithColumnAlign(col, align)` | Set alignment for a column (`AlignLeft/Center/Right`) |
-| `WithColumnAligns(aligns...)` | Set alignments for all columns positionally           |
-| `WithRowSeparators(true)`     | Horizontal lines between body rows                    |
-| `WithStripedRows(true)`       | Alternating row background for readability            |
-| `WithCaption(text)`           | Caption above the table                               |
-| `WithCaptionBottom(text)`     | Caption below the table                               |
-| `WithFooterRow(true)`         | Treat last row as a styled footer with separator      |
-| `WithMaxColumnWidth(n)`       | Truncate all columns to `n` chars with `…`            |
-| `WithColumnMaxWidth(col, n)`  | Truncate a specific column (overrides global max)     |
 
 ### Lists
 
@@ -207,14 +188,19 @@ fmt.Println(ty.TableWithOpts([][]string{
 </p>
 </details>
 
+| Method             | Description                                              |
+| ------------------ | -------------------------------------------------------- |
+| `UL(items...)`     | Unordered list with bullet character (default `•`)       |
+| `OL(items...)`     | Ordered list with `1.`, `2.`, `3.` markers               |
+| `NestUL(items...)` | Nested unordered list with bullet cycling                |
+| `NestOL(items...)` | Nested ordered list with optional hierarchical numbering |
+
 ```go
 fmt.Println(ty.UL("Apples", "Bananas", "Cherries"))
 fmt.Println(ty.OL("First", "Second", "Third"))
 ```
 
-`UL` uses a bullet character (default `•`). `OL` uses `1.`, `2.`, `3.` markers.
-
-### Nested lists
+#### Nested lists
 
 `NestUL` and `NestOL` render hierarchical lists with configurable indentation, bullet cycling, and mixed nesting.
 
@@ -295,37 +281,77 @@ fmt.Println(ty.NestOL(
 3. Conclusion
 ```
 
-### Inline styles
+### Tables
 
 <details>
 <summary><b>Preview</b></summary>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-inline.png" alt="inline styles demo" width="600" />
+  <img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-tables.png" alt="tables demo" width="600" />
 </p>
 </details>
 
-| Method                | Renders as                                                                                  |
-| --------------------- | ------------------------------------------------------------------------------------------- |
-| `Code(text, lang)`    | Inline code with background highlight; `lang` is optional, used when a CodeFormatter is set |
-| `Bold(text)`          | Bold                                                                                        |
-| `Italic(text)`        | Italic                                                                                      |
-| `Underline(text)`     | Underlined                                                                                  |
-| `Strikethrough(text)` | Strikethrough                                                                               |
-| `Small(text)`         | Faint                                                                                       |
-| `Mark(text)`          | Highlighted background                                                                      |
-| `Link(label, url)`    | Styled link; `url` is optional - when both differ, renders as `label (url)`                 |
-| `Kbd(text)`           | Keyboard key indicator                                                                      |
-| `Abbr(abbr, desc)`    | Abbreviation; `desc` is optional, appended in parentheses                                   |
-| `Sub(text)`           | Subscript, prefixed with `_`                                                                |
-| `Sup(text)`           | Superscript, prefixed with `^`                                                              |
+`Table` renders a table from a `[][]string` slice. The first row is treated as the header. Two border presets are available: `BoxBorderSet()` (default, full Unicode box-drawing) and `MinimalBorderSet()` (header and column separators only, no outer border).
 
 ```go
-fmt.Println(ty.Bold("important") + " and " + ty.Italic("nuanced"))
-fmt.Println(ty.Kbd("Ctrl") + " + " + ty.Kbd("C"))
-fmt.Println(ty.Link("Go website", "https://go.dev"))
-fmt.Println(ty.Abbr("CSS", "Cascading Style Sheets"))
-fmt.Println(ty.Sub("2") + "O" + ty.Sup("n"))
+fmt.Println(ty.Table([][]string{
+    {"Name", "Role", "Status"},
+    {"Alice", "Admin", "Active"},
+    {"Bob", "Editor", "Idle"},
+}))
 ```
+
+**Bordered (default):**
+
+```text
+┌───────┬────────┬────────┐
+│ Name  │ Role   │ Status │
+├───────┼────────┼────────┤
+│ Alice │ Admin  │ Active │
+│ Bob   │ Editor │ Idle   │
+└───────┴────────┴────────┘
+```
+
+**Minimal:**
+
+```go
+ty := herald.New(herald.WithTableBorderSet(herald.MinimalBorderSet()))
+```
+
+```text
+ Name  │ Role   │ Status
+───────┼────────┼────────
+ Alice │ Admin  │ Active
+ Bob   │ Editor │ Idle
+```
+
+`TableWithOpts(rows [][]string, opts ...TableOption)` accepts per-table options for column alignment, row separators, striped rows, captions, and footer rows:
+
+```go
+// Column alignment, footer row, and caption
+fmt.Println(ty.TableWithOpts([][]string{
+    {"Item", "Qty", "Price"},
+    {"Widget", "10", "$9.99"},
+    {"Gadget", "5", "$24.50"},
+    {"Total", "15", "$34.49"},
+},
+    herald.WithCaption("Order Summary"),
+    herald.WithFooterRow(true),
+    herald.WithColumnAlign(1, herald.AlignRight),
+    herald.WithColumnAlign(2, herald.AlignRight),
+))
+```
+
+| Table option                  | Description                                           |
+| ----------------------------- | ----------------------------------------------------- |
+| `WithColumnAlign(col, align)` | Set alignment for a column (`AlignLeft/Center/Right`) |
+| `WithColumnAligns(aligns...)` | Set alignments for all columns positionally           |
+| `WithRowSeparators(true)`     | Horizontal lines between body rows                    |
+| `WithStripedRows(true)`       | Alternating row background for readability            |
+| `WithCaption(text)`           | Caption above the table                               |
+| `WithCaptionBottom(text)`     | Caption below the table                               |
+| `WithFooterRow(true)`         | Treat last row as a styled footer with separator      |
+| `WithMaxColumnWidth(n)`       | Truncate all columns to `n` chars with `…`            |
+| `WithColumnMaxWidth(col, n)`  | Truncate a specific column (overrides global max)     |
 
 ### Alerts
 
@@ -441,7 +467,7 @@ ty := herald.New(
 
 ### Code formatting
 
-`WithCodeFormatter` accepts a `func(code, language string) string` callback. When set, `Code()` and `CodeBlock()` pass the raw text and language string to the formatter before applying the lipgloss style. When not set (the default), behavior is unchanged.
+`WithCodeFormatter` accepts a `func(code, language string) string` callback. When set, `Code()` and `CodeBlock()` pass the raw text and language string to the formatter before applying the lipgloss style.
 
 ```go
 import (
@@ -501,7 +527,7 @@ ty := herald.New(
 
 ### Color palette
 
-`ColorPalette` lets you define 9 colors and derive a complete theme from them. All style fields map from this palette; configurable tokens use the same defaults as `DefaultTheme`.
+`ColorPalette` lets you define 9 colors and derive a complete theme from them. All style fields map from this palette; token options (characters, widths) are unaffected and retain their defaults. Alert colors are handled separately via `AlertPalette`.
 
 | Field       | Maps to                                                                   |
 | ----------- | ------------------------------------------------------------------------- |
@@ -569,18 +595,18 @@ ty := herald.New(
 )
 ```
 
-### Built-in themes
+## Built-in themes
 
-Herald ships with named themes that match [huh](https://charm.land/huh)'s built-in color palettes. Colors auto-adapt to light/dark terminal backgrounds using `lipgloss.HasDarkBackground`.
+Herald ships with named themes that match [huh](https://charm.land/huh)'s built-in color palettes. Colors auto-adapt to light/dark terminal backgrounds using `lipgloss.HasDarkBackground`. See [Pairing with huh](#pairing-with-huh) for how to use matching themes across herald and huh.
 
 <table align="center">
   <tr>
-    <td align="center" valign="middle"><code>DraculaTheme()</code><br/><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-dracula.png" alt="Dracula theme demo" width="280" /></td>
-    <td align="center" valign="middle"><code>CatppuccinTheme()</code><br/><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-catppuccin.png" alt="Catppuccin theme demo" width="280" /></td>
+    <td align="center" valign="middle"><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-dracula.png" alt="Dracula theme demo" width="280" /><br/><sub><code>DraculaTheme()</code></sub></td>
+    <td align="center" valign="middle"><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-catppuccin.png" alt="Catppuccin theme demo" width="280" /><br/><sub><code>CatppuccinTheme()</code></sub></td>
   </tr>
   <tr>
-    <td align="center" valign="middle"><code>Base16Theme()</code><br/><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-base16.png" alt="Base16 theme demo" width="280" /></td>
-    <td align="center" valign="middle"><code>CharmTheme()</code><br/><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-charm.png" alt="Charm theme demo" width="280" /></td>
+    <td align="center" valign="middle"><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-base16.png" alt="Base16 theme demo" width="280" /><br/><sub><code>Base16Theme()</code></sub></td>
+    <td align="center" valign="middle"><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-charm.png" alt="Charm theme demo" width="280" /><br/><sub><code>CharmTheme()</code></sub></td>
   </tr>
 </table>
 
@@ -588,17 +614,7 @@ Herald ships with named themes that match [huh](https://charm.land/huh)'s built-
 ty := herald.New(herald.WithTheme(herald.DraculaTheme()))
 ```
 
-Pair with the corresponding huh theme for consistent styling across forms and typography:
-
-```go
-// herald output layer
-ty := herald.New(herald.WithTheme(herald.DraculaTheme()))
-
-// huh prompt layer — themes match exactly
-form := huh.NewForm(...).WithTheme(huh.ThemeFunc(huh.ThemeDracula))
-```
-
-### Custom theme
+## Custom theme
 
 The easiest way to customize is to start from an existing theme and modify specific fields:
 
