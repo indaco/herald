@@ -126,6 +126,16 @@ func WithAbbrStyle(s lipgloss.Style) Option {
 	return func(ty *Typography) { ty.theme.Abbr = s }
 }
 
+// WithInsStyle overrides the inserted text style.
+func WithInsStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.Ins = s }
+}
+
+// WithDelStyle overrides the deleted text style.
+func WithDelStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.Del = s }
+}
+
 // --- List style options ---
 
 // WithListBulletStyle overrides the bullet/number marker style.
@@ -196,6 +206,16 @@ func WithHRWidth(w int) Option {
 // WithBlockquoteBar sets the left-bar character for blockquotes.
 func WithBlockquoteBar(c string) Option {
 	return func(ty *Typography) { ty.theme.BlockquoteBar = c }
+}
+
+// WithInsPrefix sets the prefix for inserted text.
+func WithInsPrefix(c string) Option {
+	return func(ty *Typography) { ty.theme.InsPrefix = c }
+}
+
+// WithDelPrefix sets the prefix for deleted text.
+func WithDelPrefix(c string) Option {
+	return func(ty *Typography) { ty.theme.DelPrefix = c }
 }
 
 // --- Nested list options ---

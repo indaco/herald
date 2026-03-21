@@ -120,6 +120,13 @@ func ThemeFromPalette(p ColorPalette) Theme {
 		Sup: lipgloss.NewStyle().
 			Foreground(p.Muted),
 
+		Ins: lipgloss.NewStyle().
+			Foreground(p.Tertiary),
+
+		Del: lipgloss.NewStyle().
+			Foreground(p.Highlight).
+			Strikethrough(true),
+
 		DT: lipgloss.NewStyle().
 			Bold(true).
 			Foreground(p.Text),
@@ -139,6 +146,8 @@ func ThemeFromPalette(p ColorPalette) Theme {
 		HRChar:            DefaultHRChar,
 		HRWidth:           DefaultHRWidth,
 		BlockquoteBar:     DefaultBlockquoteBar,
+		InsPrefix:         DefaultInsPrefix,
+		DelPrefix:         DefaultDelPrefix,
 
 		CodeLineNumber:    lipgloss.NewStyle().Foreground(p.Muted).Background(p.Base),
 		CodeLineNumberSep: DefaultCodeLineNumberSep,
