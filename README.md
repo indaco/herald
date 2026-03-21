@@ -162,6 +162,8 @@ fmt.Println(ty.DL([][2]string{
 | `Abbr(abbr, desc)`    | Abbreviation; `desc` is optional, appended in parentheses                                   |
 | `Sub(text)`           | Subscript, prefixed with `_`                                                                |
 | `Sup(text)`           | Superscript, prefixed with `^`                                                              |
+| `Ins(text)`           | Inserted text, prefixed with `+`                                                            |
+| `Del(text)`           | Deleted text, prefixed with `-`, strikethrough                                              |
 
 ```go
 fmt.Println(ty.Bold("important") + " and " + ty.Italic("nuanced"))
@@ -169,6 +171,8 @@ fmt.Println(ty.Kbd("Ctrl") + " + " + ty.Kbd("C"))
 fmt.Println(ty.Link("Go website", "https://go.dev"))
 fmt.Println(ty.Abbr("CSS", "Cascading Style Sheets"))
 fmt.Println(ty.Sub("2") + "O" + ty.Sup("n"))
+fmt.Println(ty.Ins("added line"))
+fmt.Println(ty.Del("removed line"))
 ```
 
 ```text
@@ -177,6 +181,8 @@ important and nuanced
 Go website (https://go.dev)
 CSS (Cascading Style Sheets)
 _2O^n
++added line
+-removed line
 ```
 
 ### Lists
@@ -430,6 +436,8 @@ ty := herald.New(
 | `WithLinkStyle`               | `Link`                  |
 | `WithKbdStyle`                | `Kbd`                   |
 | `WithAbbrStyle`               | `Abbr`                  |
+| `WithInsStyle`                | `Ins`                   |
+| `WithDelStyle`                | `Del`                   |
 | `WithListBulletStyle`         | Bullet/number marker    |
 | `WithListItemStyle`           | List item text          |
 | `WithDTStyle`                 | Definition term         |
@@ -457,6 +465,8 @@ ty := herald.New(
 | `WithHRChar(c)`                | `─`                | Character repeated for `HR`                                 |
 | `WithHRWidth(w)`               | `40`               | Width of `HR` in characters                                 |
 | `WithBlockquoteBar(c)`         | `│`                | Left bar character for `Blockquote`                         |
+| `WithInsPrefix(c)`             | `+`                | Prefix for `Ins` (inserted text)                            |
+| `WithDelPrefix(c)`             | `-`                | Prefix for `Del` (deleted text)                             |
 | `WithCodeLineNumbers(b)`       | `false`            | Show line numbers in `CodeBlock`                            |
 | `WithCodeLineNumberSep(c)`     | `│`                | Separator between line numbers and code                     |
 | `WithTableBorderSet(bs)`       | `BoxBorderSet()`   | Border character set (`BoxBorderSet` or `MinimalBorderSet`) |
@@ -533,9 +543,9 @@ ty := herald.New(
 | ----------- | ------------------------------------------------------------------------- |
 | `Primary`   | H1 headings                                                               |
 | `Secondary` | H2, list bullets                                                          |
-| `Tertiary`  | H3, links                                                                 |
+| `Tertiary`  | H3, links, `Ins`                                                          |
 | `Accent`    | H4, mark background                                                       |
-| `Highlight` | H5, `Abbr`                                                                |
+| `Highlight` | H5, `Abbr`, `Del`                                                         |
 | `Muted`     | H6, blockquote, HR, sub/sup, `DD`, line numbers, table border, caption    |
 | `Text`      | Body text, paragraphs, list items, inline code, `DT`, table cells, footer |
 | `Surface`   | Background for `Kbd`, striped table rows                                  |
