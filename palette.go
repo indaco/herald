@@ -146,6 +146,17 @@ func ThemeFromPalette(p ColorPalette) Theme {
 		AddressCardBorder: lipgloss.NewStyle().
 			Foreground(p.Muted),
 
+		Badge: lipgloss.NewStyle().
+			Background(p.Secondary).
+			Foreground(p.Base).
+			Bold(true).
+			Padding(0, 1),
+
+		Tag: lipgloss.NewStyle().
+			Foreground(p.Secondary).
+			Background(p.Surface).
+			Padding(0, 1),
+
 		H1UnderlineChar: DefaultH1UnderlineChar,
 		H2UnderlineChar: DefaultH2UnderlineChar,
 		H3UnderlineChar: DefaultH3UnderlineChar,

@@ -802,3 +802,28 @@ func (t *Typography) AddressCard(text string) string {
 		Padding(0, 1)
 	return style.Render(text)
 }
+
+// ---------------------------------------------------------------------------
+// Badge
+// ---------------------------------------------------------------------------
+
+// Badge renders text as a styled pill/tag label.
+func (t *Typography) Badge(text string) string {
+	return t.theme.Badge.Render(text)
+}
+
+// BadgeWithStyle renders a badge using a one-off style override, useful for
+// semantic variants (success, warning, error) without changing the theme.
+func (t *Typography) BadgeWithStyle(text string, style lipgloss.Style) string {
+	return style.Render(text)
+}
+
+// Tag renders text as a subtle pill/category label.
+func (t *Typography) Tag(text string) string {
+	return t.theme.Tag.Render(text)
+}
+
+// TagWithStyle renders a tag using a one-off style override.
+func (t *Typography) TagWithStyle(text string, style lipgloss.Style) string {
+	return style.Render(text)
+}
