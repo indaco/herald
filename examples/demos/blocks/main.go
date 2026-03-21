@@ -39,4 +39,12 @@ func main() {
 	fmt.Println(ty.Address("Jane Doe\njane@example.com\nSan Francisco, CA"))
 	fmt.Println()
 	fmt.Println(ty.AddressCard("Jane Doe\njane@example.com\nSan Francisco, CA"))
+	fmt.Println()
+
+	// Footnote section
+	fmt.Println(ty.P("Herald supports rich typography" + ty.FootnoteRef(1) + " with multiple elements" + ty.FootnoteRef(2)))
+	fmt.Println(ty.FootnoteSection([]string{
+		"Built on lipgloss v2",
+		"Headings, lists, alerts, and more",
+	}))
 }
