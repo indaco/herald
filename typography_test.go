@@ -810,6 +810,67 @@ func TestDTDD(t *testing.T) {
 }
 
 // ---------------------------------------------------------------------------
+// Address
+// ---------------------------------------------------------------------------
+
+func TestAddress(t *testing.T) {
+	ty := newTestTypography()
+
+	tests := []struct {
+		name     string
+		text     string
+		contains string
+	}{
+		{"basic", "Jane Doe", "Jane Doe"},
+		{"multi-line", "Jane Doe\njane@example.com\nSan Francisco, CA", "jane@example.com"},
+		{"empty", "", ""},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			result := stripANSI(ty.Address(tc.text))
+			if tc.contains != "" && !strings.Contains(result, tc.contains) {
+				t.Errorf("Address: expected %q in %q", tc.contains, result)
+			}
+		})
+	}
+}
+
+// ---------------------------------------------------------------------------
+// AddressCard
+// ---------------------------------------------------------------------------
+
+func TestAddressCard(t *testing.T) {
+	ty := newTestTypography()
+
+	tests := []struct {
+		name     string
+		text     string
+		contains string
+	}{
+		{"basic", "Jane Doe", "Jane Doe"},
+		{"multi-line", "Jane Doe\njane@example.com\nSan Francisco, CA", "jane@example.com"},
+		{"empty", "", ""},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			result := stripANSI(ty.AddressCard(tc.text))
+			if tc.contains != "" && !strings.Contains(result, tc.contains) {
+				t.Errorf("AddressCard: expected %q in %q", tc.contains, result)
+			}
+		})
+	}
+
+	t.Run("has rounded border characters", func(t *testing.T) {
+		result := stripANSI(ty.AddressCard("Test"))
+		if !strings.Contains(result, "\u256d") && !strings.Contains(result, "\u2570") {
+			t.Errorf("AddressCard should contain rounded border chars, got %q", result)
+		}
+	})
+}
+
+// ---------------------------------------------------------------------------
 // Edge cases
 // ---------------------------------------------------------------------------
 
@@ -863,6 +924,8 @@ func TestConcurrentAccess(t *testing.T) {
 			ty.Ins("added")
 			ty.Del("removed")
 			ty.DL([][2]string{{"term", "def"}})
+			ty.Address("Jane Doe\njane@example.com")
+			ty.AddressCard("Jane Doe\njane@example.com")
 		}()
 	}
 

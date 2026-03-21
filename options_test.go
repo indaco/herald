@@ -120,6 +120,33 @@ func TestWithDLStyles(t *testing.T) {
 	_ = ty
 }
 
+func TestWithAddressStyle(t *testing.T) {
+	style := lipgloss.NewStyle().Italic(true)
+	ty := New(WithAddressStyle(style))
+	result := ty.theme.Address.Render("test")
+	if result == "" {
+		t.Error("expected non-empty render from Address style")
+	}
+}
+
+func TestWithAddressCardStyle(t *testing.T) {
+	style := lipgloss.NewStyle().Italic(true)
+	ty := New(WithAddressCardStyle(style))
+	result := ty.theme.AddressCard.Render("test")
+	if result == "" {
+		t.Error("expected non-empty render from AddressCard style")
+	}
+}
+
+func TestWithAddressCardBorderStyle(t *testing.T) {
+	style := lipgloss.NewStyle().Foreground(lipgloss.Color("#FF0000"))
+	ty := New(WithAddressCardBorderStyle(style))
+	result := ty.theme.AddressCardBorder.Render("test")
+	if result == "" {
+		t.Error("expected non-empty render from AddressCardBorder style")
+	}
+}
+
 func TestWithTokenOptions(t *testing.T) {
 	t.Run("BulletChar", func(t *testing.T) {
 		ty := New(WithBulletChar("*"))

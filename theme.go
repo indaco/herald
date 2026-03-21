@@ -47,6 +47,11 @@ type Theme struct {
 	DT lipgloss.Style // definition term
 	DD lipgloss.Style // definition description
 
+	// Address element
+	Address           lipgloss.Style // style for address/contact blocks
+	AddressCard       lipgloss.Style // content style for bordered address card
+	AddressCardBorder lipgloss.Style // border color/style for address card (same pattern as TableBorder)
+
 	// Callbacks
 	CodeFormatter func(code, language string) string // optional syntax highlighter
 

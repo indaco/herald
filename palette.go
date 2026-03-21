@@ -135,6 +135,17 @@ func ThemeFromPalette(p ColorPalette) Theme {
 			PaddingLeft(4).
 			Foreground(p.Muted),
 
+		Address: lipgloss.NewStyle().
+			Foreground(p.Muted).
+			Italic(true).
+			PaddingLeft(2),
+
+		AddressCard: lipgloss.NewStyle().
+			Foreground(p.Muted).
+			Italic(true),
+		AddressCardBorder: lipgloss.NewStyle().
+			Foreground(p.Muted),
+
 		H1UnderlineChar: DefaultH1UnderlineChar,
 		H2UnderlineChar: DefaultH2UnderlineChar,
 		H3UnderlineChar: DefaultH3UnderlineChar,
