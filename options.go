@@ -64,6 +64,11 @@ func WithBlockquoteStyle(s lipgloss.Style) Option {
 	return func(ty *Typography) { ty.theme.Blockquote = s }
 }
 
+// WithBlockquoteBarStyle overrides the blockquote bar character style.
+func WithBlockquoteBarStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.BlockquoteBarStyle = s }
+}
+
 // WithCodeInlineStyle overrides the inline code style.
 func WithCodeInlineStyle(s lipgloss.Style) Option {
 	return func(ty *Typography) { ty.theme.CodeInline = s }
