@@ -127,6 +127,8 @@ fmt.Println(ty.H4("Subsection"))
 | `DL(pairs)`             | Definition list from `[][2]string` pairs (term, description)                  |
 | `DT(text)`              | Definition term (standalone)                                                  |
 | `DD(text)`              | Definition description (standalone)                                           |
+| `Address(text)`         | Contact/author block; renders multi-line text in a distinctive italic style   |
+| `AddressCard(text)`     | Bordered card variant of `Address` with rounded border                        |
 
 ```go
 fmt.Println(ty.Blockquote("First line.\nSecond line."))
@@ -137,6 +139,8 @@ fmt.Println(ty.DL([][2]string{
     {"Go", "A statically typed, compiled language"},
     {"Rust", "A systems programming language"},
 }))
+
+fmt.Println(ty.Address("Jane Doe\njane@example.com\nSan Francisco, CA"))
 ```
 
 ### Inline styles
@@ -442,6 +446,9 @@ ty := herald.New(
 | `WithListItemStyle`           | List item text          |
 | `WithDTStyle`                 | Definition term         |
 | `WithDDStyle`                 | Definition description  |
+| `WithAddressStyle`            | `Address`               |
+| `WithAddressCardStyle`        | `AddressCard` content   |
+| `WithAddressCardBorderStyle`  | `AddressCard` border    |
 | `WithTableHeaderStyle`        | Table header cells      |
 | `WithTableCellStyle`          | Table body cells        |
 | `WithTableStripedCellStyle`   | Alternating body rows   |
@@ -539,17 +546,17 @@ ty := herald.New(
 
 `ColorPalette` lets you define 9 colors and derive a complete theme from them. All style fields map from this palette; token options (characters, widths) are unaffected and retain their defaults. Alert colors are handled separately via `AlertPalette`.
 
-| Field       | Maps to                                                                   |
-| ----------- | ------------------------------------------------------------------------- |
-| `Primary`   | H1 headings                                                               |
-| `Secondary` | H2, list bullets                                                          |
-| `Tertiary`  | H3, links, `Ins`                                                          |
-| `Accent`    | H4, mark background                                                       |
-| `Highlight` | H5, `Abbr`, `Del`                                                         |
-| `Muted`     | H6, blockquote, HR, sub/sup, `DD`, line numbers, table border, caption    |
-| `Text`      | Body text, paragraphs, list items, inline code, `DT`, table cells, footer |
-| `Surface`   | Background for `Kbd`, striped table rows                                  |
-| `Base`      | Background for inline code, code blocks; mark fg                          |
+| Field       | Maps to                                                                                                               |
+| ----------- | --------------------------------------------------------------------------------------------------------------------- |
+| `Primary`   | H1 headings                                                                                                           |
+| `Secondary` | H2, list bullets                                                                                                      |
+| `Tertiary`  | H3, links, `Ins`                                                                                                      |
+| `Accent`    | H4, mark background                                                                                                   |
+| `Highlight` | H5, `Abbr`, `Del`                                                                                                     |
+| `Muted`     | H6, blockquote, HR, sub/sup, `DD`, `Address`, `AddressCard`, `AddressCardBorder`, line numbers, table border, caption |
+| `Text`      | Body text, paragraphs, list items, inline code, `DT`, table cells, footer                                             |
+| `Surface`   | Background for `Kbd`, striped table rows                                                                              |
+| `Base`      | Background for inline code, code blocks; mark fg                                                                      |
 
 Pass the palette to `New()` via `WithPalette`, or call `ThemeFromPalette` to construct a `Theme` value directly.
 
