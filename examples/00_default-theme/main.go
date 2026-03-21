@@ -122,4 +122,13 @@ func main() {
 	fmt.Println(ty.H3("Badge / Tag"))
 	fmt.Println(ty.Badge("SUCCESS") + " " + ty.Badge("BETA") + " " + ty.Tag("v2.0") + " " + ty.Tag("go"))
 	fmt.Println()
+
+	// Footnote
+	fmt.Println(ty.H3("Footnote"))
+	fmt.Println(ty.P("Herald supports rich typography" + ty.FootnoteRef(1) + " with multiple elements" + ty.FootnoteRef(2)))
+	fmt.Println(ty.FootnoteSection([]string{
+		"Built on lipgloss v2",
+		"Headings, lists, alerts, and more",
+	}))
+	fmt.Println()
 }

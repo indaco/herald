@@ -189,6 +189,37 @@ func WithTagStyle(s lipgloss.Style) Option {
 	return func(ty *Typography) { ty.theme.Tag = s }
 }
 
+// --- Footnote style options ---
+
+// WithFootnoteRefStyle overrides the inline footnote reference marker style.
+func WithFootnoteRefStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.FootnoteRef = s }
+}
+
+// WithFootnoteItemStyle overrides the footnote item style.
+func WithFootnoteItemStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.FootnoteItem = s }
+}
+
+// WithFootnoteDividerStyle overrides the footnote divider style.
+func WithFootnoteDividerStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.FootnoteDivider = s }
+}
+
+// WithFootnoteDividerChar sets the character used for the footnote section divider.
+func WithFootnoteDividerChar(c string) Option {
+	return func(ty *Typography) { ty.theme.FootnoteDividerChar = c }
+}
+
+// WithFootnoteDividerWidth sets the width of the footnote section divider.
+func WithFootnoteDividerWidth(w int) Option {
+	return func(ty *Typography) {
+		if w > 0 {
+			ty.theme.FootnoteDividerWidth = w
+		}
+	}
+}
+
 // --- Heading decoration options ---
 
 // WithH1UnderlineChar sets the character used for the H1 underline.

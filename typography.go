@@ -827,3 +827,30 @@ func (t *Typography) Tag(text string) string {
 func (t *Typography) TagWithStyle(text string, style lipgloss.Style) string {
 	return style.Render(text)
 }
+
+// ---------------------------------------------------------------------------
+// Footnote
+// ---------------------------------------------------------------------------
+
+// FootnoteRef renders an inline footnote reference marker, e.g. "[1]".
+func (t *Typography) FootnoteRef(n int) string {
+	return t.theme.FootnoteRef.Render(fmt.Sprintf("[%d]", n))
+}
+
+// FootnoteSection renders the collected footnotes as a numbered list,
+// preceded by a divider line. Returns an empty string if notes is empty.
+func (t *Typography) FootnoteSection(notes []string) string {
+	if len(notes) == 0 {
+		return ""
+	}
+	divider := t.theme.FootnoteDivider.Render(
+		strings.Repeat(t.theme.FootnoteDividerChar, t.theme.FootnoteDividerWidth),
+	)
+	lines := make([]string, 0, len(notes)+1)
+	lines = append(lines, divider)
+	for i, note := range notes {
+		ref := fmt.Sprintf("[%d]", i+1)
+		lines = append(lines, t.theme.FootnoteItem.Render(ref+" "+note))
+	}
+	return strings.Join(lines, "\n")
+}

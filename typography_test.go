@@ -1022,6 +1022,8 @@ func TestConcurrentAccess(t *testing.T) {
 			ty.BadgeWithStyle("BETA", lipgloss.NewStyle().Bold(true))
 			ty.Tag("v2.0")
 			ty.TagWithStyle("go", lipgloss.NewStyle().Italic(true))
+			ty.FootnoteRef(1)
+			ty.FootnoteSection([]string{"note one", "note two"})
 		}()
 	}
 
