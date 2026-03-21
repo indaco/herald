@@ -732,6 +732,27 @@ The following option controls the visual appearance of line numbers:
 | ------------------------- | ----------------------- |
 | `WithCodeLineNumberStyle` | Code block line numbers |
 
+## Themes
+
+### Built-in themes
+
+Herald ships with named themes that match [huh](https://charm.land/huh)'s built-in color palettes. Colors auto-adapt to light/dark terminal backgrounds using `lipgloss.HasDarkBackground`. See [Pairing with huh](#pairing-with-huh) for how to use matching themes across herald and huh.
+
+<table align="center">
+  <tr>
+    <td align="center" valign="middle"><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-dracula.png" alt="Dracula theme demo" width="280" /><br/><sub><code>DraculaTheme()</code></sub></td>
+    <td align="center" valign="middle"><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-catppuccin.png" alt="Catppuccin theme demo" width="280" /><br/><sub><code>CatppuccinTheme()</code></sub></td>
+  </tr>
+  <tr>
+    <td align="center" valign="middle"><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-base16.png" alt="Base16 theme demo" width="280" /><br/><sub><code>Base16Theme()</code></sub></td>
+    <td align="center" valign="middle"><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-charm.png" alt="Charm theme demo" width="280" /><br/><sub><code>CharmTheme()</code></sub></td>
+  </tr>
+</table>
+
+```go
+ty := herald.New(herald.WithTheme(herald.DraculaTheme()))
+```
+
 ### Color palette
 
 `ColorPalette` lets you define 9 colors and derive a complete theme from them. All style fields map from this palette; token options (characters, widths) are unaffected and retain their defaults. Alert colors are handled separately via `AlertPalette`.
@@ -802,27 +823,6 @@ ty := herald.New(
     herald.WithHRWidth(60),
     herald.WithBulletChar("-"),
 )
-```
-
-## Themes
-
-### Built-in themes
-
-Herald ships with named themes that match [huh](https://charm.land/huh)'s built-in color palettes. Colors auto-adapt to light/dark terminal backgrounds using `lipgloss.HasDarkBackground`. See [Pairing with huh](#pairing-with-huh) for how to use matching themes across herald and huh.
-
-<table align="center">
-  <tr>
-    <td align="center" valign="middle"><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-dracula.png" alt="Dracula theme demo" width="280" /><br/><sub><code>DraculaTheme()</code></sub></td>
-    <td align="center" valign="middle"><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-catppuccin.png" alt="Catppuccin theme demo" width="280" /><br/><sub><code>CatppuccinTheme()</code></sub></td>
-  </tr>
-  <tr>
-    <td align="center" valign="middle"><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-base16.png" alt="Base16 theme demo" width="280" /><br/><sub><code>Base16Theme()</code></sub></td>
-    <td align="center" valign="middle"><img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-theme-charm.png" alt="Charm theme demo" width="280" /><br/><sub><code>CharmTheme()</code></sub></td>
-  </tr>
-</table>
-
-```go
-ty := herald.New(herald.WithTheme(herald.DraculaTheme()))
 ```
 
 ### Custom theme
