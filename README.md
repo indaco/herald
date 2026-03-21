@@ -152,22 +152,26 @@ fmt.Println(ty.Address("Jane Doe\njane@example.com\nSan Francisco, CA"))
 </p>
 </details>
 
-| Method                | Renders as                                                                                  |
-| --------------------- | ------------------------------------------------------------------------------------------- |
-| `Code(text, lang)`    | Inline code with background highlight; `lang` is optional, used when a CodeFormatter is set |
-| `Bold(text)`          | Bold                                                                                        |
-| `Italic(text)`        | Italic                                                                                      |
-| `Underline(text)`     | Underlined                                                                                  |
-| `Strikethrough(text)` | Strikethrough                                                                               |
-| `Small(text)`         | Faint                                                                                       |
-| `Mark(text)`          | Highlighted background                                                                      |
-| `Link(label, url)`    | Styled link; `url` is optional - when both differ, renders as `label (url)`                 |
-| `Kbd(text)`           | Keyboard key indicator                                                                      |
-| `Abbr(abbr, desc)`    | Abbreviation; `desc` is optional, appended in parentheses                                   |
-| `Sub(text)`           | Subscript, prefixed with `_`                                                                |
-| `Sup(text)`           | Superscript, prefixed with `^`                                                              |
-| `Ins(text)`           | Inserted text, prefixed with `+`                                                            |
-| `Del(text)`           | Deleted text, prefixed with `-`, strikethrough                                              |
+| Method                        | Renders as                                                                                  |
+| ----------------------------- | ------------------------------------------------------------------------------------------- |
+| `Code(text, lang)`            | Inline code with background highlight; `lang` is optional, used when a CodeFormatter is set |
+| `Bold(text)`                  | Bold                                                                                        |
+| `Italic(text)`                | Italic                                                                                      |
+| `Underline(text)`             | Underlined                                                                                  |
+| `Strikethrough(text)`         | Strikethrough                                                                               |
+| `Small(text)`                 | Faint                                                                                       |
+| `Mark(text)`                  | Highlighted background                                                                      |
+| `Link(label, url)`            | Styled link; `url` is optional - when both differ, renders as `label (url)`                 |
+| `Kbd(text)`                   | Keyboard key indicator                                                                      |
+| `Abbr(abbr, desc)`            | Abbreviation; `desc` is optional, appended in parentheses                                   |
+| `Sub(text)`                   | Subscript, prefixed with `_`                                                                |
+| `Sup(text)`                   | Superscript, prefixed with `^`                                                              |
+| `Ins(text)`                   | Inserted text, prefixed with `+`                                                            |
+| `Del(text)`                   | Deleted text, prefixed with `-`, strikethrough                                              |
+| `Badge(text)`                 | Styled pill/tag label (e.g. `[SUCCESS]`, `[BETA]`)                                          |
+| `BadgeWithStyle(text, style)` | Badge with a one-off style override for semantic variants                                   |
+| `Tag(text)`                   | Subtle pill/category label (lighter variant of Badge)                                       |
+| `TagWithStyle(text, style)`   | Tag with a one-off style override                                                           |
 
 ```go
 fmt.Println(ty.Bold("important") + " and " + ty.Italic("nuanced"))
@@ -177,6 +181,8 @@ fmt.Println(ty.Abbr("CSS", "Cascading Style Sheets"))
 fmt.Println(ty.Sub("2") + "O" + ty.Sup("n"))
 fmt.Println(ty.Ins("added line"))
 fmt.Println(ty.Del("removed line"))
+fmt.Println(ty.Badge("SUCCESS") + " " + ty.Badge("BETA"))
+fmt.Println(ty.Tag("v2.0") + " " + ty.Tag("go"))
 ```
 
 ```text
@@ -187,6 +193,8 @@ CSS (Cascading Style Sheets)
 _2O^n
 +added line
 -removed line
+SUCCESS  BETA
+v2.0  go
 ```
 
 ### Lists
@@ -442,6 +450,8 @@ ty := herald.New(
 | `WithAbbrStyle`               | `Abbr`                  |
 | `WithInsStyle`                | `Ins`                   |
 | `WithDelStyle`                | `Del`                   |
+| `WithBadgeStyle`              | `Badge`                 |
+| `WithTagStyle`                | `Tag`                   |
 | `WithListBulletStyle`         | Bullet/number marker    |
 | `WithListItemStyle`           | List item text          |
 | `WithDTStyle`                 | Definition term         |
@@ -549,14 +559,14 @@ ty := herald.New(
 | Field       | Maps to                                                                                                               |
 | ----------- | --------------------------------------------------------------------------------------------------------------------- |
 | `Primary`   | H1 headings                                                                                                           |
-| `Secondary` | H2, list bullets                                                                                                      |
+| `Secondary` | H2, list bullets, `Badge` background, `Tag` foreground                                                                |
 | `Tertiary`  | H3, links, `Ins`                                                                                                      |
 | `Accent`    | H4, mark background                                                                                                   |
 | `Highlight` | H5, `Abbr`, `Del`                                                                                                     |
 | `Muted`     | H6, blockquote, HR, sub/sup, `DD`, `Address`, `AddressCard`, `AddressCardBorder`, line numbers, table border, caption |
 | `Text`      | Body text, paragraphs, list items, inline code, `DT`, table cells, footer                                             |
-| `Surface`   | Background for `Kbd`, striped table rows                                                                              |
-| `Base`      | Background for inline code, code blocks; mark fg                                                                      |
+| `Surface`   | Background for `Kbd`, `Tag`, striped table rows                                                                       |
+| `Base`      | Background for inline code, code blocks; mark fg, `Badge` fg                                                          |
 
 Pass the palette to `New()` via `WithPalette`, or call `ThemeFromPalette` to construct a `Theme` value directly.
 
