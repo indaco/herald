@@ -36,8 +36,9 @@
 <p align="center">
   <b><a href="#quick-start">Quick Start</a></b> |
   <b><a href="#available-elements">Elements</a></b> |
+  <b><a href="#composition-patterns">Composition</a></b> |
   <b><a href="#customization">Customization</a></b> |
-  <b><a href="#built-in-themes">Built-in Themes</a></b> |
+  <b><a href="#themes">Themes</a></b> |
   <b><a href="#pairing-with-huh">Pairing with huh</a></b> |
   <b><a href="#examples">Examples</a></b>
 </p>
@@ -62,7 +63,7 @@ go get github.com/indaco/herald
 
 Requires Go 1.25 or later.
 
-## Quick start
+## Quick Start
 
 ```go
 package main
@@ -118,20 +119,23 @@ fmt.Println(ty.H4("Subsection"))
 </p>
 </details>
 
-| Method                  | Description                                                                   |
-| ----------------------- | ----------------------------------------------------------------------------- |
-| `P(text)`               | Paragraph                                                                     |
-| `Blockquote(text)`      | Indented block with a left bar; supports multi-line input                     |
-| `CodeBlock(text, lang)` | Fenced code block with padding; optional line numbers and syntax highlighting |
-| `HR()`                  | Horizontal rule, configurable width and character                             |
-| `DL(pairs)`             | Definition list from `[][2]string` pairs (term, description)                  |
-| `DT(text)`              | Definition term (standalone)                                                  |
-| `DD(text)`              | Definition description (standalone)                                           |
-| `Address(text)`         | Contact/author block; renders multi-line text in a distinctive italic style   |
-| `AddressCard(text)`     | Bordered card variant of `Address` with rounded border                        |
+| Method                   | Description                                                                   |
+| ------------------------ | ----------------------------------------------------------------------------- |
+| `P(text)`                | Paragraph                                                                     |
+| `Blockquote(text)`       | Indented block with a left bar; supports multi-line input                     |
+| `CodeBlock(text, lang)`  | Fenced code block with padding; optional line numbers and syntax highlighting |
+| `HR()`                   | Horizontal rule, configurable width and character                             |
+| `DL(pairs)`              | Definition list from `[][2]string` pairs (term, description)                  |
+| `DT(text)`               | Definition term (standalone)                                                  |
+| `DD(text)`               | Definition description (standalone)                                           |
+| `Address(text)`          | Contact/author block; renders multi-line text in a distinctive italic style   |
+| `AddressCard(text)`      | Bordered card variant of `Address` with rounded border                        |
+| `FootnoteRef(n)`         | Inline footnote reference marker, e.g. `[1]`                                  |
+| `FootnoteSection(notes)` | Numbered footnote list with divider; returns `""` if notes is empty           |
 
 ```go
 fmt.Println(ty.Blockquote("First line.\nSecond line."))
+
 fmt.Println(ty.CodeBlock("func main() {\n\tfmt.Println(\"hello\")\n}"))
 fmt.Println(ty.HR())
 
@@ -140,7 +144,18 @@ fmt.Println(ty.DL([][2]string{
     {"Rust", "A systems programming language"},
 }))
 
+// Standalone terms and descriptions
+fmt.Println(ty.DT("Go"))
+fmt.Println(ty.DD("A statically typed, compiled language"))
+
 fmt.Println(ty.Address("Jane Doe\njane@example.com\nSan Francisco, CA"))
+
+// Footnotes compose with paragraphs via string concatenation
+fmt.Println(ty.P("Herald supports rich typography" + ty.FootnoteRef(1) + " with multiple elements" + ty.FootnoteRef(2)))
+fmt.Println(ty.FootnoteSection([]string{
+    "Built on lipgloss v2",
+    "Headings, lists, alerts, and more",
+}))
 ```
 
 ### Inline styles
@@ -164,8 +179,8 @@ fmt.Println(ty.Address("Jane Doe\njane@example.com\nSan Francisco, CA"))
 | `Link(label, url)`            | Styled link; `url` is optional - when both differ, renders as `label (url)`                 |
 | `Kbd(text)`                   | Keyboard key indicator                                                                      |
 | `Abbr(abbr, desc)`            | Abbreviation; `desc` is optional, appended in parentheses                                   |
-| `Sub(text)`                   | Subscript, prefixed with `_`                                                                |
-| `Sup(text)`                   | Superscript, prefixed with `^`                                                              |
+| `Sub(text)`                   | Renders with `_` prefix (style not configurable via options)                                |
+| `Sup(text)`                   | Renders with `^` prefix (style not configurable via options)                                |
 | `Ins(text)`                   | Inserted text, prefixed with `+`                                                            |
 | `Del(text)`                   | Deleted text, prefixed with `-`, strikethrough                                              |
 | `Badge(text)`                 | Styled pill/tag label (e.g. `[SUCCESS]`, `[BETA]`)                                          |
@@ -196,6 +211,8 @@ _2O^n
 SUCCESS  BETA
 v2.0  go
 ```
+
+In a color terminal, `Badge` renders with a filled background pill and `Tag` with a lighter variant.
 
 ### Lists
 
@@ -356,7 +373,16 @@ fmt.Println(ty.TableWithOpts([][]string{
     herald.WithFooterRow(true),
     herald.WithColumnAlign(1, herald.AlignRight),
     herald.WithColumnAlign(2, herald.AlignRight),
+    // Or set all column alignments at once
+    // herald.WithColumnAligns(herald.AlignLeft, herald.AlignRight, herald.AlignRight),
 ))
+```
+
+```go
+// Truncate long cell content
+ty.TableWithOpts(rows,
+    herald.WithMaxColumnWidth(15),
+)
 ```
 
 | Table option                  | Description                                           |
@@ -406,10 +432,71 @@ fmt.Println(ty.Caution("Advises about risks or negative outcomes."))
 │ Urgent info that needs immediate attention.
 ```
 
+See [`examples/02_alerts/`](examples/02_alerts/) for the full output of all five alert types.
+
 You can also use the generic `Alert` method with an `AlertType`:
 
 ```go
 fmt.Println(ty.Alert(herald.AlertNote, "Generic alert call."))
+```
+
+## Composition patterns
+
+Herald provides typography primitives - you compose them for higher-level patterns. Here are some common recipes.
+
+### Status messages
+
+Combine inline styles for colored status output:
+
+```go
+ty := herald.New()
+
+// Success / error with Ins/Del
+fmt.Println(ty.Ins("Build completed successfully"))  // green, prefixed with +
+fmt.Println(ty.Del("3 tests failed"))                // red, prefixed with -
+
+// Status badges inline with text
+fmt.Println(ty.Badge("PASS") + " " + "All checks passed")
+fmt.Println(ty.Badge("FAIL") + " " + "Linter found 2 issues")
+
+// Subtle labels for categories
+fmt.Println(ty.Tag("v2.1.0") + " " + ty.Tag("stable"))
+```
+
+### Annotated sections
+
+Pair headings with alerts for contextual guidance:
+
+```go
+fmt.Println(ty.H2("Database Migration"))
+fmt.Println(ty.Warning("Back up your database before proceeding."))
+fmt.Println(ty.P("Run the following command to apply migrations:"))
+fmt.Println(ty.CodeBlock("go run ./cmd/migrate up"))
+```
+
+### Author blocks in release notes
+
+Use `AddressCard` for styled contact information:
+
+```go
+fmt.Println(ty.H2("Release v2.0"))
+fmt.Println(ty.P("Major performance improvements and new API surface."))
+fmt.Println(ty.AddressCard("Maintained by\nJane Doe\njane@example.com"))
+```
+
+### Rich paragraphs with references
+
+Compose inline elements and footnotes within paragraphs:
+
+```go
+fmt.Println(ty.P(
+    "Herald" + ty.FootnoteRef(1) + " is built on " +
+    ty.Link("lipgloss", "https://github.com/charmbracelet/lipgloss") +
+    " and supports " + ty.Bold("rich text") + ", " +
+    ty.Code("inline code") + ", and " + ty.Kbd("Ctrl") + "+" + ty.Kbd("C") +
+    " key indicators.",
+))
+fmt.Println(ty.FootnoteSection([]string{"A Go library for TUI typography"}))
 ```
 
 ## Customization
@@ -430,67 +517,154 @@ ty := herald.New(
 
 **Style options** - each accepts a `lipgloss.Style`:
 
-| Option                        | Targets                 |
-| ----------------------------- | ----------------------- |
-| `WithH1Style` – `WithH6Style` | Heading levels 1–6      |
-| `WithParagraphStyle`          | `P`                     |
-| `WithBlockquoteStyle`         | `Blockquote`            |
-| `WithCodeInlineStyle`         | `Code`                  |
-| `WithCodeBlockStyle`          | `CodeBlock`             |
-| `WithCodeLineNumberStyle`     | Code block line numbers |
-| `WithHRStyle`                 | `HR`                    |
-| `WithBoldStyle`               | `Bold`                  |
-| `WithItalicStyle`             | `Italic`                |
-| `WithUnderlineStyle`          | `Underline`             |
-| `WithStrikethroughStyle`      | `Strikethrough`         |
-| `WithSmallStyle`              | `Small`                 |
-| `WithMarkStyle`               | `Mark`                  |
-| `WithLinkStyle`               | `Link`                  |
-| `WithKbdStyle`                | `Kbd`                   |
-| `WithAbbrStyle`               | `Abbr`                  |
-| `WithInsStyle`                | `Ins`                   |
-| `WithDelStyle`                | `Del`                   |
-| `WithBadgeStyle`              | `Badge`                 |
-| `WithTagStyle`                | `Tag`                   |
-| `WithListBulletStyle`         | Bullet/number marker    |
-| `WithListItemStyle`           | List item text          |
-| `WithDTStyle`                 | Definition term         |
-| `WithDDStyle`                 | Definition description  |
-| `WithAddressStyle`            | `Address`               |
-| `WithAddressCardStyle`        | `AddressCard` content   |
-| `WithAddressCardBorderStyle`  | `AddressCard` border    |
-| `WithTableHeaderStyle`        | Table header cells      |
-| `WithTableCellStyle`          | Table body cells        |
-| `WithTableStripedCellStyle`   | Alternating body rows   |
-| `WithTableFooterStyle`        | Table footer row        |
-| `WithTableCaptionStyle`       | Table caption text      |
-| `WithTableBorderStyle`        | Table border characters |
-| `WithAlertStyle(type, style)` | Alert of given type     |
+#### Headings
 
-**Token options** - each accepts a `string` or `int`:
+| Option                        | Targets            |
+| ----------------------------- | ------------------ |
+| `WithH1Style` – `WithH6Style` | Heading levels 1–6 |
 
-| Option                         | Default            | Description                                                 |
-| ------------------------------ | ------------------ | ----------------------------------------------------------- |
-| `WithH1UnderlineChar(c)`       | `═`                | Underline character for H1                                  |
-| `WithH2UnderlineChar(c)`       | `─`                | Underline character for H2                                  |
-| `WithH3UnderlineChar(c)`       | `·`                | Underline character for H3                                  |
-| `WithHeadingBarChar(c)`        | `▎`                | Bar prefix character for H4–H6                              |
-| `WithBulletChar(c)`            | `•`                | Bullet character for `UL`                                   |
-| `WithNestedBulletChars(chars)` | `•`, `◦`, `▪`, `▹` | Bullet characters cycling per depth for `NestUL`            |
-| `WithListIndent(n)`            | `2`                | Spaces per nesting level for `NestUL`/`NestOL`              |
-| `WithHierarchicalNumbers(b)`   | `false`            | Outline-style numbering for nested `OL` (e.g. `2.1.`)       |
-| `WithHRChar(c)`                | `─`                | Character repeated for `HR`                                 |
-| `WithHRWidth(w)`               | `40`               | Width of `HR` in characters                                 |
-| `WithBlockquoteBar(c)`         | `│`                | Left bar character for `Blockquote`                         |
-| `WithInsPrefix(c)`             | `+`                | Prefix for `Ins` (inserted text)                            |
-| `WithDelPrefix(c)`             | `-`                | Prefix for `Del` (deleted text)                             |
-| `WithCodeLineNumbers(b)`       | `false`            | Show line numbers in `CodeBlock`                            |
-| `WithCodeLineNumberSep(c)`     | `│`                | Separator between line numbers and code                     |
-| `WithTableBorderSet(bs)`       | `BoxBorderSet()`   | Border character set (`BoxBorderSet` or `MinimalBorderSet`) |
-| `WithTableCellPad(n)`          | `1`                | Spaces of padding inside each table cell                    |
-| `WithAlertBar(c)`              | `│`                | Left bar character for alerts                               |
-| `WithAlertIcon(type, icon)`    | per-type           | Override icon for a specific alert type                     |
-| `WithAlertLabel(type, label)`  | per-type           | Override label for a specific alert type                    |
+#### Blocks
+
+| Option                   | Targets           |
+| ------------------------ | ----------------- |
+| `WithParagraphStyle`     | `P`               |
+| `WithBlockquoteStyle`    | `Blockquote` text |
+| `WithBlockquoteBarStyle` | `Blockquote` bar  |
+| `WithCodeInlineStyle`    | `Code`            |
+| `WithCodeBlockStyle`     | `CodeBlock`       |
+| `WithHRStyle`            | `HR`              |
+
+#### Inline
+
+| Option                   | Targets         |
+| ------------------------ | --------------- |
+| `WithBoldStyle`          | `Bold`          |
+| `WithItalicStyle`        | `Italic`        |
+| `WithUnderlineStyle`     | `Underline`     |
+| `WithStrikethroughStyle` | `Strikethrough` |
+| `WithSmallStyle`         | `Small`         |
+| `WithMarkStyle`          | `Mark`          |
+| `WithLinkStyle`          | `Link`          |
+| `WithKbdStyle`           | `Kbd`           |
+| `WithAbbrStyle`          | `Abbr`          |
+| `WithInsStyle`           | `Ins`           |
+| `WithDelStyle`           | `Del`           |
+
+#### Lists & definitions
+
+| Option                | Targets                |
+| --------------------- | ---------------------- |
+| `WithListBulletStyle` | Bullet/number marker   |
+| `WithListItemStyle`   | List item text         |
+| `WithDTStyle`         | Definition term        |
+| `WithDDStyle`         | Definition description |
+
+#### Address
+
+| Option                       | Targets               |
+| ---------------------------- | --------------------- |
+| `WithAddressStyle`           | `Address`             |
+| `WithAddressCardStyle`       | `AddressCard` content |
+| `WithAddressCardBorderStyle` | `AddressCard` border  |
+
+#### Badge & Tag
+
+| Option           | Targets |
+| ---------------- | ------- |
+| `WithBadgeStyle` | `Badge` |
+| `WithTagStyle`   | `Tag`   |
+
+#### Footnotes
+
+| Option                     | Targets                   |
+| -------------------------- | ------------------------- |
+| `WithFootnoteRefStyle`     | `FootnoteRef`             |
+| `WithFootnoteItemStyle`    | `FootnoteSection` items   |
+| `WithFootnoteDividerStyle` | `FootnoteSection` divider |
+
+#### Tables
+
+| Option                      | Targets                 |
+| --------------------------- | ----------------------- |
+| `WithTableHeaderStyle`      | Table header cells      |
+| `WithTableCellStyle`        | Table body cells        |
+| `WithTableStripedCellStyle` | Alternating body rows   |
+| `WithTableFooterStyle`      | Table footer row        |
+| `WithTableCaptionStyle`     | Table caption text      |
+| `WithTableBorderStyle`      | Table border characters |
+
+#### Alerts
+
+| Option                        | Targets             |
+| ----------------------------- | ------------------- |
+| `WithAlertStyle(type, style)` | Alert of given type |
+
+#### Callbacks
+
+| Option                  | Targets                                                 |
+| ----------------------- | ------------------------------------------------------- |
+| `WithCodeFormatter(fn)` | Syntax-highlighting callback for `Code` and `CodeBlock` |
+
+---
+
+**Token options** - each accepts a `string`, `int`, or `bool`:
+
+#### Heading tokens
+
+| Option                   | Default | Description                    |
+| ------------------------ | ------- | ------------------------------ |
+| `WithH1UnderlineChar(c)` | `═`     | Underline character for H1     |
+| `WithH2UnderlineChar(c)` | `─`     | Underline character for H2     |
+| `WithH3UnderlineChar(c)` | `·`     | Underline character for H3     |
+| `WithHeadingBarChar(c)`  | `▎`     | Bar prefix character for H4–H6 |
+
+#### List tokens
+
+| Option                         | Default            | Description                                           |
+| ------------------------------ | ------------------ | ----------------------------------------------------- |
+| `WithBulletChar(c)`            | `•`                | Bullet character for `UL`                             |
+| `WithNestedBulletChars(chars)` | `•`, `◦`, `▪`, `▹` | Bullet characters cycling per depth for `NestUL`      |
+| `WithListIndent(n)`            | `2`                | Spaces per nesting level for `NestUL`/`NestOL`        |
+| `WithHierarchicalNumbers(b)`   | `false`            | Outline-style numbering for nested `OL` (e.g. `2.1.`) |
+
+#### Block tokens
+
+| Option                     | Default | Description                             |
+| -------------------------- | ------- | --------------------------------------- |
+| `WithHRChar(c)`            | `─`     | Character repeated for `HR`             |
+| `WithHRWidth(w)`           | `40`    | Width of `HR` in characters             |
+| `WithBlockquoteBar(c)`     | `│`     | Left bar character for `Blockquote`     |
+| `WithCodeLineNumbers(b)`   | `false` | Show line numbers in `CodeBlock`        |
+| `WithCodeLineNumberSep(c)` | `│`     | Separator between line numbers and code |
+
+#### Inline tokens
+
+| Option             | Default | Description                      |
+| ------------------ | ------- | -------------------------------- |
+| `WithInsPrefix(c)` | `+`     | Prefix for `Ins` (inserted text) |
+| `WithDelPrefix(c)` | `-`     | Prefix for `Del` (deleted text)  |
+
+#### Table tokens
+
+| Option                   | Default          | Description                                                 |
+| ------------------------ | ---------------- | ----------------------------------------------------------- |
+| `WithTableBorderSet(bs)` | `BoxBorderSet()` | Border character set (`BoxBorderSet` or `MinimalBorderSet`) |
+| `WithTableCellPad(n)`    | `1`              | Spaces of padding inside each table cell                    |
+
+#### Footnote tokens
+
+| Option                        | Default | Description                                     |
+| ----------------------------- | ------- | ----------------------------------------------- |
+| `WithFootnoteDividerChar(c)`  | `─`     | Character repeated for footnote section divider |
+| `WithFootnoteDividerWidth(w)` | `20`    | Width of footnote section divider               |
+
+#### Alert tokens
+
+| Option                        | Default  | Description                              |
+| ----------------------------- | -------- | ---------------------------------------- |
+| `WithAlertBar(c)`             | `│`      | Left bar character for alerts            |
+| `WithAlertIcon(type, icon)`   | per-type | Override icon for a specific alert type  |
+| `WithAlertLabel(type, label)` | per-type | Override label for a specific alert type |
 
 ### Code formatting
 
@@ -552,21 +726,27 @@ ty := herald.New(
 )
 ```
 
+The following option controls the visual appearance of line numbers:
+
+| Option                    | Targets                 |
+| ------------------------- | ----------------------- |
+| `WithCodeLineNumberStyle` | Code block line numbers |
+
 ### Color palette
 
 `ColorPalette` lets you define 9 colors and derive a complete theme from them. All style fields map from this palette; token options (characters, widths) are unaffected and retain their defaults. Alert colors are handled separately via `AlertPalette`.
 
-| Field       | Maps to                                                                                                               |
-| ----------- | --------------------------------------------------------------------------------------------------------------------- |
-| `Primary`   | H1 headings                                                                                                           |
-| `Secondary` | H2, list bullets, `Badge` background, `Tag` foreground                                                                |
-| `Tertiary`  | H3, links, `Ins`                                                                                                      |
-| `Accent`    | H4, mark background                                                                                                   |
-| `Highlight` | H5, `Abbr`, `Del`                                                                                                     |
-| `Muted`     | H6, blockquote, HR, sub/sup, `DD`, `Address`, `AddressCard`, `AddressCardBorder`, line numbers, table border, caption |
-| `Text`      | Body text, paragraphs, list items, inline code, `DT`, table cells, footer                                             |
-| `Surface`   | Background for `Kbd`, `Tag`, striped table rows                                                                       |
-| `Base`      | Background for inline code, code blocks; mark fg, `Badge` fg                                                          |
+| Field       | Maps to                                                                                                                                                  |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Primary`   | H1 headings                                                                                                                                              |
+| `Secondary` | H2, list bullets, `Badge` background, `Tag` foreground                                                                                                   |
+| `Tertiary`  | H3, links, `Ins`, `FootnoteRef`                                                                                                                          |
+| `Accent`    | H4, mark background                                                                                                                                      |
+| `Highlight` | H5, `Abbr`, `Del`                                                                                                                                        |
+| `Muted`     | H6, blockquote, HR, sub/sup, `DD`, `Address`, `AddressCard`, `AddressCardBorder`, `FootnoteItem`, `FootnoteDivider`, line numbers, table border, caption |
+| `Text`      | Body text, paragraphs, list items, inline code, `DT`, table cells, footer                                                                                |
+| `Surface`   | Background for `Kbd`, `Tag`, striped table rows                                                                                                          |
+| `Base`      | Background for inline code, code blocks; mark fg, `Badge` fg                                                                                             |
 
 Pass the palette to `New()` via `WithPalette`, or call `ThemeFromPalette` to construct a `Theme` value directly.
 
@@ -586,6 +766,8 @@ palette := herald.ColorPalette{
 
 ty := herald.New(herald.WithPalette(palette))
 ```
+
+`ThemeFromPalette` applies the provided colors directly and does not perform automatic light/dark adaptation. To support both modes, provide separate palettes and switch based on `lipgloss.HasDarkBackground()`.
 
 #### Alert palette
 
@@ -622,7 +804,9 @@ ty := herald.New(
 )
 ```
 
-## Built-in themes
+## Themes
+
+### Built-in themes
 
 Herald ships with named themes that match [huh](https://charm.land/huh)'s built-in color palettes. Colors auto-adapt to light/dark terminal backgrounds using `lipgloss.HasDarkBackground`. See [Pairing with huh](#pairing-with-huh) for how to use matching themes across herald and huh.
 
@@ -641,7 +825,7 @@ Herald ships with named themes that match [huh](https://charm.land/huh)'s built-
 ty := herald.New(herald.WithTheme(herald.DraculaTheme()))
 ```
 
-## Custom theme
+### Custom theme
 
 The easiest way to customize is to start from an existing theme and modify specific fields:
 
@@ -692,7 +876,7 @@ form := huh.NewForm(
         huh.NewInput().Title("Project name").Value(&name),
         huh.NewSelect[string]().Title("Language").Options(...).Value(&lang),
     ),
-).WithTheme(huh.ThemeFunc(huh.ThemeDracula))
+).WithTheme(huh.ThemeDracula())
 form.Run()
 
 fmt.Println(ty.H2("Summary"))
