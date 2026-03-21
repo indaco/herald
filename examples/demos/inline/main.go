@@ -20,6 +20,8 @@ func main() {
 	fmt.Println(ty.Code("inline code"))
 	fmt.Println(ty.Kbd("Ctrl") + " + " + ty.Kbd("C"))
 	fmt.Println(ty.Sub("subscript") + " and " + ty.Sup("superscript"))
+	fmt.Println(ty.Ins("added line"))
+	fmt.Println(ty.Del("removed line"))
 	fmt.Println()
 
 	fmt.Println(ty.Link("https://go.dev"))
