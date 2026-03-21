@@ -314,6 +314,16 @@ func (t *Typography) Sup(text string) string {
 	return t.theme.Sup.Render("^" + text)
 }
 
+// Ins renders inserted (added) text with a prefix marker.
+func (t *Typography) Ins(text string) string {
+	return t.theme.Ins.Render(t.theme.InsPrefix + text)
+}
+
+// Del renders deleted (removed) text with a prefix marker.
+func (t *Typography) Del(text string) string {
+	return t.theme.Del.Render(t.theme.DelPrefix + text)
+}
+
 // ---------------------------------------------------------------------------
 // Alerts
 // ---------------------------------------------------------------------------

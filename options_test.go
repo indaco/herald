@@ -88,6 +88,8 @@ func TestWithInlineStyles(t *testing.T) {
 		{"Link", WithLinkStyle(style)},
 		{"Kbd", WithKbdStyle(style)},
 		{"Abbr", WithAbbrStyle(style)},
+		{"Ins", WithInsStyle(style)},
+		{"Del", WithDelStyle(style)},
 	}
 
 	for _, tc := range tests {
@@ -158,6 +160,20 @@ func TestWithTokenOptions(t *testing.T) {
 		ty := New(WithBlockquoteBar("|"))
 		if ty.theme.BlockquoteBar != "|" {
 			t.Errorf("expected %q, got %q", "|", ty.theme.BlockquoteBar)
+		}
+	})
+
+	t.Run("InsPrefix", func(t *testing.T) {
+		ty := New(WithInsPrefix("++ "))
+		if ty.theme.InsPrefix != "++ " {
+			t.Errorf("expected %q, got %q", "++ ", ty.theme.InsPrefix)
+		}
+	})
+
+	t.Run("DelPrefix", func(t *testing.T) {
+		ty := New(WithDelPrefix("-- "))
+		if ty.theme.DelPrefix != "-- " {
+			t.Errorf("expected %q, got %q", "-- ", ty.theme.DelPrefix)
 		}
 	})
 }

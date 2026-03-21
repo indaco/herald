@@ -40,6 +40,8 @@ type Theme struct {
 	Abbr          lipgloss.Style
 	Sub           lipgloss.Style
 	Sup           lipgloss.Style
+	Ins           lipgloss.Style
+	Del           lipgloss.Style
 
 	// Definition list
 	DT lipgloss.Style // definition term
@@ -67,6 +69,8 @@ type Theme struct {
 	HRChar              string   // character repeated for horizontal rules
 	HRWidth             int      // width of horizontal rule in characters
 	BlockquoteBar       string   // left-bar character for blockquotes
+	InsPrefix           string   // prefix for inserted text (e.g. "+")
+	DelPrefix           string   // prefix for deleted text (e.g. "-")
 
 	// Table elements
 	TableHeader      lipgloss.Style // style for header cell text (e.g. bold + primary color)
@@ -167,6 +171,8 @@ const (
 	DefaultAlertBar          = "│"
 	DefaultCodeLineNumberSep = "│"
 	DefaultTableCellPad      = 1
+	DefaultInsPrefix         = "+"
+	DefaultDelPrefix         = "-"
 )
 
 // DefaultNestedBulletChars is the default set of bullet characters that

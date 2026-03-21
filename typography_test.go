@@ -695,6 +695,53 @@ func TestSubSup(t *testing.T) {
 }
 
 // ---------------------------------------------------------------------------
+// Ins / Del
+// ---------------------------------------------------------------------------
+
+func TestInsDel(t *testing.T) {
+	ty := newTestTypography()
+
+	tests := []struct {
+		name     string
+		fn       func(string) string
+		text     string
+		contains string
+	}{
+		{"Ins basic", ty.Ins, "added line", "+added line"},
+		{"Del basic", ty.Del, "removed line", "-removed line"},
+		{"Ins empty", ty.Ins, "", "+"},
+		{"Del empty", ty.Del, "", "-"},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			result := stripANSI(tc.fn(tc.text))
+			if !strings.Contains(result, tc.contains) {
+				t.Errorf("expected %q in %q", tc.contains, result)
+			}
+		})
+	}
+}
+
+func TestInsDelCustomPrefix(t *testing.T) {
+	ty := New(WithInsPrefix("++ "), WithDelPrefix("-- "))
+
+	t.Run("custom ins prefix", func(t *testing.T) {
+		result := stripANSI(ty.Ins("new"))
+		if !strings.Contains(result, "++ new") {
+			t.Errorf("expected '++ new' in %q", result)
+		}
+	})
+
+	t.Run("custom del prefix", func(t *testing.T) {
+		result := stripANSI(ty.Del("old"))
+		if !strings.Contains(result, "-- old") {
+			t.Errorf("expected '-- old' in %q", result)
+		}
+	})
+}
+
+// ---------------------------------------------------------------------------
 // Definition List
 // ---------------------------------------------------------------------------
 
@@ -813,6 +860,8 @@ func TestConcurrentAccess(t *testing.T) {
 			ty.Abbr("abbr", "description")
 			ty.Sub("sub")
 			ty.Sup("sup")
+			ty.Ins("added")
+			ty.Del("removed")
 			ty.DL([][2]string{{"term", "def"}})
 		}()
 	}
