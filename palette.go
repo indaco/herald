@@ -157,19 +157,25 @@ func ThemeFromPalette(p ColorPalette) Theme {
 			Background(p.Surface).
 			Padding(0, 1),
 
+		FootnoteRef:     lipgloss.NewStyle().Foreground(p.Tertiary),
+		FootnoteItem:    lipgloss.NewStyle().Foreground(p.Muted),
+		FootnoteDivider: lipgloss.NewStyle().Foreground(p.Muted),
+
 		H1UnderlineChar: DefaultH1UnderlineChar,
 		H2UnderlineChar: DefaultH2UnderlineChar,
 		H3UnderlineChar: DefaultH3UnderlineChar,
 		HeadingBarChar:  DefaultHeadingBarChar,
 
-		BulletChar:        DefaultBulletChar,
-		NestedBulletChars: DefaultNestedBulletChars,
-		ListIndent:        DefaultListIndent,
-		HRChar:            DefaultHRChar,
-		HRWidth:           DefaultHRWidth,
-		BlockquoteBar:     DefaultBlockquoteBar,
-		InsPrefix:         DefaultInsPrefix,
-		DelPrefix:         DefaultDelPrefix,
+		BulletChar:           DefaultBulletChar,
+		NestedBulletChars:    DefaultNestedBulletChars,
+		ListIndent:           DefaultListIndent,
+		HRChar:               DefaultHRChar,
+		HRWidth:              DefaultHRWidth,
+		BlockquoteBar:        DefaultBlockquoteBar,
+		InsPrefix:            DefaultInsPrefix,
+		DelPrefix:            DefaultDelPrefix,
+		FootnoteDividerChar:  DefaultFootnoteDividerChar,
+		FootnoteDividerWidth: DefaultFootnoteDividerWidth,
 
 		CodeLineNumber:    lipgloss.NewStyle().Foreground(p.Muted).Background(p.Base),
 		CodeLineNumberSep: DefaultCodeLineNumberSep,

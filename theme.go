@@ -56,6 +56,11 @@ type Theme struct {
 	Badge lipgloss.Style // style for bold pill/status labels
 	Tag   lipgloss.Style // style for subtle pill/category labels
 
+	// Footnote elements
+	FootnoteRef     lipgloss.Style // style for inline reference markers (e.g. "[1]")
+	FootnoteItem    lipgloss.Style // style for each footnote entry in the section
+	FootnoteDivider lipgloss.Style // style for the divider line above the footnote section
+
 	// Callbacks
 	CodeFormatter func(code, language string) string // optional syntax highlighter
 
@@ -71,15 +76,17 @@ type Theme struct {
 	ShowLineNumbers   bool           // whether to render line numbers in CodeBlock
 
 	// Configurable tokens
-	BulletChar          string   // character used for unordered list bullets
-	NestedBulletChars   []string // bullet chars cycling per depth for nested lists
-	ListIndent          int      // spaces per nesting level for nested lists
-	HierarchicalNumbers bool     // use hierarchical numbering (e.g. 2.1, 2.2) for nested OL
-	HRChar              string   // character repeated for horizontal rules
-	HRWidth             int      // width of horizontal rule in characters
-	BlockquoteBar       string   // left-bar character for blockquotes
-	InsPrefix           string   // prefix for inserted text (e.g. "+")
-	DelPrefix           string   // prefix for deleted text (e.g. "-")
+	BulletChar           string   // character used for unordered list bullets
+	NestedBulletChars    []string // bullet chars cycling per depth for nested lists
+	ListIndent           int      // spaces per nesting level for nested lists
+	HierarchicalNumbers  bool     // use hierarchical numbering (e.g. 2.1, 2.2) for nested OL
+	HRChar               string   // character repeated for horizontal rules
+	HRWidth              int      // width of horizontal rule in characters
+	BlockquoteBar        string   // left-bar character for blockquotes
+	InsPrefix            string   // prefix for inserted text (e.g. "+")
+	DelPrefix            string   // prefix for deleted text (e.g. "-")
+	FootnoteDividerChar  string   // character for footnote section divider (default "─")
+	FootnoteDividerWidth int      // width of footnote divider (default 20)
 
 	// Table elements
 	TableHeader      lipgloss.Style // style for header cell text (e.g. bold + primary color)
@@ -168,20 +175,22 @@ func MinimalBorderSet() TableBorderSet {
 
 // Default token values used by DefaultTheme and ThemeFromPalette.
 const (
-	DefaultH1UnderlineChar   = "═"
-	DefaultH2UnderlineChar   = "─"
-	DefaultH3UnderlineChar   = "·"
-	DefaultHeadingBarChar    = "▎"
-	DefaultBulletChar        = "•"
-	DefaultListIndent        = 2
-	DefaultHRChar            = "─"
-	DefaultHRWidth           = 40
-	DefaultBlockquoteBar     = "│"
-	DefaultAlertBar          = "│"
-	DefaultCodeLineNumberSep = "│"
-	DefaultTableCellPad      = 1
-	DefaultInsPrefix         = "+"
-	DefaultDelPrefix         = "-"
+	DefaultH1UnderlineChar      = "═"
+	DefaultH2UnderlineChar      = "─"
+	DefaultH3UnderlineChar      = "·"
+	DefaultHeadingBarChar       = "▎"
+	DefaultBulletChar           = "•"
+	DefaultListIndent           = 2
+	DefaultHRChar               = "─"
+	DefaultHRWidth              = 40
+	DefaultBlockquoteBar        = "│"
+	DefaultAlertBar             = "│"
+	DefaultCodeLineNumberSep    = "│"
+	DefaultTableCellPad         = 1
+	DefaultInsPrefix            = "+"
+	DefaultDelPrefix            = "-"
+	DefaultFootnoteDividerChar  = "─"
+	DefaultFootnoteDividerWidth = 20
 )
 
 // DefaultNestedBulletChars is the default set of bullet characters that

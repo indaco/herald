@@ -165,6 +165,33 @@ func TestWithTagStyle(t *testing.T) {
 	}
 }
 
+func TestWithFootnoteRefStyle(t *testing.T) {
+	style := lipgloss.NewStyle().Foreground(lipgloss.Color("#FF0000"))
+	ty := New(WithFootnoteRefStyle(style))
+	result := ty.theme.FootnoteRef.Render("test")
+	if result == "" {
+		t.Error("expected non-empty render from FootnoteRef style")
+	}
+}
+
+func TestWithFootnoteItemStyle(t *testing.T) {
+	style := lipgloss.NewStyle().Foreground(lipgloss.Color("#00FF00"))
+	ty := New(WithFootnoteItemStyle(style))
+	result := ty.theme.FootnoteItem.Render("test")
+	if result == "" {
+		t.Error("expected non-empty render from FootnoteItem style")
+	}
+}
+
+func TestWithFootnoteDividerStyle(t *testing.T) {
+	style := lipgloss.NewStyle().Foreground(lipgloss.Color("#0000FF"))
+	ty := New(WithFootnoteDividerStyle(style))
+	result := ty.theme.FootnoteDivider.Render("test")
+	if result == "" {
+		t.Error("expected non-empty render from FootnoteDivider style")
+	}
+}
+
 func TestWithTokenOptions(t *testing.T) {
 	t.Run("BulletChar", func(t *testing.T) {
 		ty := New(WithBulletChar("*"))
@@ -219,6 +246,34 @@ func TestWithTokenOptions(t *testing.T) {
 		ty := New(WithDelPrefix("-- "))
 		if ty.theme.DelPrefix != "-- " {
 			t.Errorf("expected %q, got %q", "-- ", ty.theme.DelPrefix)
+		}
+	})
+
+	t.Run("FootnoteDividerChar", func(t *testing.T) {
+		ty := New(WithFootnoteDividerChar("="))
+		if ty.theme.FootnoteDividerChar != "=" {
+			t.Errorf("expected %q, got %q", "=", ty.theme.FootnoteDividerChar)
+		}
+	})
+
+	t.Run("FootnoteDividerWidth positive", func(t *testing.T) {
+		ty := New(WithFootnoteDividerWidth(30))
+		if ty.theme.FootnoteDividerWidth != 30 {
+			t.Errorf("expected 30, got %d", ty.theme.FootnoteDividerWidth)
+		}
+	})
+
+	t.Run("FootnoteDividerWidth zero ignored", func(t *testing.T) {
+		ty := New(WithFootnoteDividerWidth(0))
+		if ty.theme.FootnoteDividerWidth != DefaultFootnoteDividerWidth {
+			t.Errorf("expected default %d, got %d", DefaultFootnoteDividerWidth, ty.theme.FootnoteDividerWidth)
+		}
+	})
+
+	t.Run("FootnoteDividerWidth negative ignored", func(t *testing.T) {
+		ty := New(WithFootnoteDividerWidth(-5))
+		if ty.theme.FootnoteDividerWidth != DefaultFootnoteDividerWidth {
+			t.Errorf("expected default %d, got %d", DefaultFootnoteDividerWidth, ty.theme.FootnoteDividerWidth)
 		}
 	})
 }
