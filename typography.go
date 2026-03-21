@@ -87,15 +87,16 @@ func (t *Typography) P(text string) string {
 }
 
 // Blockquote renders a blockquote with a left border bar. Multi-line text
-// is handled by prepending the bar to every line.
+// is handled by prepending the bar to every line. The bar is styled
+// separately from the text so it remains visually distinct.
 func (t *Typography) Blockquote(text string) string {
-	bar := t.theme.BlockquoteBar
+	bar := t.theme.BlockquoteBarStyle.Render(t.theme.BlockquoteBar)
 	lines := strings.Split(text, "\n")
 	quoted := make([]string, len(lines))
 	for i, line := range lines {
-		quoted[i] = bar + " " + line
+		quoted[i] = bar + " " + t.theme.Blockquote.Render(line)
 	}
-	return t.theme.Blockquote.Render(strings.Join(quoted, "\n"))
+	return strings.Join(quoted, "\n")
 }
 
 // UL renders an unordered (bulleted) list from the provided items.

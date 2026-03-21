@@ -18,11 +18,12 @@ type Theme struct {
 	H6 lipgloss.Style
 
 	// Text block elements
-	Paragraph  lipgloss.Style
-	Blockquote lipgloss.Style
-	CodeInline lipgloss.Style
-	CodeBlock  lipgloss.Style
-	HR         lipgloss.Style
+	Paragraph          lipgloss.Style
+	Blockquote         lipgloss.Style
+	BlockquoteBarStyle lipgloss.Style // style for the blockquote bar character(s)
+	CodeInline         lipgloss.Style
+	CodeBlock          lipgloss.Style
+	HR                 lipgloss.Style
 
 	// List elements
 	ListBullet lipgloss.Style // style for the bullet/number marker
@@ -175,15 +176,16 @@ func MinimalBorderSet() TableBorderSet {
 
 // Default token values used by DefaultTheme and ThemeFromPalette.
 const (
-	DefaultH1UnderlineChar      = "═"
-	DefaultH2UnderlineChar      = "─"
-	DefaultH3UnderlineChar      = "·"
-	DefaultHeadingBarChar       = "▎"
-	DefaultBulletChar           = "•"
-	DefaultListIndent           = 2
-	DefaultHRChar               = "─"
-	DefaultHRWidth              = 40
-	DefaultBlockquoteBar        = "│"
+	DefaultH1UnderlineChar = "═"
+	DefaultH2UnderlineChar = "─"
+	DefaultH3UnderlineChar = "·"
+	DefaultHeadingBarChar  = "▎"
+	DefaultBulletChar      = "•"
+	DefaultListIndent      = 2
+	DefaultHRChar          = "─"
+	DefaultHRWidth         = 40
+	DefaultBlockquoteBar   = "│"
+
 	DefaultAlertBar             = "│"
 	DefaultCodeLineNumberSep    = "│"
 	DefaultTableCellPad         = 1

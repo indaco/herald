@@ -192,6 +192,15 @@ func TestWithFootnoteDividerStyle(t *testing.T) {
 	}
 }
 
+func TestWithBlockquoteBarStyle(t *testing.T) {
+	style := lipgloss.NewStyle().Foreground(lipgloss.Color("#FF0000"))
+	ty := New(WithBlockquoteBarStyle(style))
+	result := ty.theme.BlockquoteBarStyle.Render("│")
+	if result == "" {
+		t.Error("expected non-empty render from BlockquoteBarStyle")
+	}
+}
+
 func TestWithTokenOptions(t *testing.T) {
 	t.Run("BulletChar", func(t *testing.T) {
 		ty := New(WithBulletChar("*"))

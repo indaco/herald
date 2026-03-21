@@ -60,8 +60,11 @@ func ThemeFromPalette(p ColorPalette) Theme {
 
 		Blockquote: lipgloss.NewStyle().
 			Foreground(p.Muted).
-			Italic(true).
-			PaddingLeft(2),
+			Italic(true),
+
+		BlockquoteBarStyle: lipgloss.NewStyle().
+			Foreground(p.Muted).
+			PaddingLeft(1),
 
 		CodeInline: lipgloss.NewStyle().
 			Foreground(p.Text).

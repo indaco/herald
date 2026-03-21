@@ -12,12 +12,12 @@ func main() {
 	ty := herald.New()
 
 	// Headings
-	fmt.Println(ty.H1("Heading 1 — Double Underline"))
-	fmt.Println(ty.H2("Heading 2 — Single Underline"))
-	fmt.Println(ty.H3("Heading 3 — Dotted Underline"))
-	fmt.Println(ty.H4("Heading 4 — Bar Prefix"))
-	fmt.Println(ty.H5("Heading 5 — Bar Prefix"))
-	fmt.Println(ty.H6("Heading 6 — Bar Prefix"))
+	fmt.Println(ty.H1("Heading 1 - Double Underline"))
+	fmt.Println(ty.H2("Heading 2 - Single Underline"))
+	fmt.Println(ty.H3("Heading 3 - Dotted Underline"))
+	fmt.Println(ty.H4("Heading 4 - Bar Prefix"))
+	fmt.Println(ty.H5("Heading 5 - Bar Prefix"))
+	fmt.Println(ty.H6("Heading 6 - Bar Prefix"))
 
 	// Block elements
 	fmt.Println(ty.P("This is a paragraph. It wraps text with the paragraph style."))
