@@ -55,7 +55,7 @@ func main() {
 			ty.Kbd("Ctrl") + "+" + ty.Kbd("C") + "  " +
 			ty.Code("inline code"),
 	)
-	fmt.Println(ty.Ins("added") + "  " + ty.Del("removed"))
+	fmt.Println(ty.Ins("added") + "  " + ty.Del("removed") + "  " + ty.Badge("NEW") + "  " + ty.Tag("go"))
 	fmt.Println()
 
 	// Alert (just one)

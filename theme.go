@@ -52,6 +52,10 @@ type Theme struct {
 	AddressCard       lipgloss.Style // content style for bordered address card
 	AddressCardBorder lipgloss.Style // border color/style for address card (same pattern as TableBorder)
 
+	// Badge / Tag elements
+	Badge lipgloss.Style // style for bold pill/status labels
+	Tag   lipgloss.Style // style for subtle pill/category labels
+
 	// Callbacks
 	CodeFormatter func(code, language string) string // optional syntax highlighter
 

@@ -4,6 +4,8 @@ import (
 	"regexp"
 	"strings"
 	"testing"
+
+	"charm.land/lipgloss/v2"
 )
 
 // stripANSI removes all ANSI escape sequences from a string so that
@@ -871,6 +873,96 @@ func TestAddressCard(t *testing.T) {
 }
 
 // ---------------------------------------------------------------------------
+// Badge
+// ---------------------------------------------------------------------------
+
+func TestBadge(t *testing.T) {
+	ty := newTestTypography()
+
+	tests := []struct {
+		name     string
+		text     string
+		contains string
+	}{
+		{"basic", "SUCCESS", "SUCCESS"},
+		{"another label", "BETA", "BETA"},
+		{"empty", "", ""},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			result := stripANSI(ty.Badge(tc.text))
+			if tc.contains != "" && !strings.Contains(result, tc.contains) {
+				t.Errorf("Badge: expected %q in %q", tc.contains, result)
+			}
+		})
+	}
+}
+
+func TestBadgeWithStyle(t *testing.T) {
+	ty := newTestTypography()
+	custom := lipgloss.NewStyle().Bold(true)
+
+	t.Run("one-off style override", func(t *testing.T) {
+		result := stripANSI(ty.BadgeWithStyle("OK", custom))
+		if !strings.Contains(result, "OK") {
+			t.Errorf("BadgeWithStyle: expected %q in %q", "OK", result)
+		}
+	})
+
+	t.Run("empty text", func(t *testing.T) {
+		result := ty.BadgeWithStyle("", custom)
+		// Should not panic; result may be empty or contain only ANSI codes.
+		_ = result
+	})
+}
+
+// ---------------------------------------------------------------------------
+// Tag
+// ---------------------------------------------------------------------------
+
+func TestTag(t *testing.T) {
+	ty := newTestTypography()
+
+	tests := []struct {
+		name     string
+		text     string
+		contains string
+	}{
+		{"basic", "v2.0", "v2.0"},
+		{"another label", "go", "go"},
+		{"empty", "", ""},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			result := stripANSI(ty.Tag(tc.text))
+			if tc.contains != "" && !strings.Contains(result, tc.contains) {
+				t.Errorf("Tag: expected %q in %q", tc.contains, result)
+			}
+		})
+	}
+}
+
+func TestTagWithStyle(t *testing.T) {
+	ty := newTestTypography()
+	custom := lipgloss.NewStyle().Italic(true)
+
+	t.Run("one-off style override", func(t *testing.T) {
+		result := stripANSI(ty.TagWithStyle("go", custom))
+		if !strings.Contains(result, "go") {
+			t.Errorf("TagWithStyle: expected %q in %q", "go", result)
+		}
+	})
+
+	t.Run("empty text", func(t *testing.T) {
+		result := ty.TagWithStyle("", custom)
+		// Should not panic; result may be empty or contain only ANSI codes.
+		_ = result
+	})
+}
+
+// ---------------------------------------------------------------------------
 // Edge cases
 // ---------------------------------------------------------------------------
 
@@ -926,6 +1018,10 @@ func TestConcurrentAccess(t *testing.T) {
 			ty.DL([][2]string{{"term", "def"}})
 			ty.Address("Jane Doe\njane@example.com")
 			ty.AddressCard("Jane Doe\njane@example.com")
+			ty.Badge("SUCCESS")
+			ty.BadgeWithStyle("BETA", lipgloss.NewStyle().Bold(true))
+			ty.Tag("v2.0")
+			ty.TagWithStyle("go", lipgloss.NewStyle().Italic(true))
 		}()
 	}
 

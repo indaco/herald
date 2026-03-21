@@ -147,6 +147,24 @@ func TestWithAddressCardBorderStyle(t *testing.T) {
 	}
 }
 
+func TestWithBadgeStyle(t *testing.T) {
+	style := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("#00FF00"))
+	ty := New(WithBadgeStyle(style))
+	result := ty.theme.Badge.Render("test")
+	if result == "" {
+		t.Error("expected non-empty render from Badge style")
+	}
+}
+
+func TestWithTagStyle(t *testing.T) {
+	style := lipgloss.NewStyle().Foreground(lipgloss.Color("#00FF00"))
+	ty := New(WithTagStyle(style))
+	result := ty.theme.Tag.Render("test")
+	if result == "" {
+		t.Error("expected non-empty render from Tag style")
+	}
+}
+
 func TestWithTokenOptions(t *testing.T) {
 	t.Run("BulletChar", func(t *testing.T) {
 		ty := New(WithBulletChar("*"))

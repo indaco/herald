@@ -177,6 +177,18 @@ func WithAddressCardBorderStyle(s lipgloss.Style) Option {
 	return func(ty *Typography) { ty.theme.AddressCardBorder = s }
 }
 
+// --- Badge / Tag style options ---
+
+// WithBadgeStyle overrides the badge/tag pill style.
+func WithBadgeStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.Badge = s }
+}
+
+// WithTagStyle overrides the tag/category label style.
+func WithTagStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.Tag = s }
+}
+
 // --- Heading decoration options ---
 
 // WithH1UnderlineChar sets the character used for the H1 underline.
