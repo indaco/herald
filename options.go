@@ -160,6 +160,23 @@ func WithDDStyle(s lipgloss.Style) Option {
 	return func(ty *Typography) { ty.theme.DD = s }
 }
 
+// --- Address style option ---
+
+// WithAddressStyle overrides the address/contact block style.
+func WithAddressStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.Address = s }
+}
+
+// WithAddressCardStyle overrides the address card content style.
+func WithAddressCardStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.AddressCard = s }
+}
+
+// WithAddressCardBorderStyle overrides the address card border style.
+func WithAddressCardBorderStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.AddressCardBorder = s }
+}
+
 // --- Heading decoration options ---
 
 // WithH1UnderlineChar sets the character used for the H1 underline.

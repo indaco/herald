@@ -782,3 +782,23 @@ func (t *Typography) DT(text string) string {
 func (t *Typography) DD(text string) string {
 	return t.theme.DD.Render(text)
 }
+
+// ---------------------------------------------------------------------------
+// Address
+// ---------------------------------------------------------------------------
+
+// Address renders a styled contact/author information block.
+func (t *Typography) Address(text string) string {
+	return t.theme.Address.Render(text)
+}
+
+// AddressCard renders a contact/author block inside a bordered card.
+// The border color is taken from the AddressCardBorder theme style.
+func (t *Typography) AddressCard(text string) string {
+	borderColor := t.theme.AddressCardBorder.GetForeground()
+	style := t.theme.AddressCard.
+		Border(lipgloss.RoundedBorder()).
+		BorderForeground(borderColor).
+		Padding(0, 1)
+	return style.Render(text)
+}
