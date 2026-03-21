@@ -117,4 +117,9 @@ func main() {
 	fmt.Println()
 	fmt.Println(ty.AddressCard("Jane Doe\njane@example.com\nSan Francisco, CA"))
 	fmt.Println()
+
+	// Badge / Tag
+	fmt.Println(ty.H3("Badge / Tag"))
+	fmt.Println(ty.Badge("SUCCESS") + " " + ty.Badge("BETA") + " " + ty.Tag("v2.0") + " " + ty.Tag("go"))
+	fmt.Println()
 }
