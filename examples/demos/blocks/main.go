@@ -34,4 +34,9 @@ func main() {
 
 	fmt.Println(ty.DT("Manual Term"))
 	fmt.Println(ty.DD("Manual description using DT/DD directly"))
+	fmt.Println()
+
+	fmt.Println(ty.Address("Jane Doe\njane@example.com\nSan Francisco, CA"))
+	fmt.Println()
+	fmt.Println(ty.AddressCard("Jane Doe\njane@example.com\nSan Francisco, CA"))
 }
