@@ -194,6 +194,7 @@ const (
 	DefaultDelPrefix            = "-"
 	DefaultFootnoteDividerChar  = "─"
 	DefaultFootnoteDividerWidth = 20
+	MaxWidthChars               = 500
 )
 
 // DefaultNestedBulletChars is the default set of bullet characters that
