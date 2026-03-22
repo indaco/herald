@@ -105,9 +105,9 @@ func (t *Typography) UL(items ...string) string {
 		return ""
 	}
 	bullet := t.theme.BulletChar
+	marker := t.theme.ListBullet.Render(bullet)
 	lines := make([]string, len(items))
 	for i, item := range items {
-		marker := t.theme.ListBullet.Render(bullet)
 		lines[i] = marker + " " + t.theme.ListItem.Render(item)
 	}
 	return strings.Join(lines, "\n")
@@ -369,9 +369,10 @@ func (t *Typography) Alert(at AlertType, text string) string {
 
 	// Content: colored bar + unstyled text (matching GitHub alerts)
 	lines := strings.Split(text, "\n")
+	renderedBar := style.Render(bar)
 	content := make([]string, len(lines))
 	for i, line := range lines {
-		content[i] = style.Render(bar) + " " + line
+		content[i] = renderedBar + " " + line
 	}
 
 	return header + "\n" + strings.Join(content, "\n")

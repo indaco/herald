@@ -2,6 +2,7 @@ package herald
 
 import (
 	"os"
+	"sync"
 
 	"charm.land/lipgloss/v2"
 )
@@ -200,13 +201,23 @@ const (
 // cycle through nesting levels in nested unordered lists.
 var DefaultNestedBulletChars = []string{"•", "◦", "▪", "▹"}
 
+var (
+	termBGOnce sync.Once
+	termBGDark bool
+)
+
 // hasDarkBG returns whether the terminal has a dark background.
-// It respects the HERALD_FORCE_DARK env var for tooling (e.g. screenshots).
+// The terminal query is cached to avoid repeated I/O, but the
+// HERALD_FORCE_DARK env var is always checked first so it can be
+// changed between calls (e.g. in tests).
 func hasDarkBG() bool {
 	if v := os.Getenv("HERALD_FORCE_DARK"); v != "" {
 		return v == "1" || v == "true"
 	}
-	return lipgloss.HasDarkBackground(os.Stdin, os.Stdout)
+	termBGOnce.Do(func() {
+		termBGDark = lipgloss.HasDarkBackground(os.Stdin, os.Stdout)
+	})
+	return termBGDark
 }
 
 // DefaultTheme returns a Theme based on the Rose Pine color palette.
