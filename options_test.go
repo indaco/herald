@@ -357,7 +357,7 @@ func TestWithNestedBulletChars(t *testing.T) {
 
 	t.Run("empty slice ignored", func(t *testing.T) {
 		ty := New(WithNestedBulletChars([]string{}))
-		if len(ty.theme.NestedBulletChars) != len(DefaultNestedBulletChars) {
+		if len(ty.theme.NestedBulletChars) != len(DefaultNestedBulletChars()) {
 			t.Errorf("expected default chars to be preserved")
 		}
 	})
