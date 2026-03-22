@@ -161,6 +161,9 @@ func (t *Typography) renderNestedList(items []ListItem, kind ListKind, depth int
 			childPrefix = num
 		} else {
 			chars := t.theme.NestedBulletChars
+			if len(chars) == 0 {
+				chars = []string{"•"}
+			}
 			bullet := chars[depth%len(chars)]
 			marker = t.theme.ListBullet.Render(bullet)
 			childPrefix = ""
