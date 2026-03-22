@@ -637,7 +637,11 @@ func (t *Typography) tableRow(row []string, style lipgloss.Style, colWidths []in
 		sep = t.theme.TableBorder.Render(bs.Left)
 		end = t.theme.TableBorder.Render(bs.Right)
 	}
-	inner := t.theme.TableBorder.Render("│")
+	colSep := bs.ColumnSep
+	if colSep == "" {
+		colSep = "│"
+	}
+	inner := t.theme.TableBorder.Render(colSep)
 	return sep + strings.Join(cells, inner) + end
 }
 

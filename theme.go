@@ -129,6 +129,7 @@ type TableBorderSet struct {
 	FooterLeft     string // footer-row left junction
 	FooterRight    string // footer-row right junction
 	FooterCross    string // footer-row interior junction
+	ColumnSep      string // vertical separator between columns (defaults to "│")
 }
 
 // BoxBorderSet returns a TableBorderSet using full Unicode box-drawing characters.
@@ -155,6 +156,7 @@ func BoxBorderSet() TableBorderSet {
 		FooterLeft:     "├",
 		FooterRight:    "┤",
 		FooterCross:    "┼",
+		ColumnSep:      "│",
 	}
 }
 
@@ -173,6 +175,7 @@ func MinimalBorderSet() TableBorderSet {
 		FooterRight: "",
 		FooterCross: "┼",
 		Cross:       "┼",
+		ColumnSep:   "│",
 	}
 }
 
