@@ -222,9 +222,10 @@ func WithFootnoteDividerChar(c string) Option {
 }
 
 // WithFootnoteDividerWidth sets the width of the footnote section divider.
+// Values must be between 1 and MaxWidthChars; out-of-range values are ignored.
 func WithFootnoteDividerWidth(w int) Option {
 	return func(ty *Typography) {
-		if w > 0 {
+		if w > 0 && w <= MaxWidthChars {
 			ty.theme.FootnoteDividerWidth = w
 		}
 	}
@@ -265,9 +266,10 @@ func WithHRChar(c string) Option {
 }
 
 // WithHRWidth sets the width of horizontal rules in characters.
+// Values must be between 1 and MaxWidthChars; out-of-range values are ignored.
 func WithHRWidth(w int) Option {
 	return func(ty *Typography) {
-		if w > 0 {
+		if w > 0 && w <= MaxWidthChars {
 			ty.theme.HRWidth = w
 		}
 	}
