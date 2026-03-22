@@ -23,6 +23,7 @@ func main() {
 	fmt.Println()
 
 	fmt.Println(ty.HR())
+	fmt.Println(ty.HRWithLabel("Section"))
 	fmt.Println()
 
 	fmt.Println(ty.DL([][2]string{

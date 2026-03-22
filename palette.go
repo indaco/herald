@@ -79,6 +79,9 @@ func ThemeFromPalette(p ColorPalette) Theme {
 		HR: lipgloss.NewStyle().
 			Foreground(p.Muted),
 
+		HRLabel: lipgloss.NewStyle().
+			Foreground(p.Muted),
+
 		ListBullet: lipgloss.NewStyle().
 			Foreground(p.Secondary),
 

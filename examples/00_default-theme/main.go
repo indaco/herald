@@ -25,6 +25,7 @@ func main() {
 	fmt.Println()
 	fmt.Println(ty.CodeBlock("func main() {\n\tfmt.Println(\"Hello, World!\")\n}"))
 	fmt.Println(ty.HR())
+	fmt.Println(ty.HRWithLabel("Section"))
 	fmt.Println()
 
 	// Lists
