@@ -244,6 +244,27 @@ func (t *Typography) HR() string {
 	return t.theme.HR.Render(line)
 }
 
+// HRWithLabel renders a horizontal rule with a centered label.
+// The label is styled separately from the rule characters.
+// If label is empty, it falls back to a plain HR.
+func (t *Typography) HRWithLabel(label string) string {
+	if label == "" {
+		return t.HR()
+	}
+	labelWidth := lipgloss.Width(label)
+	totalWidth := t.theme.HRWidth
+	if labelWidth+4 > totalWidth {
+		// Label too long — just render it styled
+		return t.theme.HRLabel.Render(label)
+	}
+	remaining := totalWidth - labelWidth - 2 // 2 spaces around label
+	leftWidth := remaining / 2
+	rightWidth := remaining - leftWidth
+	left := strings.Repeat(t.theme.HRChar, leftWidth)
+	right := strings.Repeat(t.theme.HRChar, rightWidth)
+	return t.theme.HR.Render(left) + " " + t.theme.HRLabel.Render(label) + " " + t.theme.HR.Render(right)
+}
+
 // ---------------------------------------------------------------------------
 // Inline styles
 // ---------------------------------------------------------------------------

@@ -562,6 +562,90 @@ func TestHRCustomWidth(t *testing.T) {
 	}
 }
 
+func TestHRWithLabel(t *testing.T) {
+	tests := []struct {
+		name     string
+		label    string
+		hrWidth  int
+		hrChar   string
+		wantHR   bool // true if we expect HR chars in output
+		wantText string
+	}{
+		{
+			name:     "basic label",
+			label:    "Section",
+			hrWidth:  40,
+			hrChar:   "-",
+			wantHR:   true,
+			wantText: "Section",
+		},
+		{
+			name:     "empty label falls back to HR",
+			label:    "",
+			hrWidth:  40,
+			hrChar:   "-",
+			wantHR:   true,
+			wantText: "",
+		},
+		{
+			name:     "label longer than width",
+			label:    "This is a very long label that exceeds the HR width",
+			hrWidth:  10,
+			hrChar:   "-",
+			wantHR:   false,
+			wantText: "This is a very long label that exceeds the HR width",
+		},
+		{
+			name:     "HR chars on both sides",
+			label:    "Mid",
+			hrWidth:  20,
+			hrChar:   "=",
+			wantHR:   true,
+			wantText: "Mid",
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			ty := New(WithHRWidth(tc.hrWidth), WithHRChar(tc.hrChar))
+			result := stripANSI(ty.HRWithLabel(tc.label))
+
+			if tc.wantText != "" && !strings.Contains(result, tc.wantText) {
+				t.Errorf("expected result to contain %q, got %q", tc.wantText, result)
+			}
+
+			if tc.wantHR && !strings.Contains(result, tc.hrChar) {
+				t.Errorf("expected HR char %q in result, got %q", tc.hrChar, result)
+			}
+		})
+	}
+
+	t.Run("empty label matches HR output", func(t *testing.T) {
+		ty := New(WithHRWidth(20), WithHRChar("-"))
+		hrResult := stripANSI(ty.HR())
+		labelResult := stripANSI(ty.HRWithLabel(""))
+		if hrResult != labelResult {
+			t.Errorf("empty label should match HR(), got HR=%q, HRWithLabel=%q", hrResult, labelResult)
+		}
+	})
+
+	t.Run("HR chars appear on both sides of label", func(t *testing.T) {
+		ty := New(WithHRWidth(20), WithHRChar("-"))
+		result := stripANSI(ty.HRWithLabel("X"))
+		// Split around the label
+		parts := strings.SplitN(result, "X", 2)
+		if len(parts) != 2 {
+			t.Fatalf("expected label 'X' in result, got %q", result)
+		}
+		if !strings.Contains(parts[0], "-") {
+			t.Errorf("expected HR chars before label, got %q", parts[0])
+		}
+		if !strings.Contains(parts[1], "-") {
+			t.Errorf("expected HR chars after label, got %q", parts[1])
+		}
+	})
+}
+
 // ---------------------------------------------------------------------------
 // Inline styles
 // ---------------------------------------------------------------------------
@@ -1006,6 +1090,7 @@ func TestConcurrentAccess(t *testing.T) {
 			ty.OL("x", "y", "z")
 			ty.Bold("bold")
 			ty.HR()
+			ty.HRWithLabel("Section")
 			ty.Blockquote("quote")
 			ty.Code("code")
 			ty.CodeBlock("block")

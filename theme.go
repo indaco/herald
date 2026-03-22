@@ -24,6 +24,7 @@ type Theme struct {
 	CodeInline         lipgloss.Style
 	CodeBlock          lipgloss.Style
 	HR                 lipgloss.Style
+	HRLabel            lipgloss.Style // style for the label text within a labeled separator
 
 	// List elements
 	ListBullet lipgloss.Style // style for the bullet/number marker

@@ -84,6 +84,11 @@ func WithHRStyle(s lipgloss.Style) Option {
 	return func(ty *Typography) { ty.theme.HR = s }
 }
 
+// WithHRLabelStyle overrides the label style for labeled horizontal rules.
+func WithHRLabelStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.HRLabel = s }
+}
+
 // --- Inline style options ---
 
 // WithBoldStyle overrides the bold style.

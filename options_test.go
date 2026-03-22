@@ -62,6 +62,7 @@ func TestWithBlockStyles(t *testing.T) {
 		{"CodeInline", WithCodeInlineStyle(style)},
 		{"CodeBlock", WithCodeBlockStyle(style)},
 		{"HR", WithHRStyle(style)},
+		{"HRLabel", WithHRLabelStyle(style)},
 	}
 
 	for _, tc := range tests {
