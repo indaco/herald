@@ -101,7 +101,7 @@ func TestNestUL(t *testing.T) {
 			t.Fatalf("expected 3 lines, got %d: %q", len(lines), result)
 		}
 		// Default bullets: "•", "◦", "▪", "▹"
-		bullets := DefaultNestedBulletChars
+		bullets := DefaultNestedBulletChars()
 		if !strings.Contains(lines[0], bullets[0]) {
 			t.Errorf("depth 0: expected bullet %q in %q", bullets[0], lines[0])
 		}
@@ -203,7 +203,7 @@ func TestMixedNesting(t *testing.T) {
 			t.Errorf("expected numbered parent, got %q", lines[0])
 		}
 		// Children should have bullet chars
-		if !strings.Contains(lines[1], DefaultNestedBulletChars[1]) {
+		if !strings.Contains(lines[1], DefaultNestedBulletChars()[1]) {
 			t.Errorf("expected bullet child, got %q", lines[1])
 		}
 	})

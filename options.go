@@ -222,9 +222,10 @@ func WithFootnoteDividerChar(c string) Option {
 }
 
 // WithFootnoteDividerWidth sets the width of the footnote section divider.
+// Values must be between 1 and MaxWidthChars; out-of-range values are ignored.
 func WithFootnoteDividerWidth(w int) Option {
 	return func(ty *Typography) {
-		if w > 0 {
+		if w > 0 && w <= MaxWidthChars {
 			ty.theme.FootnoteDividerWidth = w
 		}
 	}
@@ -265,9 +266,10 @@ func WithHRChar(c string) Option {
 }
 
 // WithHRWidth sets the width of horizontal rules in characters.
+// Values must be between 1 and MaxWidthChars; out-of-range values are ignored.
 func WithHRWidth(w int) Option {
 	return func(ty *Typography) {
-		if w > 0 {
+		if w > 0 && w <= MaxWidthChars {
 			ty.theme.HRWidth = w
 		}
 	}
@@ -365,13 +367,19 @@ func WithTableCellPad(n int) Option {
 
 // --- Alert options ---
 
+// ensureAlertConfig returns the AlertConfig for the given type,
+// initializing the map if needed.
+func ensureAlertConfig(ty *Typography, at AlertType) AlertConfig {
+	if ty.theme.Alerts == nil {
+		ty.theme.Alerts = make(map[AlertType]AlertConfig)
+	}
+	return ty.theme.Alerts[at]
+}
+
 // WithAlertStyle overrides the style for a specific alert type.
 func WithAlertStyle(at AlertType, s lipgloss.Style) Option {
 	return func(ty *Typography) {
-		if ty.theme.Alerts == nil {
-			ty.theme.Alerts = make(map[AlertType]AlertConfig)
-		}
-		cfg := ty.theme.Alerts[at]
+		cfg := ensureAlertConfig(ty, at)
 		cfg.Style = s
 		ty.theme.Alerts[at] = cfg
 	}
@@ -380,10 +388,7 @@ func WithAlertStyle(at AlertType, s lipgloss.Style) Option {
 // WithAlertIcon overrides the icon for a specific alert type.
 func WithAlertIcon(at AlertType, icon string) Option {
 	return func(ty *Typography) {
-		if ty.theme.Alerts == nil {
-			ty.theme.Alerts = make(map[AlertType]AlertConfig)
-		}
-		cfg := ty.theme.Alerts[at]
+		cfg := ensureAlertConfig(ty, at)
 		cfg.Icon = icon
 		ty.theme.Alerts[at] = cfg
 	}
@@ -392,10 +397,7 @@ func WithAlertIcon(at AlertType, icon string) Option {
 // WithAlertLabel overrides the label for a specific alert type.
 func WithAlertLabel(at AlertType, label string) Option {
 	return func(ty *Typography) {
-		if ty.theme.Alerts == nil {
-			ty.theme.Alerts = make(map[AlertType]AlertConfig)
-		}
-		cfg := ty.theme.Alerts[at]
+		cfg := ensureAlertConfig(ty, at)
 		cfg.Label = label
 		ty.theme.Alerts[at] = cfg
 	}
