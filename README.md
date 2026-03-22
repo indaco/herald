@@ -125,6 +125,7 @@ fmt.Println(ty.H4("Subsection"))
 | `Blockquote(text)`       | Indented block with a left bar; supports multi-line input                     |
 | `CodeBlock(text, lang)`  | Fenced code block with padding; optional line numbers and syntax highlighting |
 | `HR()`                   | Horizontal rule, configurable width and character                             |
+| `HRWithLabel(label)`     | Horizontal rule with a centered label, e.g. `── Section ──`                   |
 | `DL(pairs)`              | Definition list from `[][2]string` pairs (term, description)                  |
 | `DT(text)`               | Definition term (standalone)                                                  |
 | `DD(text)`               | Definition description (standalone)                                           |
@@ -138,6 +139,7 @@ fmt.Println(ty.Blockquote("First line.\nSecond line."))
 
 fmt.Println(ty.CodeBlock("func main() {\n\tfmt.Println(\"hello\")\n}"))
 fmt.Println(ty.HR())
+fmt.Println(ty.HRWithLabel("Section"))
 
 fmt.Println(ty.DL([][2]string{
     {"Go", "A statically typed, compiled language"},
@@ -533,6 +535,7 @@ ty := herald.New(
 | `WithCodeInlineStyle`    | `Code`            |
 | `WithCodeBlockStyle`     | `CodeBlock`       |
 | `WithHRStyle`            | `HR`              |
+| `WithHRLabelStyle`       | `HRWithLabel`     |
 
 #### Inline
 
@@ -757,17 +760,17 @@ ty := herald.New(herald.WithTheme(herald.DraculaTheme()))
 
 `ColorPalette` lets you define 9 colors and derive a complete theme from them. All style fields map from this palette; token options (characters, widths) are unaffected and retain their defaults. Alert colors are handled separately via `AlertPalette`.
 
-| Field       | Maps to                                                                                                                                                  |
-| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Primary`   | H1 headings                                                                                                                                              |
-| `Secondary` | H2, list bullets, `Badge` background, `Tag` foreground                                                                                                   |
-| `Tertiary`  | H3, links, `Ins`, `FootnoteRef`                                                                                                                          |
-| `Accent`    | H4, mark background                                                                                                                                      |
-| `Highlight` | H5, `Abbr`, `Del`                                                                                                                                        |
-| `Muted`     | H6, blockquote, HR, sub/sup, `DD`, `Address`, `AddressCard`, `AddressCardBorder`, `FootnoteItem`, `FootnoteDivider`, line numbers, table border, caption |
-| `Text`      | Body text, paragraphs, list items, inline code, `DT`, table cells, footer                                                                                |
-| `Surface`   | Background for `Kbd`, `Tag`, striped table rows                                                                                                          |
-| `Base`      | Background for inline code, code blocks; mark fg, `Badge` fg                                                                                             |
+| Field       | Maps to                                                                                                                                                             |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Primary`   | H1 headings                                                                                                                                                         |
+| `Secondary` | H2, list bullets, `Badge` background, `Tag` foreground                                                                                                              |
+| `Tertiary`  | H3, links, `Ins`, `FootnoteRef`                                                                                                                                     |
+| `Accent`    | H4, mark background                                                                                                                                                 |
+| `Highlight` | H5, `Abbr`, `Del`                                                                                                                                                   |
+| `Muted`     | H6, blockquote, HR, `HRLabel`, sub/sup, `DD`, `Address`, `AddressCard`, `AddressCardBorder`, `FootnoteItem`, `FootnoteDivider`, line numbers, table border, caption |
+| `Text`      | Body text, paragraphs, list items, inline code, `DT`, table cells, footer                                                                                           |
+| `Surface`   | Background for `Kbd`, `Tag`, striped table rows                                                                                                                     |
+| `Base`      | Background for inline code, code blocks; mark fg, `Badge` fg                                                                                                        |
 
 Pass the palette to `New()` via `WithPalette`, or call `ThemeFromPalette` to construct a `Theme` value directly.
 
