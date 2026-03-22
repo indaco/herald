@@ -91,6 +91,7 @@ func TestBoxBorderSet(t *testing.T) {
 		{"FooterLeft", bs.FooterLeft, "├"},
 		{"FooterRight", bs.FooterRight, "┤"},
 		{"FooterCross", bs.FooterCross, "┼"},
+		{"ColumnSep", bs.ColumnSep, "│"},
 	}
 
 	for _, f := range fields {
