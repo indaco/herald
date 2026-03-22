@@ -243,20 +243,28 @@ func TestTableSpecialCharacters(t *testing.T) {
 
 func TestTableConcurrency(t *testing.T) {
 	ty := New()
-	done := make(chan struct{})
+	results := make(chan string, 10)
 
 	for range 10 {
 		go func() {
-			defer func() { done <- struct{}{} }()
-			ty.Table([][]string{
+			results <- stripANSI(ty.Table([][]string{
 				{"Name", "Role"},
 				{"Alice", "Admin"},
-			})
+			}))
 		}()
 	}
 
-	for range 10 {
-		<-done
+	var first string
+	for i := range 10 {
+		r := <-results
+		if !strings.Contains(r, "Alice") || !strings.Contains(r, "Admin") {
+			t.Errorf("goroutine %d: expected table content, got %q", i, r)
+		}
+		if i == 0 {
+			first = r
+		} else if r != first {
+			t.Errorf("goroutine %d: output differs from first goroutine", i)
+		}
 	}
 }
 
