@@ -1,6 +1,7 @@
 package herald
 
 import (
+	"strings"
 	"testing"
 
 	"charm.land/lipgloss/v2"
@@ -54,21 +55,25 @@ func TestWithBlockStyles(t *testing.T) {
 	style := lipgloss.NewStyle().Italic(true)
 
 	tests := []struct {
-		name string
-		opt  Option
+		name   string
+		opt    Option
+		render func(*Typography) string
 	}{
-		{"Paragraph", WithParagraphStyle(style)},
-		{"Blockquote", WithBlockquoteStyle(style)},
-		{"CodeInline", WithCodeInlineStyle(style)},
-		{"CodeBlock", WithCodeBlockStyle(style)},
-		{"HR", WithHRStyle(style)},
-		{"HRLabel", WithHRLabelStyle(style)},
+		{"Paragraph", WithParagraphStyle(style), func(ty *Typography) string { return ty.P("test") }},
+		{"Blockquote", WithBlockquoteStyle(style), func(ty *Typography) string { return ty.Blockquote("test") }},
+		{"CodeInline", WithCodeInlineStyle(style), func(ty *Typography) string { return ty.Code("test") }},
+		{"CodeBlock", WithCodeBlockStyle(style), func(ty *Typography) string { return ty.CodeBlock("test", "") }},
+		{"HR", WithHRStyle(style), func(ty *Typography) string { return ty.HR() }},
+		{"HRLabel", WithHRLabelStyle(style), func(ty *Typography) string { return ty.HRWithLabel("test") }},
 	}
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			ty := New(tc.opt)
-			_ = ty // option applied without panic
+			result := stripANSI(tc.render(ty))
+			if len(result) == 0 {
+				t.Errorf("expected non-empty rendered output")
+			}
 		})
 	}
 }
@@ -77,26 +82,30 @@ func TestWithInlineStyles(t *testing.T) {
 	style := lipgloss.NewStyle()
 
 	tests := []struct {
-		name string
-		opt  Option
+		name   string
+		opt    Option
+		render func(*Typography) string
 	}{
-		{"Bold", WithBoldStyle(style)},
-		{"Italic", WithItalicStyle(style)},
-		{"Underline", WithUnderlineStyle(style)},
-		{"Strikethrough", WithStrikethroughStyle(style)},
-		{"Small", WithSmallStyle(style)},
-		{"Mark", WithMarkStyle(style)},
-		{"Link", WithLinkStyle(style)},
-		{"Kbd", WithKbdStyle(style)},
-		{"Abbr", WithAbbrStyle(style)},
-		{"Ins", WithInsStyle(style)},
-		{"Del", WithDelStyle(style)},
+		{"Bold", WithBoldStyle(style), func(ty *Typography) string { return ty.Bold("test") }},
+		{"Italic", WithItalicStyle(style), func(ty *Typography) string { return ty.Italic("test") }},
+		{"Underline", WithUnderlineStyle(style), func(ty *Typography) string { return ty.Underline("test") }},
+		{"Strikethrough", WithStrikethroughStyle(style), func(ty *Typography) string { return ty.Strikethrough("test") }},
+		{"Small", WithSmallStyle(style), func(ty *Typography) string { return ty.Small("test") }},
+		{"Mark", WithMarkStyle(style), func(ty *Typography) string { return ty.Mark("test") }},
+		{"Link", WithLinkStyle(style), func(ty *Typography) string { return ty.Link("test", "url") }},
+		{"Kbd", WithKbdStyle(style), func(ty *Typography) string { return ty.Kbd("test") }},
+		{"Abbr", WithAbbrStyle(style), func(ty *Typography) string { return ty.Abbr("test", "title") }},
+		{"Ins", WithInsStyle(style), func(ty *Typography) string { return ty.Ins("test") }},
+		{"Del", WithDelStyle(style), func(ty *Typography) string { return ty.Del("test") }},
 	}
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			ty := New(tc.opt)
-			_ = ty
+			result := stripANSI(tc.render(ty))
+			if !strings.Contains(result, "test") {
+				t.Errorf("expected output to contain %q, got %q", "test", result)
+			}
 		})
 	}
 }
@@ -108,7 +117,10 @@ func TestWithListStyles(t *testing.T) {
 		WithListBulletStyle(style),
 		WithListItemStyle(style),
 	)
-	_ = ty
+	result := stripANSI(ty.UL("item1", "item2"))
+	if !strings.Contains(result, "item1") || !strings.Contains(result, "item2") {
+		t.Errorf("expected list items in output, got %q", result)
+	}
 }
 
 func TestWithDLStyles(t *testing.T) {
@@ -118,7 +130,10 @@ func TestWithDLStyles(t *testing.T) {
 		WithDTStyle(style),
 		WithDDStyle(style),
 	)
-	_ = ty
+	result := stripANSI(ty.DL([][2]string{{"Term", "Definition"}}))
+	if !strings.Contains(result, "Term") || !strings.Contains(result, "Definition") {
+		t.Errorf("expected DL content in output, got %q", result)
+	}
 }
 
 func TestWithAddressStyle(t *testing.T) {
