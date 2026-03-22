@@ -141,8 +141,10 @@ func (t *Typography) NestOL(items ...ListItem) string {
 // renderNestedList recursively renders a list at the given depth.
 // The prefix parameter carries the parent number for hierarchical numbering
 // (e.g. "2" so children become "2.1", "2.2").
+const maxNestedListDepth = 64
+
 func (t *Typography) renderNestedList(items []ListItem, kind ListKind, depth int, prefix string) string {
-	if len(items) == 0 {
+	if len(items) == 0 || depth > maxNestedListDepth {
 		return ""
 	}
 
