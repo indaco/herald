@@ -173,7 +173,7 @@ func ThemeFromPalette(p ColorPalette) Theme {
 		HeadingBarChar:  DefaultHeadingBarChar,
 
 		BulletChar:           DefaultBulletChar,
-		NestedBulletChars:    DefaultNestedBulletChars,
+		NestedBulletChars:    DefaultNestedBulletChars(),
 		ListIndent:           DefaultListIndent,
 		HRChar:               DefaultHRChar,
 		HRWidth:              DefaultHRWidth,

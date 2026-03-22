@@ -197,9 +197,12 @@ const (
 	DefaultFootnoteDividerWidth = 20
 )
 
-// DefaultNestedBulletChars is the default set of bullet characters that
+// DefaultNestedBulletChars returns the default set of bullet characters that
 // cycle through nesting levels in nested unordered lists.
-var DefaultNestedBulletChars = []string{"•", "◦", "▪", "▹"}
+// A fresh slice is returned on each call to prevent mutation of shared state.
+func DefaultNestedBulletChars() []string {
+	return []string{"•", "◦", "▪", "▹"}
+}
 
 var (
 	termBGOnce sync.Once
