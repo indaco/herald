@@ -37,8 +37,9 @@ func (t *Typography) Theme() Theme {
 // headingWithUnderline renders a heading with a repeated underline character
 // beneath the text. The underline matches the visible width of the text.
 func (t *Typography) headingWithUnderline(text string, style lipgloss.Style, char string) string {
-	rendered := style.UnsetMarginBottom().Render(text)
-	underline := style.UnsetMarginBottom().Render(strings.Repeat(char, len([]rune(text))))
+	noMargin := style.UnsetMarginBottom()
+	rendered := noMargin.Render(text)
+	underline := noMargin.Render(strings.Repeat(char, lipgloss.Width(text)))
 	return rendered + "\n" + underline + style.Render("")
 }
 
