@@ -8,6 +8,49 @@ import (
 	"charm.land/lipgloss/v2"
 )
 
+func TestDefaultAlertConfigs(t *testing.T) {
+	ap := AlertPalette{
+		Note:      lipgloss.Color("#0000FF"),
+		Tip:       lipgloss.Color("#00FF00"),
+		Important: lipgloss.Color("#800080"),
+		Warning:   lipgloss.Color("#FFFF00"),
+		Caution:   lipgloss.Color("#FF0000"),
+	}
+	configs := DefaultAlertConfigs(ap)
+
+	tests := []struct {
+		name  string
+		at    AlertType
+		icon  string
+		label string
+	}{
+		{"Note", AlertNote, DefaultAlertNoteIcon, DefaultAlertNoteLabel},
+		{"Tip", AlertTip, DefaultAlertTipIcon, DefaultAlertTipLabel},
+		{"Important", AlertImportant, DefaultAlertImportantIcon, DefaultAlertImportantLabel},
+		{"Warning", AlertWarning, DefaultAlertWarningIcon, DefaultAlertWarningLabel},
+		{"Caution", AlertCaution, DefaultAlertCautionIcon, DefaultAlertCautionLabel},
+	}
+
+	if len(configs) != 5 {
+		t.Fatalf("expected 5 configs, got %d", len(configs))
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			cfg, ok := configs[tc.at]
+			if !ok {
+				t.Fatalf("missing config for %s", tc.name)
+			}
+			if cfg.Icon != tc.icon {
+				t.Errorf("icon: got %q, want %q", cfg.Icon, tc.icon)
+			}
+			if cfg.Label != tc.label {
+				t.Errorf("label: got %q, want %q", cfg.Label, tc.label)
+			}
+		})
+	}
+}
+
 func TestAlertRendering(t *testing.T) {
 	ty := newTestTypography()
 

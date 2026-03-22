@@ -62,6 +62,46 @@ func TestHasDarkBGEnvOverride(t *testing.T) {
 	})
 }
 
+func TestBoxBorderSet(t *testing.T) {
+	bs := BoxBorderSet()
+
+	fields := []struct {
+		name string
+		val  string
+		want string
+	}{
+		{"Top", bs.Top, "─"},
+		{"Bottom", bs.Bottom, "─"},
+		{"Left", bs.Left, "│"},
+		{"Right", bs.Right, "│"},
+		{"Header", bs.Header, "─"},
+		{"Row", bs.Row, "─"},
+		{"TopLeft", bs.TopLeft, "┌"},
+		{"TopRight", bs.TopRight, "┐"},
+		{"BottomLeft", bs.BottomLeft, "└"},
+		{"BottomRight", bs.BottomRight, "┘"},
+		{"TopJunction", bs.TopJunction, "┬"},
+		{"BottomJunction", bs.BottomJunction, "┴"},
+		{"LeftJunction", bs.LeftJunction, "├"},
+		{"RightJunction", bs.RightJunction, "┤"},
+		{"Cross", bs.Cross, "┼"},
+		{"HeaderLeft", bs.HeaderLeft, "├"},
+		{"HeaderRight", bs.HeaderRight, "┤"},
+		{"HeaderCross", bs.HeaderCross, "┼"},
+		{"FooterLeft", bs.FooterLeft, "├"},
+		{"FooterRight", bs.FooterRight, "┤"},
+		{"FooterCross", bs.FooterCross, "┼"},
+	}
+
+	for _, f := range fields {
+		t.Run(f.name, func(t *testing.T) {
+			if f.val != f.want {
+				t.Errorf("BoxBorderSet().%s = %q, want %q", f.name, f.val, f.want)
+			}
+		})
+	}
+}
+
 func TestDefaultThemeIdempotent(t *testing.T) {
 	t1 := DefaultTheme()
 	t2 := DefaultTheme()
