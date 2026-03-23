@@ -58,6 +58,14 @@ func main() {
 	fmt.Println(ty.Ins("added") + "  " + ty.Del("removed") + "  " + ty.Badge("NEW") + "  " + ty.Tag("go"))
 	fmt.Println()
 
+	// Key-value
+	fmt.Println(ty.KVGroup([][2]string{
+		{"Version", "0.7.0"},
+		{"License", "MIT"},
+		{"Go", "1.25+"},
+	}))
+	fmt.Println()
+
 	// Alert (just one)
 	fmt.Println(ty.Tip("Herald supports Note, Tip, Important, Warning, and Caution alerts."))
 }
