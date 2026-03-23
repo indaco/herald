@@ -136,6 +136,33 @@ func TestWithDLStyles(t *testing.T) {
 	}
 }
 
+func TestWithKVStyles(t *testing.T) {
+	t.Run("KVKeyStyle", func(t *testing.T) {
+		style := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("#FF0000"))
+		ty := New(WithKVKeyStyle(style))
+		result := ty.theme.KVKey.Render("test")
+		if result == "" {
+			t.Error("expected non-empty render from KVKey style")
+		}
+	})
+
+	t.Run("KVValueStyle", func(t *testing.T) {
+		style := lipgloss.NewStyle().Foreground(lipgloss.Color("#00FF00"))
+		ty := New(WithKVValueStyle(style))
+		result := ty.theme.KVValue.Render("test")
+		if result == "" {
+			t.Error("expected non-empty render from KVValue style")
+		}
+	})
+
+	t.Run("KVSeparator", func(t *testing.T) {
+		ty := New(WithKVSeparator(" =>"))
+		if ty.theme.KVSeparator != " =>" {
+			t.Errorf("expected %q, got %q", " =>", ty.theme.KVSeparator)
+		}
+	})
+}
+
 func TestWithAddressStyle(t *testing.T) {
 	style := lipgloss.NewStyle().Italic(true)
 	ty := New(WithAddressStyle(style))

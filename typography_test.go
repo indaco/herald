@@ -1074,6 +1074,115 @@ func TestVeryLongText(t *testing.T) {
 }
 
 // ---------------------------------------------------------------------------
+// Key-value pairs
+// ---------------------------------------------------------------------------
+
+func TestKV(t *testing.T) {
+	ty := newTestTypography()
+
+	t.Run("basic pair", func(t *testing.T) {
+		got := stripANSI(ty.KV("Name", "Alice"))
+		if got != "Name: Alice" {
+			t.Errorf("KV basic pair = %q, want %q", got, "Name: Alice")
+		}
+	})
+
+	t.Run("empty key", func(t *testing.T) {
+		got := stripANSI(ty.KV("", "value"))
+		if got != ": value" {
+			t.Errorf("KV empty key = %q, want %q", got, ": value")
+		}
+	})
+
+	t.Run("empty value", func(t *testing.T) {
+		got := stripANSI(ty.KV("Key", ""))
+		if got != "Key: " {
+			t.Errorf("KV empty value = %q, want %q", got, "Key: ")
+		}
+	})
+
+	t.Run("custom separator", func(t *testing.T) {
+		ty2 := New(WithKVSeparator(" →"))
+		got := stripANSI(ty2.KV("Name", "Alice"))
+		if got != "Name → Alice" {
+			t.Errorf("KV custom sep = %q, want %q", got, "Name → Alice")
+		}
+	})
+
+	t.Run("custom styles", func(t *testing.T) {
+		ty2 := New(
+			WithKVKeyStyle(lipgloss.NewStyle().Bold(true)),
+			WithKVValueStyle(lipgloss.NewStyle().Italic(true)),
+		)
+		got := ty2.KV("Name", "Alice")
+		if got == "" {
+			t.Error("KV custom styles returned empty string")
+		}
+	})
+}
+
+func TestKVGroup(t *testing.T) {
+	ty := newTestTypography()
+
+	t.Run("empty input", func(t *testing.T) {
+		got := ty.KVGroup(nil)
+		if got != "" {
+			t.Errorf("KVGroup empty = %q, want empty", got)
+		}
+	})
+
+	t.Run("single pair", func(t *testing.T) {
+		got := stripANSI(ty.KVGroup([][2]string{{"Name", "Alice"}}))
+		if got != "Name: Alice" {
+			t.Errorf("KVGroup single = %q, want %q", got, "Name: Alice")
+		}
+	})
+
+	t.Run("multiple pairs aligned", func(t *testing.T) {
+		pairs := [][2]string{
+			{"Name", "Alice"},
+			{"Age", "30"},
+			{"Location", "Wonderland"},
+		}
+		got := stripANSI(ty.KVGroup(pairs))
+		lines := strings.Split(got, "\n")
+		if len(lines) != 3 {
+			t.Fatalf("KVGroup lines = %d, want 3", len(lines))
+		}
+		// All colons should be at the same position (after "Location" length = 8).
+		for i, line := range lines {
+			idx := strings.Index(line, ":")
+			if idx != 8 {
+				t.Errorf("line %d colon at %d, want 8: %q", i, idx, line)
+			}
+		}
+	})
+
+	t.Run("empty key in group", func(t *testing.T) {
+		pairs := [][2]string{
+			{"Name", "Alice"},
+			{"", "orphan"},
+		}
+		got := stripANSI(ty.KVGroup(pairs))
+		if !strings.Contains(got, "orphan") {
+			t.Errorf("KVGroup should contain orphan value, got %q", got)
+		}
+	})
+
+	t.Run("custom separator in group", func(t *testing.T) {
+		ty2 := New(WithKVSeparator(" ="))
+		pairs := [][2]string{
+			{"host", "localhost"},
+			{"port", "8080"},
+		}
+		got := stripANSI(ty2.KVGroup(pairs))
+		if !strings.Contains(got, "=") {
+			t.Errorf("KVGroup custom sep should contain '=', got %q", got)
+		}
+	})
+}
+
+// ---------------------------------------------------------------------------
 // Concurrency safety (for -race detector)
 // ---------------------------------------------------------------------------
 
@@ -1109,6 +1218,8 @@ func TestConcurrentAccess(t *testing.T) {
 			ty.TagWithStyle("go", lipgloss.NewStyle().Italic(true))
 			ty.FootnoteRef(1)
 			ty.FootnoteSection([]string{"note one", "note two"})
+			ty.KV("key", "value")
+			ty.KVGroup([][2]string{{"a", "1"}, {"bb", "2"}})
 		}()
 	}
 
