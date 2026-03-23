@@ -112,6 +112,17 @@ func main() {
 	fmt.Println(ty.DD("Manual description using DT/DD directly"))
 	fmt.Println()
 
+	// Key-Value
+	fmt.Println(ty.H3("Key-Value"))
+	fmt.Println(ty.KV("Name", "Alice"))
+	fmt.Println()
+	fmt.Println(ty.KVGroup([][2]string{
+		{"Name", "Alice"},
+		{"Role", "Admin"},
+		{"Status", "Active"},
+	}))
+	fmt.Println()
+
 	// Address
 	fmt.Println(ty.H3("Address"))
 	fmt.Println(ty.Address("Jane Doe\njane@example.com\nSan Francisco, CA"))
