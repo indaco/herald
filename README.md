@@ -512,6 +512,30 @@ fmt.Println(ty.P(
 fmt.Println(ty.FootnoteSection([]string{"A Go library for TUI typography"}))
 ```
 
+### Global padding and framing
+
+Herald renders typography elements. Layout concerns - padding, centering, and framing - belong at the output boundary using lipgloss directly. This avoids double-wrapping when composing inline elements inside block elements.
+
+**Per-element wrapping** - apply a frame style to each rendered line:
+
+```go
+ty := herald.New()
+frame := lipgloss.NewStyle().Padding(0, 2)
+
+fmt.Println(frame.Render(ty.H1("Title")))
+fmt.Println(frame.Render(ty.P("Body text with " + ty.Bold("bold"))))
+```
+
+**Whole-output wrapping** - build all output first, then wrap once:
+
+```go
+var buf strings.Builder
+buf.WriteString(ty.H1("Title") + "\n")
+buf.WriteString(ty.P("Body text") + "\n")
+buf.WriteString(ty.HR() + "\n")
+fmt.Println(frame.Render(buf.String()))
+```
+
 ## Customization
 
 ### Functional options
