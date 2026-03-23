@@ -129,6 +129,8 @@ fmt.Println(ty.H4("Subsection"))
 | `DL(pairs)`              | Definition list from `[][2]string` pairs (term, description)                  |
 | `DT(text)`               | Definition term (standalone)                                                  |
 | `DD(text)`               | Definition description (standalone)                                           |
+| `KV(key, value)`         | Key-value pair rendered as `key: value` with independent styling              |
+| `KVGroup(pairs)`         | Aligned key-value list from `[][2]string` pairs; keys are right-padded        |
 | `Address(text)`          | Contact/author block; renders multi-line text in a distinctive italic style   |
 | `AddressCard(text)`      | Bordered card variant of `Address` with rounded border                        |
 | `FootnoteRef(n)`         | Inline footnote reference marker, e.g. `[1]`                                  |
@@ -149,6 +151,15 @@ fmt.Println(ty.DL([][2]string{
 // Standalone terms and descriptions
 fmt.Println(ty.DT("Go"))
 fmt.Println(ty.DD("A statically typed, compiled language"))
+
+// Key-value pairs
+fmt.Println(ty.KV("Name", "Alice"))
+
+fmt.Println(ty.KVGroup([][2]string{
+    {"Name", "Alice"},
+    {"Role", "Admin"},
+    {"Status", "Active"},
+}))
 
 fmt.Println(ty.Address("Jane Doe\njane@example.com\nSan Francisco, CA"))
 
@@ -562,6 +573,13 @@ ty := herald.New(
 | `WithDTStyle`         | Definition term        |
 | `WithDDStyle`         | Definition description |
 
+#### Key-value
+
+| Option             | Targets                     |
+| ------------------ | --------------------------- |
+| `WithKVKeyStyle`   | `KV` / `KVGroup` key text   |
+| `WithKVValueStyle` | `KV` / `KVGroup` value text |
+
 #### Address
 
 | Option                       | Targets               |
@@ -646,6 +664,12 @@ ty := herald.New(
 | ------------------ | ------- | -------------------------------- |
 | `WithInsPrefix(c)` | `+`     | Prefix for `Ins` (inserted text) |
 | `WithDelPrefix(c)` | `-`     | Prefix for `Del` (deleted text)  |
+
+#### Key-value tokens
+
+| Option               | Default | Description                                       |
+| -------------------- | ------- | ------------------------------------------------- |
+| `WithKVSeparator(c)` | `:`     | Separator between key and value in `KV`/`KVGroup` |
 
 #### Table tokens
 
@@ -760,17 +784,17 @@ ty := herald.New(herald.WithTheme(herald.DraculaTheme()))
 
 `ColorPalette` lets you define 9 colors and derive a complete theme from them. All style fields map from this palette; token options (characters, widths) are unaffected and retain their defaults. Alert colors are handled separately via `AlertPalette`.
 
-| Field       | Maps to                                                                                                                                                             |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Primary`   | H1 headings                                                                                                                                                         |
-| `Secondary` | H2, list bullets, `Badge` background, `Tag` foreground                                                                                                              |
-| `Tertiary`  | H3, links, `Ins`, `FootnoteRef`                                                                                                                                     |
-| `Accent`    | H4, mark background                                                                                                                                                 |
-| `Highlight` | H5, `Abbr`, `Del`                                                                                                                                                   |
-| `Muted`     | H6, blockquote, HR, `HRLabel`, sub/sup, `DD`, `Address`, `AddressCard`, `AddressCardBorder`, `FootnoteItem`, `FootnoteDivider`, line numbers, table border, caption |
-| `Text`      | Body text, paragraphs, list items, inline code, `DT`, table cells, footer                                                                                           |
-| `Surface`   | Background for `Kbd`, `Tag`, striped table rows                                                                                                                     |
-| `Base`      | Background for inline code, code blocks; mark fg, `Badge` fg                                                                                                        |
+| Field       | Maps to                                                                                                                                                                      |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Primary`   | H1 headings                                                                                                                                                                  |
+| `Secondary` | H2, list bullets, `Badge` background, `Tag` foreground                                                                                                                       |
+| `Tertiary`  | H3, links, `Ins`, `FootnoteRef`                                                                                                                                              |
+| `Accent`    | H4, mark background                                                                                                                                                          |
+| `Highlight` | H5, `Abbr`, `Del`                                                                                                                                                            |
+| `Muted`     | H6, blockquote, HR, `HRLabel`, sub/sup, `DD`, `KVKey`, `Address`, `AddressCard`, `AddressCardBorder`, `FootnoteItem`, `FootnoteDivider`, line numbers, table border, caption |
+| `Text`      | Body text, paragraphs, list items, inline code, `DT`, `KVValue`, table cells, footer                                                                                         |
+| `Surface`   | Background for `Kbd`, `Tag`, striped table rows                                                                                                                              |
+| `Base`      | Background for inline code, code blocks; mark fg, `Badge` fg                                                                                                                 |
 
 Pass the palette to `New()` via `WithPalette`, or call `ThemeFromPalette` to construct a `Theme` value directly.
 
