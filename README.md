@@ -39,7 +39,7 @@
   <b><a href="#composition-patterns">Composition</a></b> |
   <b><a href="#customization">Customization</a></b> |
   <b><a href="#themes">Themes</a></b> |
-  <b><a href="#pairing-with-huh">Pairing with huh</a></b> |
+  <b><a href="#pairing-with-huh">Ecosystem</a></b> |
   <b><a href="#examples">Examples</a></b>
 </p>
 
@@ -944,6 +944,27 @@ fmt.Println(ty.DL([][2]string{
 ```
 
 See [`examples/10_huh-pairing/`](./examples/10_huh-pairing) for a runnable example.
+
+## Pairing with bubbletea
+
+herald works inside [bubbletea](https://github.com/charmbracelet/bubbletea) applications — build your content with herald, then display it in a bubbletea viewport or model. Herald handles the typography, bubbletea handles the interactivity.
+
+```go
+func buildContent(ty *herald.Typography) string {
+    var buf strings.Builder
+    buf.WriteString(ty.H1("Release Notes") + "\n")
+    buf.WriteString(ty.Badge("STABLE") + " " + ty.Tag("v2.0.0") + "\n\n")
+    buf.WriteString(ty.HRWithLabel("Features") + "\n")
+    buf.WriteString(ty.UL("New dashboard", "Dark mode support") + "\n")
+    buf.WriteString(ty.Tip("Run `go get -u` to upgrade.") + "\n")
+    return buf.String()
+}
+
+// Pass to a bubbles viewport for scrolling
+m.viewport.SetContent(buildContent(ty))
+```
+
+See [`examples/12_bubbletea-release-viewer/`](./examples/12_bubbletea-release-viewer) for a scrollable release notes viewer and [`examples/13_bubbletea-wizard/`](./examples/13_bubbletea-wizard) for a multi-step wizard combining herald, huh, and bubbletea.
 
 ## Examples
 
