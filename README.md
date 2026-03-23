@@ -822,37 +822,43 @@ ty := herald.New(herald.WithTheme(herald.DraculaTheme()))
 
 Pass the palette to `New()` via `WithPalette`, or call `ThemeFromPalette` to construct a `Theme` value directly.
 
+Use `lipgloss.LightDark` to define adaptive colors that automatically adjust to the terminal's background:
+
 ```go
-// Dracula-inspired palette
+lightDark := lipgloss.LightDark(lipgloss.HasDarkBackground(os.Stdin, os.Stdout))
+
+// Nord-inspired palette
 palette := herald.ColorPalette{
-    Primary:   lipgloss.Color("#bd93f9"), // purple
-    Secondary: lipgloss.Color("#ff79c6"), // pink
-    Tertiary:  lipgloss.Color("#8be9fd"), // cyan
-    Accent:    lipgloss.Color("#ffb86c"), // orange
-    Highlight: lipgloss.Color("#ff5555"), // red
-    Muted:     lipgloss.Color("#6272a4"), // comment gray
-    Text:      lipgloss.Color("#f8f8f2"), // foreground
-    Surface:   lipgloss.Color("#44475a"), // current line
-    Base:      lipgloss.Color("#282a36"), // background
+    Primary:   lightDark(lipgloss.Color("#5E81AC"), lipgloss.Color("#88C0D0")),
+    Secondary: lightDark(lipgloss.Color("#81A1C1"), lipgloss.Color("#81A1C1")),
+    Tertiary:  lightDark(lipgloss.Color("#8FBCBB"), lipgloss.Color("#8FBCBB")),
+    Accent:    lightDark(lipgloss.Color("#EBCB8B"), lipgloss.Color("#EBCB8B")),
+    Highlight: lightDark(lipgloss.Color("#BF616A"), lipgloss.Color("#BF616A")),
+    Muted:     lightDark(lipgloss.Color("#7B88A1"), lipgloss.Color("#4C566A")),
+    Text:      lightDark(lipgloss.Color("#2E3440"), lipgloss.Color("#ECEFF4")),
+    Surface:   lightDark(lipgloss.Color("#D8DEE9"), lipgloss.Color("#3B4252")),
+    Base:      lightDark(lipgloss.Color("#ECEFF4"), lipgloss.Color("#2E3440")),
 }
 
 ty := herald.New(herald.WithPalette(palette))
 ```
 
-`ThemeFromPalette` applies the provided colors directly and does not perform automatic light/dark adaptation. To support both modes, provide separate palettes and switch based on `lipgloss.HasDarkBackground()`.
+Each `lightDark(lightColor, darkColor)` call returns a single adaptive color that picks the right variant based on the terminal background. This is the same approach used by herald's built-in themes and `DefaultTheme()`.
+
+Plain `lipgloss.Color` values (without `LightDark`) work too — they apply the same color regardless of terminal background.
 
 #### Alert palette
 
-`AlertPalette` lets you override the 5 alert colors independently from the main `ColorPalette`:
+`AlertPalette` lets you override the 5 alert colors independently from the main `ColorPalette`. Use `lipgloss.LightDark` for adaptive colors, or plain `lipgloss.Color` for a fixed palette:
 
 ```go
 ty := herald.New(
     herald.WithAlertPalette(herald.AlertPalette{
-        Note:      lipgloss.Color("#0969DA"),
-        Tip:       lipgloss.Color("#1A7F37"),
-        Important: lipgloss.Color("#8250DF"),
-        Warning:   lipgloss.Color("#9A6700"),
-        Caution:   lipgloss.Color("#CF222E"),
+        Note:      lightDark(lipgloss.Color("#0969DA"), lipgloss.Color("#58A6FF")),
+        Tip:       lightDark(lipgloss.Color("#1A7F37"), lipgloss.Color("#3FB950")),
+        Important: lightDark(lipgloss.Color("#8250DF"), lipgloss.Color("#D2A8FF")),
+        Warning:   lightDark(lipgloss.Color("#9A6700"), lipgloss.Color("#D29922")),
+        Caution:   lightDark(lipgloss.Color("#CF222E"), lipgloss.Color("#F85149")),
     }),
 )
 ```
@@ -949,7 +955,7 @@ Runnable examples are in the [`examples/`](examples/) directory:
 | [01_lists](examples/01_lists/)                                                       | Flat, nested, mixed, and hierarchical lists                                                | `go run ./examples/01_lists/`                                 |
 | [02_alerts](examples/02_alerts/)                                                     | GitHub-style alert callouts (Note, Tip, Important, Warning, Caution)                       | `go run ./examples/02_alerts/`                                |
 | [03_custom-options](examples/03_custom-options/)                                     | Override styles, decoration chars, and tokens via functional options                       | `go run ./examples/03_custom-options/`                        |
-| [04_palette](examples/04_palette/)                                                   | Generate a full theme from 9 colors using `ColorPalette`                                   | `go run ./examples/04_palette/`                               |
+| [04_custom-palette](examples/04_custom-palette/)                                     | Custom adaptive theme from 9 colors using `ColorPalette` and `LightDark`                   | `go run ./examples/04_custom-palette/`                        |
 | [05_builtin-themes](examples/05_builtin-themes/)                                     | Built-in themes (Dracula, Catppuccin, Base16, Charm) matching huh                          | `go run ./examples/05_builtin-themes/`                        |
 | [06_catppuccin-theme](examples/06_catppuccin-theme/)                                 | Build a full theme from the [Catppuccin](https://catppuccin.com) palette (separate module) | `cd examples/06_catppuccin-theme && go run .`                 |
 | [07_chroma-syntax-highlighting](examples/07_chroma-syntax-highlighting/)             | Plug in chroma for syntax-highlighted code blocks (separate module)                        | `cd examples/07_chroma-syntax-highlighting && go run .`       |
