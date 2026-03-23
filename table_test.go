@@ -789,3 +789,18 @@ func TestAlignCell(t *testing.T) {
 		})
 	}
 }
+
+func TestTableEmptyColumnSep(t *testing.T) {
+	bs := BoxBorderSet()
+	bs.ColumnSep = ""
+	ty := New(WithTableBorderSet(bs), WithTableCellPad(0))
+	rows := [][]string{
+		{"A", "B"},
+		{"1", "2"},
+	}
+	result := stripANSI(ty.Table(rows))
+	// Should fallback to │ and not panic
+	if !strings.Contains(result, "│") {
+		t.Errorf("expected fallback │ separator, got %q", result)
+	}
+}

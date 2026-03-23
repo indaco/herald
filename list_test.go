@@ -252,6 +252,37 @@ func TestNestULCustomBullets(t *testing.T) {
 	}
 }
 
+func TestNestULEmptyBulletChars(t *testing.T) {
+	ty := New()
+	// Directly set to nil to trigger the len(chars) == 0 fallback
+	// in renderNestedList (WithNestedBulletChars guards against empty slices)
+	ty.theme.NestedBulletChars = nil
+	result := stripANSI(ty.NestUL(Item("fallback")))
+	if !strings.Contains(result, "•") {
+		t.Errorf("expected fallback bullet •, got %q", result)
+	}
+}
+
+func TestNestULDepthLimit(t *testing.T) {
+	// Build a deeply nested list that exceeds maxNestedListDepth (64).
+	// renderNestedList starts at depth 0, so we need 65+ levels of nesting
+	// to trigger the depth > 64 guard.
+	item := Item("leaf")
+	for range 66 {
+		item = ItemWithChildren("level", item)
+	}
+	ty := New()
+	result := ty.NestUL(item)
+	// Should not panic; the deepest child should be silently dropped
+	if result == "" {
+		t.Error("expected non-empty result for deep nesting")
+	}
+	// Verify that "leaf" does NOT appear (it's beyond the depth limit)
+	if strings.Contains(stripANSI(result), "leaf") {
+		t.Error("expected leaf to be dropped due to depth limit")
+	}
+}
+
 func TestHierarchicalNumbers(t *testing.T) {
 	ty := New(WithHierarchicalNumbers(true))
 
