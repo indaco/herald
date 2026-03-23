@@ -170,6 +170,23 @@ func WithDDStyle(s lipgloss.Style) Option {
 	return func(ty *Typography) { ty.theme.DD = s }
 }
 
+// --- Key-value style options ---
+
+// WithKVKeyStyle overrides the key style for key-value pairs.
+func WithKVKeyStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.KVKey = s }
+}
+
+// WithKVValueStyle overrides the value style for key-value pairs.
+func WithKVValueStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.KVValue = s }
+}
+
+// WithKVSeparator sets the separator between key and value (default ":").
+func WithKVSeparator(s string) Option {
+	return func(ty *Typography) { ty.theme.KVSeparator = s }
+}
+
 // --- Address style option ---
 
 // WithAddressStyle overrides the address/contact block style.

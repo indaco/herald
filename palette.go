@@ -141,6 +141,13 @@ func ThemeFromPalette(p ColorPalette) Theme {
 			PaddingLeft(4).
 			Foreground(p.Muted),
 
+		KVKey: lipgloss.NewStyle().
+			Foreground(p.Muted).
+			Bold(true),
+		KVValue: lipgloss.NewStyle().
+			Foreground(p.Text),
+		KVSeparator: DefaultKVSeparator,
+
 		Address: lipgloss.NewStyle().
 			Foreground(p.Muted).
 			Italic(true).

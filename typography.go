@@ -817,6 +817,39 @@ func (t *Typography) DD(text string) string {
 }
 
 // ---------------------------------------------------------------------------
+// Key-value pairs
+// ---------------------------------------------------------------------------
+
+// KV renders a single key-value pair as "key: value" with the key and value
+// styled independently. The separator is taken from the theme's KVSeparator.
+func (t *Typography) KV(key, value string) string {
+	return t.theme.KVKey.Render(key+t.theme.KVSeparator) + " " + t.theme.KVValue.Render(value)
+}
+
+// KVGroup renders multiple key-value pairs with keys right-padded so that
+// values align vertically. Each pair is a two-element array [key, value].
+// Returns an empty string for empty input.
+func (t *Typography) KVGroup(pairs [][2]string) string {
+	if len(pairs) == 0 {
+		return ""
+	}
+	// Find max key width for alignment.
+	maxKeyWidth := 0
+	for _, pair := range pairs {
+		if w := lipgloss.Width(pair[0]); w > maxKeyWidth {
+			maxKeyWidth = w
+		}
+	}
+	lines := make([]string, len(pairs))
+	for i, pair := range pairs {
+		keyWidth := lipgloss.Width(pair[0])
+		padding := strings.Repeat(" ", maxKeyWidth-keyWidth)
+		lines[i] = t.theme.KVKey.Render(pair[0]+padding+t.theme.KVSeparator) + " " + t.theme.KVValue.Render(pair[1])
+	}
+	return strings.Join(lines, "\n")
+}
+
+// ---------------------------------------------------------------------------
 // Address
 // ---------------------------------------------------------------------------
 

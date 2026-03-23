@@ -50,6 +50,11 @@ type Theme struct {
 	DT lipgloss.Style // definition term
 	DD lipgloss.Style // definition description
 
+	// Key-value elements
+	KVKey       lipgloss.Style // style for key text in key-value pairs
+	KVValue     lipgloss.Style // style for value text in key-value pairs
+	KVSeparator string         // separator between key and value (default ":")
+
 	// Address element
 	Address           lipgloss.Style // style for address/contact blocks
 	AddressCard       lipgloss.Style // content style for bordered address card
@@ -198,6 +203,7 @@ const (
 	DefaultDelPrefix            = "-"
 	DefaultFootnoteDividerChar  = "─"
 	DefaultFootnoteDividerWidth = 20
+	DefaultKVSeparator          = ":"
 	MaxWidthChars               = 500
 )
 
