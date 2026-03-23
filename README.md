@@ -963,6 +963,8 @@ Runnable examples are in the [`examples/`](examples/) directory:
 | [09_table](examples/09_table/)                                                       | Table rendering: bordered, minimal, alignment, striped rows, captions, and footer          | `go run ./examples/09_table/`                                 |
 | [10_huh-pairing](examples/10_huh-pairing/)                                           | Using herald with huh for interactive TUI forms                                            | `cd examples/10_huh-pairing && go run .`                      |
 | [11_gotreesitter-syntax-highlighting](examples/11_gotreesitter-syntax-highlighting/) | Pure-Go tree-sitter highlighting via gotreesitter (separate module)                        | `cd examples/11_gotreesitter-syntax-highlighting && go run .` |
+| [12_bubbletea-release-viewer](examples/12_bubbletea-release-viewer/)                 | Scrollable release notes viewer with bubbletea viewport (separate module)                  | `cd examples/12_bubbletea-release-viewer && go run .`         |
+| [13_bubbletea-wizard](examples/13_bubbletea-wizard/)                                 | Multi-step project scaffolder with herald + huh + bubbletea (separate module)              | `cd examples/13_bubbletea-wizard && go run .`                 |
 
 ## License
 
