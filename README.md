@@ -43,7 +43,7 @@
   <b><a href="#examples">Examples</a></b>
 </p>
 
-herald maps familiar HTML elements (H1–H6, P, Blockquote, UL, OL, Code, HR, Tables, Alerts, and inline styles) to styled terminal output, built on [lipgloss v2](https://github.com/charmbracelet/lipgloss).
+herald maps familiar HTML elements (H1-H6, P, Blockquote, UL, OL, Code, HR, Tables, Alerts, and inline styles) to styled terminal output, built on [lipgloss v2](https://github.com/charmbracelet/lipgloss).
 
 It ships with a Rose Pine-inspired default theme, built-in themes matching the Charm ecosystem (Dracula, Catppuccin, Base16, Charm), and full style customization via functional options and ColorPalette.
 
@@ -93,7 +93,7 @@ func main() {
 </p>
 </details>
 
-H1–H3 render with a repeated underline character beneath the text. H4–H6 render with a left bar prefix.
+H1-H3 render with a repeated underline character beneath the text. H4-H6 render with a left bar prefix.
 
 | Method     | Decoration | Default character |
 | ---------- | ---------- | ----------------- |
@@ -445,7 +445,7 @@ fmt.Println(ty.Caution("Advises about risks or negative outcomes."))
 │ Urgent info that needs immediate attention.
 ```
 
-See [`examples/02_alerts/`](examples/02_alerts/) for the full output of all five alert types.
+See [`examples/002_alerts/`](examples/002_alerts/) for the full output of all five alert types.
 
 You can also use the generic `Alert` method with an `AlertType`:
 
@@ -558,7 +558,7 @@ ty := herald.New(
 
 | Option                        | Targets            |
 | ----------------------------- | ------------------ |
-| `WithH1Style` – `WithH6Style` | Heading levels 1–6 |
+| `WithH1Style` - `WithH6Style` | Heading levels 1-6 |
 
 #### Blocks
 
@@ -661,7 +661,7 @@ ty := herald.New(
 | `WithH1UnderlineChar(c)` | `═`     | Underline character for H1     |
 | `WithH2UnderlineChar(c)` | `─`     | Underline character for H2     |
 | `WithH3UnderlineChar(c)` | `·`     | Underline character for H3     |
-| `WithHeadingBarChar(c)`  | `▎`     | Bar prefix character for H4–H6 |
+| `WithHeadingBarChar(c)`  | `▎`     | Bar prefix character for H4-H6 |
 
 #### List tokens
 
@@ -747,7 +747,7 @@ ty := herald.New(
 fmt.Println(ty.CodeBlock(`func main() { fmt.Println("hello") }`, "go"))
 ```
 
-See [`examples/07_chroma-syntax-highlighting/`](examples/07_chroma-syntax-highlighting/) for a chroma-based example, or [`examples/08_tree-sitter-syntax-highlighting/`](examples/08_tree-sitter-syntax-highlighting/) for a tree-sitter-based alternative.
+See [`examples/200_chroma-syntax-highlighting/`](examples/200_chroma-syntax-highlighting/) for a chroma-based example, or [`examples/201_tree-sitter-syntax-highlighting/`](examples/201_tree-sitter-syntax-highlighting/) for a tree-sitter-based alternative.
 
 ### Line numbers in code blocks
 
@@ -943,7 +943,7 @@ fmt.Println(ty.DL([][2]string{
 }))
 ```
 
-See [`examples/10_huh-pairing/`](./examples/10_huh-pairing) for a runnable example.
+See [`examples/203_huh-form/`](./examples/203_huh-form) for a runnable example.
 
 ## Pairing with bubbletea
 
@@ -964,28 +964,28 @@ func buildContent(ty *herald.Typography) string {
 m.viewport.SetContent(buildContent(ty))
 ```
 
-See [`examples/12_bubbletea-release-viewer/`](./examples/12_bubbletea-release-viewer) for a scrollable release notes viewer and [`examples/13_bubbletea-wizard/`](./examples/13_bubbletea-wizard) for a multi-step wizard combining herald, huh, and bubbletea.
+See [`examples/205_bubbletea-release-viewer/`](./examples/205_bubbletea-release-viewer) for a scrollable release notes viewer and [`examples/204_huh-wizard/`](./examples/204_huh-wizard) for a multi-step wizard combining herald and huh.
 
 ## Examples
 
 Runnable examples are in the [`examples/`](examples/) directory:
 
-| Example                                                                              | Description                                                                                | Run                                                           |
-| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------- |
-| [00_default-theme](examples/00_default-theme/)                                       | All elements with the default Rose Pine theme                                              | `go run ./examples/00_default-theme/`                         |
-| [01_lists](examples/01_lists/)                                                       | Flat, nested, mixed, and hierarchical lists                                                | `go run ./examples/01_lists/`                                 |
-| [02_alerts](examples/02_alerts/)                                                     | GitHub-style alert callouts (Note, Tip, Important, Warning, Caution)                       | `go run ./examples/02_alerts/`                                |
-| [03_custom-options](examples/03_custom-options/)                                     | Override styles, decoration chars, and tokens via functional options                       | `go run ./examples/03_custom-options/`                        |
-| [04_custom-palette](examples/04_custom-palette/)                                     | Custom adaptive theme from 9 colors using `ColorPalette` and `LightDark`                   | `go run ./examples/04_custom-palette/`                        |
-| [05_builtin-themes](examples/05_builtin-themes/)                                     | Built-in themes (Dracula, Catppuccin, Base16, Charm) matching huh                          | `go run ./examples/05_builtin-themes/`                        |
-| [06_catppuccin-theme](examples/06_catppuccin-theme/)                                 | Build a full theme from the [Catppuccin](https://catppuccin.com) palette (separate module) | `cd examples/06_catppuccin-theme && go run .`                 |
-| [07_chroma-syntax-highlighting](examples/07_chroma-syntax-highlighting/)             | Plug in chroma for syntax-highlighted code blocks (separate module)                        | `cd examples/07_chroma-syntax-highlighting && go run .`       |
-| [08_tree-sitter-syntax-highlighting](examples/08_tree-sitter-syntax-highlighting/)   | Plug in tree-sitter for AST-based syntax highlighting (separate module)                    | `cd examples/08_tree-sitter-syntax-highlighting && go run .`  |
-| [09_table](examples/09_table/)                                                       | Table rendering: bordered, minimal, alignment, striped rows, captions, and footer          | `go run ./examples/09_table/`                                 |
-| [10_huh-pairing](examples/10_huh-pairing/)                                           | Using herald with huh for interactive TUI forms                                            | `cd examples/10_huh-pairing && go run .`                      |
-| [11_gotreesitter-syntax-highlighting](examples/11_gotreesitter-syntax-highlighting/) | Pure-Go tree-sitter highlighting via gotreesitter (separate module)                        | `cd examples/11_gotreesitter-syntax-highlighting && go run .` |
-| [12_bubbletea-release-viewer](examples/12_bubbletea-release-viewer/)                 | Scrollable release notes viewer with bubbletea viewport (separate module)                  | `cd examples/12_bubbletea-release-viewer && go run .`         |
-| [13_bubbletea-wizard](examples/13_bubbletea-wizard/)                                 | Multi-step project scaffolder with herald + huh + bubbletea (separate module)              | `cd examples/13_bubbletea-wizard && go run .`                 |
+| Example                                                                                | Description                                                                                |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| [000_default-theme](examples/000_default-theme/)                                       | All elements with the default Rose Pine theme                                              |
+| [001_lists](examples/001_lists/)                                                       | Flat, nested, mixed, and hierarchical lists                                                |
+| [002_alerts](examples/002_alerts/)                                                     | GitHub-style alert callouts (Note, Tip, Important, Warning, Caution)                       |
+| [003_table](examples/003_table/)                                                       | Table rendering: bordered, minimal, alignment, striped rows, captions, and footer          |
+| [100_custom-options](examples/100_custom-options/)                                     | Override styles, decoration chars, and tokens via functional options                       |
+| [101_custom-palette](examples/101_custom-palette/)                                     | Custom adaptive theme from 9 colors using `ColorPalette` and `LightDark`                   |
+| [102_builtin-themes](examples/102_builtin-themes/)                                     | Built-in themes (Dracula, Catppuccin, Base16, Charm) matching huh                          |
+| [103_catppuccin-theme](examples/103_catppuccin-theme/)                                 | Build a full theme from the [Catppuccin](https://catppuccin.com) palette (separate module) |
+| [200_chroma-syntax-highlighting](examples/200_chroma-syntax-highlighting/)             | Plug in chroma for syntax-highlighted code blocks (separate module)                        |
+| [201_tree-sitter-syntax-highlighting](examples/201_tree-sitter-syntax-highlighting/)   | Plug in tree-sitter for AST-based syntax highlighting (separate module)                    |
+| [202_gotreesitter-syntax-highlighting](examples/202_gotreesitter-syntax-highlighting/) | Pure-Go tree-sitter highlighting via gotreesitter (separate module)                        |
+| [203_huh-form](examples/203_huh-form/)                                                 | Using herald with huh for interactive TUI forms                                            |
+| [204_huh-wizard](examples/204_huh-wizard/)                                             | Multi-step project scaffolder with herald + huh (separate module)                          |
+| [205_bubbletea-release-viewer](examples/205_bubbletea-release-viewer/)                 | Scrollable release notes viewer with bubbletea viewport (separate module)                  |
 
 ## License
 
