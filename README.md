@@ -53,7 +53,7 @@ Works with any CLI or TUI - and if you use [huh](https://github.com/charmbracele
   <img src="https://raw.githubusercontent.com/indaco/gh-assets/main/herald/demo-hero.png" alt="herald demo output" width="600" />
 </p>
 
-<p align="center"><em>Default Rose Pine theme (dark and light). Herald also ships with Dracula, Catppuccin, Base16, and Charm themes.</em></p>
+<p align="center"><em>Default Rose Pine theme (dark and light). herald also ships with Dracula, Catppuccin, Base16, and Charm themes.</em></p>
 
 ## Installation
 
@@ -77,7 +77,7 @@ func main() {
     ty := herald.New()
 
     fmt.Println(ty.H1("Getting Started"))
-    fmt.Println(ty.P("Herald renders terminal typography using lipgloss styles."))
+    fmt.Println(ty.P("herald renders terminal typography using lipgloss styles."))
     fmt.Println(ty.UL("Headings", "Block elements", "Inline styles"))
 }
 ```
@@ -164,7 +164,7 @@ fmt.Println(ty.KVGroup([][2]string{
 fmt.Println(ty.Address("Jane Doe\njane@example.com\nSan Francisco, CA"))
 
 // Footnotes compose with paragraphs via string concatenation
-fmt.Println(ty.P("Herald supports rich typography" + ty.FootnoteRef(1) + " with multiple elements" + ty.FootnoteRef(2)))
+fmt.Println(ty.P("herald supports rich typography" + ty.FootnoteRef(1) + " with multiple elements" + ty.FootnoteRef(2)))
 fmt.Println(ty.FootnoteSection([]string{
     "Built on lipgloss v2",
     "Headings, lists, alerts, and more",
@@ -455,7 +455,7 @@ fmt.Println(ty.Alert(herald.AlertNote, "Generic alert call."))
 
 ## Composition patterns
 
-Herald provides typography primitives - you compose them for higher-level patterns. Here are some common recipes.
+herald provides typography primitives - you compose them for higher-level patterns. Here are some common recipes.
 
 ### Status messages
 
@@ -503,7 +503,7 @@ Compose inline elements and footnotes within paragraphs:
 
 ```go
 fmt.Println(ty.P(
-    "Herald" + ty.FootnoteRef(1) + " is built on " +
+    "herald" + ty.FootnoteRef(1) + " is built on " +
     ty.Link("lipgloss", "https://github.com/charmbracelet/lipgloss") +
     " and supports " + ty.Bold("rich text") + ", " +
     ty.Code("inline code") + ", and " + ty.Kbd("Ctrl") + "+" + ty.Kbd("C") +
@@ -514,7 +514,7 @@ fmt.Println(ty.FootnoteSection([]string{"A Go library for TUI typography"}))
 
 ### Global padding and framing
 
-Herald renders typography elements. Layout concerns - padding, centering, and framing - belong at the output boundary using lipgloss directly. This avoids double-wrapping when composing inline elements inside block elements.
+herald renders typography elements. Layout concerns - padding, centering, and framing - belong at the output boundary using lipgloss directly. This avoids double-wrapping when composing inline elements inside block elements.
 
 **Per-element wrapping** - apply a frame style to each rendered line:
 
@@ -787,7 +787,7 @@ The following option controls the visual appearance of line numbers:
 
 ### Built-in themes
 
-Herald ships with named themes that match [huh](https://charm.land/huh)'s built-in color palettes. Colors auto-adapt to light/dark terminal backgrounds using `lipgloss.HasDarkBackground`. See [Pairing with huh](#pairing-with-huh) for how to use matching themes across herald and huh.
+herald ships with named themes that match [huh](https://charm.land/huh)'s built-in color palettes. Colors auto-adapt to light/dark terminal backgrounds using `lipgloss.HasDarkBackground`. See [Pairing with huh](#pairing-with-huh) for how to use matching themes across herald and huh.
 
 <table align="center">
   <tr>
@@ -947,7 +947,7 @@ See [`examples/203_huh-form/`](./examples/203_huh-form) for a runnable example.
 
 ## Pairing with bubbletea
 
-herald works inside [bubbletea](https://github.com/charmbracelet/bubbletea) applications — build your content with herald, then display it in a bubbletea viewport or model. Herald handles the typography, bubbletea handles the interactivity.
+herald works inside [bubbletea](https://github.com/charmbracelet/bubbletea) applications — build your content with herald, then display it in a bubbletea viewport or model. herald handles the typography, bubbletea handles the interactivity.
 
 ```go
 func buildContent(ty *herald.Typography) string {
@@ -970,22 +970,24 @@ See [`examples/205_bubbletea-release-viewer/`](./examples/205_bubbletea-release-
 
 Runnable examples are in the [`examples/`](examples/) directory:
 
-| Example                                                                                | Description                                                                                |
-| -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| [000_default-theme](examples/000_default-theme/)                                       | All elements with the default Rose Pine theme                                              |
-| [001_lists](examples/001_lists/)                                                       | Flat, nested, mixed, and hierarchical lists                                                |
-| [002_alerts](examples/002_alerts/)                                                     | GitHub-style alert callouts (Note, Tip, Important, Warning, Caution)                       |
-| [003_table](examples/003_table/)                                                       | Table rendering: bordered, minimal, alignment, striped rows, captions, and footer          |
-| [100_custom-options](examples/100_custom-options/)                                     | Override styles, decoration chars, and tokens via functional options                       |
-| [101_custom-palette](examples/101_custom-palette/)                                     | Custom adaptive theme from 9 colors using `ColorPalette` and `LightDark`                   |
-| [102_builtin-themes](examples/102_builtin-themes/)                                     | Built-in themes (Dracula, Catppuccin, Base16, Charm) matching huh                          |
-| [103_catppuccin-theme](examples/103_catppuccin-theme/)                                 | Build a full theme from the [Catppuccin](https://catppuccin.com) palette (separate module) |
-| [200_chroma-syntax-highlighting](examples/200_chroma-syntax-highlighting/)             | Plug in chroma for syntax-highlighted code blocks (separate module)                        |
-| [201_tree-sitter-syntax-highlighting](examples/201_tree-sitter-syntax-highlighting/)   | Plug in tree-sitter for AST-based syntax highlighting (separate module)                    |
-| [202_gotreesitter-syntax-highlighting](examples/202_gotreesitter-syntax-highlighting/) | Pure-Go tree-sitter highlighting via gotreesitter (separate module)                        |
-| [203_huh-form](examples/203_huh-form/)                                                 | Using herald with huh for interactive TUI forms                                            |
-| [204_huh-wizard](examples/204_huh-wizard/)                                             | Multi-step project scaffolder with herald + huh (separate module)                          |
-| [205_bubbletea-release-viewer](examples/205_bubbletea-release-viewer/)                 | Scrollable release notes viewer with bubbletea viewport (separate module)                  |
+| Example                                                                                | Description                                                                       |
+| -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| [000_default-theme](examples/000_default-theme/)                                       | All elements with the default Rose Pine theme                                     |
+| [001_lists](examples/001_lists/)                                                       | Flat, nested, mixed, and hierarchical lists                                       |
+| [002_alerts](examples/002_alerts/)                                                     | GitHub-style alert callouts (Note, Tip, Important, Warning, Caution)              |
+| [003_table](examples/003_table/)                                                       | Table rendering: bordered, minimal, alignment, striped rows, captions, and footer |
+| [100_custom-options](examples/100_custom-options/)                                     | Override styles, decoration chars, and tokens via functional options              |
+| [101_custom-palette](examples/101_custom-palette/)                                     | Custom adaptive theme from 9 colors using `ColorPalette` and `LightDark`          |
+| [102_builtin-themes](examples/102_builtin-themes/)                                     | Built-in themes (Dracula, Catppuccin, Base16, Charm) matching huh                 |
+| [103_catppuccin-theme](examples/103_catppuccin-theme/)                                 | Build a full theme from the [Catppuccin](https://catppuccin.com) palette          |
+| [200_chroma-syntax-highlighting](examples/200_chroma-syntax-highlighting/)             | Plug in chroma for syntax-highlighted code blocks                                 |
+| [201_tree-sitter-syntax-highlighting](examples/201_tree-sitter-syntax-highlighting/)   | Plug in tree-sitter for AST-based syntax highlighting                             |
+| [202_gotreesitter-syntax-highlighting](examples/202_gotreesitter-syntax-highlighting/) | Pure-Go tree-sitter highlighting via gotreesitter                                 |
+| [203_huh-form](examples/203_huh-form/)                                                 | Using herald with huh for interactive TUI forms                                   |
+| [204_huh-wizard](examples/204_huh-wizard/)                                             | Multi-step project scaffolder with herald + huh                                   |
+| [205_bubbletea-release-viewer](examples/205_bubbletea-release-viewer/)                 | Scrollable release notes viewer with bubbletea viewport                           |
+| [206_bubbletea-explorer](examples/206_bubbletea-explorer/)                             | Sidebar + scrollable content pane explorer with bubbletea                         |
+| [207_tview-explorer](examples/207_tview-explorer/)                                     | Sidebar + scrollable content pane explorer with tview                             |
 
 ## License
 
