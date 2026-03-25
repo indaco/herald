@@ -845,7 +845,7 @@ ty := herald.New(herald.WithPalette(palette))
 
 Each `lightDark(lightColor, darkColor)` call returns a single adaptive color that picks the right variant based on the terminal background. This is the same approach used by herald's built-in themes and `DefaultTheme()`.
 
-Plain `lipgloss.Color` values (without `LightDark`) work too — they apply the same color regardless of terminal background.
+Plain `lipgloss.Color` values (without `LightDark`) work too - they apply the same color regardless of terminal background.
 
 #### Alert palette
 
@@ -943,11 +943,11 @@ fmt.Println(ty.DL([][2]string{
 }))
 ```
 
-See [`examples/203_huh-form/`](./examples/203_huh-form) for a runnable example.
+See [`examples/203_huh-form/`](./examples/203_huh-form) for a runnable example, and [`examples/204_huh-wizard/`](./examples/204_huh-wizard) for a multi-step wizard combining herald and huh.
 
 ## Pairing with bubbletea
 
-herald works inside [bubbletea](https://github.com/charmbracelet/bubbletea) applications — build your content with herald, then display it in a bubbletea viewport or model. herald handles the typography, bubbletea handles the interactivity.
+herald works inside [bubbletea](https://github.com/charmbracelet/bubbletea) applications - build your content with herald, then display it in a bubbletea viewport or model. Herald handles the typography, bubbletea handles the interactivity.
 
 ```go
 func buildContent(ty *herald.Typography) string {
@@ -964,7 +964,27 @@ func buildContent(ty *herald.Typography) string {
 m.viewport.SetContent(buildContent(ty))
 ```
 
-See [`examples/205_bubbletea-release-viewer/`](./examples/205_bubbletea-release-viewer) for a scrollable release notes viewer and [`examples/204_huh-wizard/`](./examples/204_huh-wizard) for a multi-step wizard combining herald and huh.
+See [`examples/205_bubbletea-release-viewer/`](./examples/205_bubbletea-release-viewer) for a scrollable release notes viewer and [`examples/206_bubbletea-explorer/`](./examples/206_bubbletea-explorer) for a sidebar + viewport explorer.
+
+## Pairing with tview
+
+herald works with [tview](https://github.com/rivo/tview) via `tview.ANSIWriter`, which translates lipgloss ANSI output into tview's internal color tags.
+
+```go
+ty := herald.New()
+
+textView := tview.NewTextView().
+    SetDynamicColors(true).
+    SetScrollable(true).
+    SetWordWrap(true)
+
+w := tview.ANSIWriter(textView)
+fmt.Fprintln(w, ty.H1("Herald + tview"))
+fmt.Fprintln(w, ty.P("ANSI escape sequences are converted to tview color tags."))
+fmt.Fprintln(w, ty.UL("Headings", "Lists", "Alerts", "Tables"))
+```
+
+See [`examples/207_tview-explorer/`](./examples/207_tview-explorer) for a sidebar + content pane explorer.
 
 ## Examples
 
