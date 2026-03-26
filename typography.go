@@ -968,3 +968,23 @@ func (t *Typography) FootnoteSection(notes []string) string {
 	}
 	return strings.Join(lines, "\n")
 }
+
+// ---------------------------------------------------------------------------
+// Compose
+// ---------------------------------------------------------------------------
+
+// Compose joins pre-rendered blocks with a single blank line between them,
+// producing a single string suitable for printing. Trailing and leading
+// whitespace on each block is trimmed before joining so that elements with
+// built-in margins (e.g. headings with MarginBottom) do not produce excess
+// vertical space. Empty or whitespace-only blocks are skipped.
+func (t *Typography) Compose(blocks ...string) string {
+	non := make([]string, 0, len(blocks))
+	for _, b := range blocks {
+		trimmed := strings.TrimRight(b, "\n")
+		if trimmed != "" {
+			non = append(non, trimmed)
+		}
+	}
+	return strings.Join(non, "\n\n")
+}
