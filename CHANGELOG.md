@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). The changelog is generated and managed by [sley](https://github.com/indaco/sley).
 
+## v0.8.0 - 2026-03-26
+
+### 🚀 Enhancements
+
+- add semantic palette with themed badge and tag variants ([d5d2045](https://github.com/indaco/herald/commit/d5d2045)) ([#44](https://github.com/indaco/herald/pull/44))
+
+### 📖 Documentation
+
+- **README:** use go get @latest in installation instructions ([b1ba5ef](https://github.com/indaco/herald/commit/b1ba5ef))
+- **README:** fix ecosystem pairing sections and add tview ([7880674](https://github.com/indaco/herald/commit/7880674))
+- **README:** add Pairing with bubbletea section ([27b5f65](https://github.com/indaco/herald/commit/27b5f65)) ([#40](https://github.com/indaco/herald/pull/40))
+
+### 🏡 Chores
+
+- refactor input and resize for model state in bubbletea examples ([b010abc](https://github.com/indaco/herald/commit/b010abc)) ([#43](https://github.com/indaco/herald/pull/43))
+- **examples:** add bubbletea and tview explorer demos ([f42d44e](https://github.com/indaco/herald/commit/f42d44e)) ([#42](https://github.com/indaco/herald/pull/42))
+- **examples:** reorder with range-based numbering convention ([5f9864a](https://github.com/indaco/herald/commit/5f9864a)) ([#41](https://github.com/indaco/herald/pull/41))
+
+**Full Changelog:** [v0.7.0...v0.8.0](https://github.com/indaco/herald/compare/v0.7.0...v0.8.0)
+
+### ❤️ Contributors
+
+- [@indaco](https://github.com/indaco)
+
 ## v0.7.0 - 2026-03-23
 
 ### 🚀 Enhancements
