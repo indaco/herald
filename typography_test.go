@@ -1047,6 +1047,66 @@ func TestTagWithStyle(t *testing.T) {
 }
 
 // ---------------------------------------------------------------------------
+// Semantic Badges
+// ---------------------------------------------------------------------------
+
+func TestSemanticBadges(t *testing.T) {
+	ty := newTestTypography()
+
+	tests := []struct {
+		name string
+		fn   func(string) string
+		text string
+	}{
+		{"SuccessBadge", ty.SuccessBadge, "running"},
+		{"WarningBadge", ty.WarningBadge, "expiring"},
+		{"ErrorBadge", ty.ErrorBadge, "failed"},
+		{"InfoBadge", ty.InfoBadge, "pending"},
+		{"SuccessBadge empty", ty.SuccessBadge, ""},
+		{"ErrorBadge special", ty.ErrorBadge, "<error>"},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			result := tc.fn(tc.text)
+			if tc.text != "" && !strings.Contains(stripANSI(result), tc.text) {
+				t.Errorf("%s(%q) missing text in output %q", tc.name, tc.text, stripANSI(result))
+			}
+		})
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Semantic Tags
+// ---------------------------------------------------------------------------
+
+func TestSemanticTags(t *testing.T) {
+	ty := newTestTypography()
+
+	tests := []struct {
+		name string
+		fn   func(string) string
+		text string
+	}{
+		{"SuccessTag", ty.SuccessTag, "healthy"},
+		{"WarningTag", ty.WarningTag, "degraded"},
+		{"ErrorTag", ty.ErrorTag, "critical"},
+		{"InfoTag", ty.InfoTag, "maintenance"},
+		{"SuccessTag empty", ty.SuccessTag, ""},
+		{"InfoTag unicode", ty.InfoTag, "Bonjour"},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			result := tc.fn(tc.text)
+			if tc.text != "" && !strings.Contains(stripANSI(result), tc.text) {
+				t.Errorf("%s(%q) missing text in output %q", tc.name, tc.text, stripANSI(result))
+			}
+		})
+	}
+}
+
+// ---------------------------------------------------------------------------
 // Edge cases
 // ---------------------------------------------------------------------------
 
@@ -1102,10 +1162,10 @@ func TestKV(t *testing.T) {
 	})
 
 	t.Run("custom separator", func(t *testing.T) {
-		ty2 := New(WithKVSeparator(" →"))
+		ty2 := New(WithKVSeparator(" ->"))
 		got := stripANSI(ty2.KV("Name", "Alice"))
-		if got != "Name → Alice" {
-			t.Errorf("KV custom sep = %q, want %q", got, "Name → Alice")
+		if got != "Name -> Alice" {
+			t.Errorf("KV custom sep = %q, want %q", got, "Name -> Alice")
 		}
 	})
 
@@ -1220,6 +1280,14 @@ func TestConcurrentAccess(t *testing.T) {
 			ty.FootnoteSection([]string{"note one", "note two"})
 			ty.KV("key", "value")
 			ty.KVGroup([][2]string{{"a", "1"}, {"bb", "2"}})
+			ty.SuccessBadge("ok")
+			ty.WarningBadge("warn")
+			ty.ErrorBadge("err")
+			ty.InfoBadge("info")
+			ty.SuccessTag("ok")
+			ty.WarningTag("warn")
+			ty.ErrorTag("err")
+			ty.InfoTag("info")
 		}()
 	}
 

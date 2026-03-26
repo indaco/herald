@@ -30,6 +30,18 @@ func DraculaTheme() Theme {
 		Caution:   lightDark(lipgloss.Color("#c44040"), lipgloss.Color("#ff5555")), // red
 	})
 
+	// Semantic palette: Dracula green/yellow/red/cyan
+	draculaSP := SemanticPalette{
+		Success: lightDark(lipgloss.Color("#1e9651"), lipgloss.Color("#50fa7b")), // green
+		Warning: lightDark(lipgloss.Color("#b07d2b"), lipgloss.Color("#f1fa8c")), // yellow
+		Error:   lightDark(lipgloss.Color("#c44040"), lipgloss.Color("#ff5555")), // red
+		Info:    lightDark(lipgloss.Color("#1e6e99"), lipgloss.Color("#8be9fd")), // cyan
+	}
+	base := theme.Badge.GetForeground()
+	surface := theme.Tag.GetBackground()
+	theme.SuccessBadge, theme.WarningBadge, theme.ErrorBadge, theme.InfoBadge = defaultSemanticBadgeStyles(draculaSP, base)
+	theme.SuccessTag, theme.WarningTag, theme.ErrorTag, theme.InfoTag = defaultSemanticTagStyles(draculaSP, surface)
+
 	return theme
 }
 
@@ -58,6 +70,18 @@ func CatppuccinTheme() Theme {
 		Warning:   lightDark(lipgloss.Color("#fe640b"), lipgloss.Color("#fab387")), // peach
 		Caution:   lightDark(lipgloss.Color("#d20f39"), lipgloss.Color("#f38ba8")), // red
 	})
+
+	// Semantic palette: Catppuccin green/peach/red/blue
+	catppuccinSP := SemanticPalette{
+		Success: lightDark(lipgloss.Color("#40a02b"), lipgloss.Color("#a6e3a1")), // green
+		Warning: lightDark(lipgloss.Color("#fe640b"), lipgloss.Color("#fab387")), // peach
+		Error:   lightDark(lipgloss.Color("#d20f39"), lipgloss.Color("#f38ba8")), // red
+		Info:    lightDark(lipgloss.Color("#1e66f5"), lipgloss.Color("#89b4fa")), // blue
+	}
+	base := theme.Badge.GetForeground()
+	surface := theme.Tag.GetBackground()
+	theme.SuccessBadge, theme.WarningBadge, theme.ErrorBadge, theme.InfoBadge = defaultSemanticBadgeStyles(catppuccinSP, base)
+	theme.SuccessTag, theme.WarningTag, theme.ErrorTag, theme.InfoTag = defaultSemanticTagStyles(catppuccinSP, surface)
 
 	return theme
 }
@@ -88,6 +112,18 @@ func Base16Theme() Theme {
 		Caution:   lightDark(lipgloss.Color("1"), lipgloss.Color("1")), // red
 	})
 
+	// Semantic palette: ANSI green/yellow/red/blue
+	base16SP := SemanticPalette{
+		Success: lightDark(lipgloss.Color("2"), lipgloss.Color("2")), // green
+		Warning: lightDark(lipgloss.Color("3"), lipgloss.Color("3")), // yellow
+		Error:   lightDark(lipgloss.Color("1"), lipgloss.Color("1")), // red
+		Info:    lightDark(lipgloss.Color("4"), lipgloss.Color("4")), // blue
+	}
+	base := theme.Badge.GetForeground()
+	surface := theme.Tag.GetBackground()
+	theme.SuccessBadge, theme.WarningBadge, theme.ErrorBadge, theme.InfoBadge = defaultSemanticBadgeStyles(base16SP, base)
+	theme.SuccessTag, theme.WarningTag, theme.ErrorTag, theme.InfoTag = defaultSemanticTagStyles(base16SP, surface)
+
 	return theme
 }
 
@@ -116,6 +152,18 @@ func CharmTheme() Theme {
 		Warning:   lightDark(lipgloss.Color("#C740B0"), lipgloss.Color("#F780E2")), // charm pink/warm
 		Caution:   lightDark(lipgloss.Color("#C7304E"), lipgloss.Color("#ED567A")), // charm red
 	})
+
+	// Semantic palette: Charm green/pink/red/blue
+	charmSP := SemanticPalette{
+		Success: lightDark(lipgloss.Color("#02BA84"), lipgloss.Color("#02BF87")), // charm green
+		Warning: lightDark(lipgloss.Color("#C740B0"), lipgloss.Color("#F780E2")), // charm pink/warm
+		Error:   lightDark(lipgloss.Color("#C7304E"), lipgloss.Color("#ED567A")), // charm red
+		Info:    lightDark(lipgloss.Color("#2563EB"), lipgloss.Color("#60A5FA")), // charm blue
+	}
+	base := theme.Badge.GetForeground()
+	surface := theme.Tag.GetBackground()
+	theme.SuccessBadge, theme.WarningBadge, theme.ErrorBadge, theme.InfoBadge = defaultSemanticBadgeStyles(charmSP, base)
+	theme.SuccessTag, theme.WarningTag, theme.ErrorTag, theme.InfoTag = defaultSemanticTagStyles(charmSP, surface)
 
 	return theme
 }

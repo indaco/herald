@@ -477,6 +477,93 @@ func TestWithCodeLineNumberSep(t *testing.T) {
 	}
 }
 
+func TestWithSemanticBadgeTagStyles(t *testing.T) {
+	style := lipgloss.NewStyle().Bold(true)
+
+	tests := []struct {
+		name string
+		opt  Option
+		get  func(*Typography) lipgloss.Style
+	}{
+		{"SuccessBadge", WithSuccessBadgeStyle(style), func(ty *Typography) lipgloss.Style { return ty.theme.SuccessBadge }},
+		{"WarningBadge", WithWarningBadgeStyle(style), func(ty *Typography) lipgloss.Style { return ty.theme.WarningBadge }},
+		{"ErrorBadge", WithErrorBadgeStyle(style), func(ty *Typography) lipgloss.Style { return ty.theme.ErrorBadge }},
+		{"InfoBadge", WithInfoBadgeStyle(style), func(ty *Typography) lipgloss.Style { return ty.theme.InfoBadge }},
+		{"SuccessTag", WithSuccessTagStyle(style), func(ty *Typography) lipgloss.Style { return ty.theme.SuccessTag }},
+		{"WarningTag", WithWarningTagStyle(style), func(ty *Typography) lipgloss.Style { return ty.theme.WarningTag }},
+		{"ErrorTag", WithErrorTagStyle(style), func(ty *Typography) lipgloss.Style { return ty.theme.ErrorTag }},
+		{"InfoTag", WithInfoTagStyle(style), func(ty *Typography) lipgloss.Style { return ty.theme.InfoTag }},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			ty := New(tc.opt)
+			got := tc.get(ty)
+			result := got.Render("test")
+			if result == "" {
+				t.Error("expected non-empty render")
+			}
+		})
+	}
+}
+
+func TestWithSemanticPalette(t *testing.T) {
+	sp := SemanticPalette{
+		Success: lipgloss.Color("#00FF00"),
+		Warning: lipgloss.Color("#FFFF00"),
+		Error:   lipgloss.Color("#FF0000"),
+		Info:    lipgloss.Color("#0000FF"),
+	}
+
+	ty := New(WithSemanticPalette(sp))
+
+	// All 8 styles should render non-empty output
+	tests := []struct {
+		name   string
+		render func(string) string
+	}{
+		{"SuccessBadge", ty.SuccessBadge},
+		{"WarningBadge", ty.WarningBadge},
+		{"ErrorBadge", ty.ErrorBadge},
+		{"InfoBadge", ty.InfoBadge},
+		{"SuccessTag", ty.SuccessTag},
+		{"WarningTag", ty.WarningTag},
+		{"ErrorTag", ty.ErrorTag},
+		{"InfoTag", ty.InfoTag},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			result := stripANSI(tc.render("test"))
+			if !strings.Contains(result, "test") {
+				t.Errorf("%s: expected 'test' in output, got %q", tc.name, result)
+			}
+		})
+	}
+}
+
+func TestWithSemanticPalettePreservesOtherStyles(t *testing.T) {
+	sp := SemanticPalette{
+		Success: lipgloss.Color("#00FF00"),
+		Warning: lipgloss.Color("#FFFF00"),
+		Error:   lipgloss.Color("#FF0000"),
+		Info:    lipgloss.Color("#0000FF"),
+	}
+
+	ty := New(WithSemanticPalette(sp))
+
+	// Badge and Tag (non-semantic) should still work
+	result := stripANSI(ty.Badge("BETA"))
+	if !strings.Contains(result, "BETA") {
+		t.Errorf("Badge should still work after WithSemanticPalette, got %q", result)
+	}
+
+	result = stripANSI(ty.Tag("v1.0"))
+	if !strings.Contains(result, "v1.0") {
+		t.Errorf("Tag should still work after WithSemanticPalette, got %q", result)
+	}
+}
+
 func TestMultipleOptions(t *testing.T) {
 	ty := New(
 		WithHRWidth(80),
