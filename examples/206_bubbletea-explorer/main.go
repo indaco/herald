@@ -128,7 +128,7 @@ func buildOverview(ty *herald.Typography, width int) string {
 	b.WriteString("\n\n")
 
 	b.WriteString(ty.Blockquote(
-		"The integration point with bubbletea is "+ty.Code("viewport.SetContent()")+
+		"The integration point with bubbletea is " + ty.Code("viewport.SetContent()") +
 			".\nHerald renders the styled text, bubbletea handles the interactivity.",
 	))
 	b.WriteString("\n")
@@ -345,7 +345,7 @@ func buildTablesAndData(ty *herald.Typography, width int) string {
 	b.WriteString("\n\n")
 
 	b.WriteString(ty.P(
-		ty.Badge("STABLE")+" "+ty.Tag("v1.0.0")+" "+ty.Badge("GO")+" "+ty.Tag("lipgloss-v2"),
+		ty.Badge("STABLE") + " " + ty.Tag("v1.0.0") + " " + ty.Badge("GO") + " " + ty.Tag("lipgloss-v2"),
 	))
 	b.WriteString("\n\n")
 
@@ -427,7 +427,7 @@ palette := herald.ColorPalette{
 ty := herald.New(herald.WithPalette(palette))`, "go"))
 	b.WriteString("\n\n")
 
-	b.WriteString(ty.Tip("All built-in themes are themselves built with "+ty.Code("ThemeFromPalette()")+"."))
+	b.WriteString(ty.Tip("All built-in themes are themselves built with " + ty.Code("ThemeFromPalette()") + "."))
 	b.WriteString("\n")
 
 	return b.String()
@@ -563,54 +563,68 @@ func (m model) Init() tea.Cmd {
 	return nil
 }
 
+// handleKeyPress processes keyboard input and returns true with an optional
+// command when the key was fully handled (no further processing needed).
+func (m *model) handleKeyPress(key string) (bool, tea.Cmd) {
+	switch key {
+	case "q", "ctrl+c":
+		return true, tea.Quit
+	case "tab", "right":
+		if m.focus == sidebarPane {
+			m.focus = contentPane
+		}
+		return true, nil
+	case "left":
+		if m.focus == contentPane {
+			m.focus = sidebarPane
+		}
+		return true, nil
+	default:
+		return false, nil
+	}
+}
+
+// handleWindowSize updates layout dimensions and re-renders content when the
+// terminal is resized.
+func (m *model) handleWindowSize(msg tea.WindowSizeMsg) {
+	vpW := contentWidth(msg.Width)
+	vpHeight := msg.Height - 6 // padding (2) + border (2) + newline (1) + footer (1)
+
+	if !m.ready {
+		m.viewport = viewport.New(
+			viewport.WithWidth(vpW+6), // add padding back for viewport frame
+			viewport.WithHeight(vpHeight),
+		)
+		m.viewport.MouseWheelEnabled = true
+		m.list.SetHeight(vpHeight)
+		m.renderContents(vpW)
+		m.ready = true
+		return
+	}
+
+	m.viewport.SetWidth(vpW + 6)
+	m.viewport.SetHeight(vpHeight)
+	m.list.SetHeight(vpHeight)
+	if vpW != m.lastWidth {
+		m.renderContents(vpW)
+		// Re-apply current content at new width.
+		idx := m.list.Index()
+		if idx >= 0 && idx < len(m.contents) {
+			m.viewport.SetContent(m.contents[idx])
+		}
+	}
+}
+
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd
 
 	switch msg := msg.(type) {
 	case tea.KeyPressMsg:
-		switch msg.String() {
-		case "q", "ctrl+c":
-			return m, tea.Quit
-
-		case "tab", "right":
-			if m.focus == sidebarPane {
-				m.focus = contentPane
-			}
-			return m, nil
-
-		case "left":
-			if m.focus == contentPane {
-				m.focus = sidebarPane
-			}
-			return m, nil
+		if handled, cmd := m.handleKeyPress(msg.String()); handled {
+			return m, cmd
 		}
-
 	case tea.WindowSizeMsg:
-		vpW := contentWidth(msg.Width)
-		vpHeight := msg.Height - 6 // padding (2) + border (2) + newline (1) + footer (1)
-
-		if !m.ready {
-			m.viewport = viewport.New(
-				viewport.WithWidth(vpW+6), // add padding back for viewport frame
-				viewport.WithHeight(vpHeight),
-			)
-			m.viewport.MouseWheelEnabled = true
-			m.list.SetHeight(vpHeight)
-			m.renderContents(vpW)
-			m.ready = true
-		} else {
-			m.viewport.SetWidth(vpW + 6)
-			m.viewport.SetHeight(vpHeight)
-			m.list.SetHeight(vpHeight)
-			if vpW != m.lastWidth {
-				m.renderContents(vpW)
-				// Re-apply current content at new width.
-				idx := m.list.Index()
-				if idx >= 0 && idx < len(m.contents) {
-					m.viewport.SetContent(m.contents[idx])
-				}
-			}
-		}
+		m.handleWindowSize(msg)
 	}
 
 	// Route input to the focused pane.

@@ -186,16 +186,16 @@ func buildReleaseNotes(ty *herald.Typography) string {
 	))
 	b.WriteString("\n\n")
 
-	b.WriteString(ty.P("Custom themes are supported via "+ty.Code("ThemeFromPalette()", "")+" or full "+ty.Code("WithTheme()", "")+" overrides."))
+	b.WriteString(ty.P("Custom themes are supported via " + ty.Code("ThemeFromPalette()", "") + " or full " + ty.Code("WithTheme()", "") + " overrides."))
 	b.WriteString("\n\n")
 
 	b.WriteString(ty.H3("Badge and Tag System"))
 	b.WriteString("\n\n")
 
 	b.WriteString(ty.P(
-		"New pill-style labels for status indicators and categories. "+
-			"Use "+ty.Code("Badge()", "")+" for bold status pills and "+ty.Code("Tag()", "")+" for subtle category markers. "+
-			"Both support one-off style overrides via "+ty.Code("BadgeWithStyle()", "")+" and "+ty.Code("TagWithStyle()", "")+"."),
+		"New pill-style labels for status indicators and categories. " +
+			"Use " + ty.Code("Badge()", "") + " for bold status pills and " + ty.Code("Tag()", "") + " for subtle category markers. " +
+			"Both support one-off style overrides via " + ty.Code("BadgeWithStyle()", "") + " and " + ty.Code("TagWithStyle()", "") + "."),
 	)
 	b.WriteString("\n\n")
 
@@ -203,8 +203,8 @@ func buildReleaseNotes(ty *herald.Typography) string {
 	b.WriteString("\n\n")
 
 	b.WriteString(ty.P(
-		"Inline footnote references"+ty.FootnoteRef(2)+" paired with a collected footnote section "+
-			"at the bottom of your document. References are rendered as bracketed numbers "+
+		"Inline footnote references" + ty.FootnoteRef(2) + " paired with a collected footnote section " +
+			"at the bottom of your document. References are rendered as bracketed numbers " +
 			"and the section includes a configurable divider line."),
 	)
 	b.WriteString("\n\n")
@@ -236,8 +236,8 @@ func buildReleaseNotes(ty *herald.Typography) string {
 	b.WriteString("\n\n")
 
 	b.WriteString(ty.P(
-		"The "+ty.Code("Table()", "")+" method now accepts "+ty.Code("[][]string", "")+" instead of "+
-			"a custom struct. Use "+ty.Code("TableWithOpts()", "")+" for column alignment, "+
+		"The " + ty.Code("Table()", "") + " method now accepts " + ty.Code("[][]string", "") + " instead of " +
+			"a custom struct. Use " + ty.Code("TableWithOpts()", "") + " for column alignment, " +
 			"striped rows, and captions."))
 	b.WriteString("\n\n")
 
@@ -259,7 +259,7 @@ fmt.Println(ty.Code("go build", ""))
 fmt.Println(ty.HR())`, "go"))
 	b.WriteString("\n\n")
 
-	b.WriteString(ty.Tip("Run "+ty.Code("go vet ./...", "")+" after migrating to catch any missed renames at compile time."))
+	b.WriteString(ty.Tip("Run " + ty.Code("go vet ./...", "") + " after migrating to catch any missed renames at compile time."))
 	b.WriteString("\n\n")
 
 	// --- Performance section ---
@@ -277,7 +277,7 @@ fmt.Println(ty.HR())`, "go"))
 	}))
 	b.WriteString("\n\n")
 
-	b.WriteString(ty.Note("Herald has no runtime dependencies beyond "+ty.Code("lipgloss/v2", "")+". "+
+	b.WriteString(ty.Note("Herald has no runtime dependencies beyond " + ty.Code("lipgloss/v2", "") + ". " +
 		"All rendering is pure Go string manipulation."))
 	b.WriteString("\n\n")
 
@@ -289,9 +289,9 @@ fmt.Println(ty.HR())`, "go"))
 	b.WriteString("\n\n")
 
 	b.WriteString(ty.P(
-		"Special thanks to all contributors who reported issues, "+
-			"submitted pull requests, and tested pre-release builds. "+
-			"Press "+ty.Kbd("q")+" to exit this viewer."))
+		"Special thanks to all contributors who reported issues, " +
+			"submitted pull requests, and tested pre-release builds. " +
+			"Press " + ty.Kbd("q") + " to exit this viewer."))
 	b.WriteString("\n\n")
 
 	// --- Footnotes ---
