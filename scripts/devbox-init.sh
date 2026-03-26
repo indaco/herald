@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# devbox-init.sh - Development environment setup for sley CLI
+# devbox-init.sh - Development environment setup for herald CLI
 # Called automatically by devbox shell init_hook
 
 set -eu
@@ -9,7 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=lib/common.sh
 source "${SCRIPT_DIR}/lib/common.sh"
 
-h1 "sley CLI - Development Environment Setup"
+h1 "herald - Development Environment Setup"
 
 # === Go Dependencies ===
 h2 "Go Dependencies"
