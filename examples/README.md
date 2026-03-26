@@ -18,12 +18,13 @@ Some examples live in the root module and can be run directly with `go run`. Oth
 
 ### Core elements (`0xx`)
 
-| Example                                 | Description                                                                       | Run                                    |
-| --------------------------------------- | --------------------------------------------------------------------------------- | -------------------------------------- |
-| [000_default-theme](000_default-theme/) | All elements with the default Rose Pine theme                                     | `go run ./examples/000_default-theme/` |
-| [001_lists](001_lists/)                 | Flat, nested, mixed, and hierarchical lists                                       | `go run ./examples/001_lists/`         |
-| [002_alerts](002_alerts/)               | GitHub-style alert callouts (Note, Tip, Important, Warning, Caution)              | `go run ./examples/002_alerts/`        |
-| [003_table](003_table/)                 | Table rendering: bordered, minimal, alignment, striped rows, captions, and footer | `go run ./examples/003_table/`         |
+| Example                                     | Description                                                                       | Run                                      |
+| ------------------------------------------- | --------------------------------------------------------------------------------- | ---------------------------------------- |
+| [000_default-theme](000_default-theme/)     | All elements with the default Rose Pine theme                                     | `go run ./examples/000_default-theme/`   |
+| [001_lists](001_lists/)                     | Flat, nested, mixed, and hierarchical lists                                       | `go run ./examples/001_lists/`           |
+| [002_alerts](002_alerts/)                   | GitHub-style alert callouts (Note, Tip, Important, Warning, Caution)              | `go run ./examples/002_alerts/`          |
+| [003_table](003_table/)                     | Table rendering: bordered, minimal, alignment, striped rows, captions, and footer | `go run ./examples/003_table/`           |
+| [004_semantic-badges](004_semantic-badges/) | Semantic badges and tags with default and custom palettes                         | `go run ./examples/004_semantic-badges/` |
 
 ### Customization (`1xx`)
 

@@ -23,6 +23,8 @@ func main() {
 	fmt.Println(ty.Ins("added line"))
 	fmt.Println(ty.Del("removed line"))
 	fmt.Println(ty.Badge("SUCCESS") + " " + ty.Badge("BETA") + " " + ty.Tag("v2.0") + " " + ty.Tag("go"))
+	fmt.Println(ty.SuccessBadge("running") + " " + ty.WarningBadge("expiring") + " " + ty.ErrorBadge("failed") + " " + ty.InfoBadge("pending"))
+	fmt.Println(ty.SuccessTag("healthy") + " " + ty.WarningTag("degraded") + " " + ty.ErrorTag("critical") + " " + ty.InfoTag("maintenance"))
 	fmt.Println()
 
 	fmt.Println(ty.Link("https://go.dev"))
