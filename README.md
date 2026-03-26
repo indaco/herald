@@ -58,7 +58,7 @@ Works with any CLI or TUI - and if you use [huh](https://github.com/charmbracele
 ## Installation
 
 ```sh
-go get github.com/indaco/herald
+go get github.com/indaco/herald@latest
 ```
 
 Requires Go 1.25 or later.
