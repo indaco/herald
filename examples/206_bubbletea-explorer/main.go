@@ -97,61 +97,37 @@ func wrapText(s string, width int) string {
 }
 
 func buildOverview(ty *herald.Typography, width int) string {
-	var b strings.Builder
-
-	b.WriteString(ty.H1("Herald"))
-	b.WriteString("\n\n")
-
-	b.WriteString(wrapText(ty.P(
-		"HTML-inspired typography for terminal UIs in Go, built on "+
-			ty.Bold("lipgloss v2")+". Herald maps familiar element names "+
-			"(H1\u2013H6, P, Blockquote, Code, HR, lists) to styled terminal output.",
-	), width))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.HR())
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.H2("Highlights"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.UL(
-		"Familiar HTML element names",
-		"Built-in themes: Dracula, Catppuccin, Base16, Charm",
-		"Pairs with huh, bubbletea, tview, and other TUI libraries",
-		"Pluggable syntax highlighting via "+ty.Code("WithCodeFormatter"),
-		"Custom palettes from just 9 colors",
-	))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.HR())
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.Blockquote(
-		"The integration point with bubbletea is " + ty.Code("viewport.SetContent()") +
-			".\nHerald renders the styled text, bubbletea handles the interactivity.",
-	))
-	b.WriteString("\n")
-
-	return b.String()
+	return ty.Compose(
+		ty.H1("Herald"),
+		wrapText(ty.P(
+			"HTML-inspired typography for terminal UIs in Go, built on "+
+				ty.Bold("lipgloss v2")+". Herald maps familiar element names "+
+				"(H1\u2013H6, P, Blockquote, Code, HR, lists) to styled terminal output.",
+		), width),
+		ty.HR(),
+		ty.H2("Highlights"),
+		ty.UL(
+			"Familiar HTML element names",
+			"Built-in themes: Dracula, Catppuccin, Base16, Charm",
+			"Pairs with huh, bubbletea, tview, and other TUI libraries",
+			"Pluggable syntax highlighting via "+ty.Code("WithCodeFormatter"),
+			"Custom palettes from just 9 colors",
+		),
+		ty.HR(),
+		ty.Blockquote(
+			"The integration point with bubbletea is "+ty.Code("viewport.SetContent()")+
+				".\nHerald renders the styled text, bubbletea handles the interactivity.",
+		),
+	)
 }
 
 func buildInstallation(ty *herald.Typography, width int) string {
-	var b strings.Builder
-
-	b.WriteString(ty.H1("Installation"))
-	b.WriteString("\n\n")
-
-	b.WriteString(wrapText(ty.P("Requires Go 1.25 or later."), width))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.CodeBlock("go get github.com/indaco/herald@latest", "sh"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.H2("Quick Start"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.CodeBlock(`package main
+	return ty.Compose(
+		ty.H1("Installation"),
+		wrapText(ty.P("Requires Go 1.25 or later."), width),
+		ty.CodeBlock("go get github.com/indaco/herald@latest", "sh"),
+		ty.H2("Quick Start"),
+		ty.CodeBlock(`package main
 
 import (
     "fmt"
@@ -163,254 +139,153 @@ func main() {
     fmt.Println(ty.H1("Hello, Herald!"))
     fmt.Println(ty.P("Rich terminal typography, simply."))
     fmt.Println(ty.UL("Headings", "Lists", "Inline styles"))
-}`, "go"))
-	b.WriteString("\n\n")
-
-	b.WriteString(wrapText(ty.Tip("Press "+ty.Kbd("\u2190")+"/"+ty.Kbd("\u2192")+" to switch focus. Use "+ty.Kbd("\u2191")+"/"+ty.Kbd("\u2193")+" to scroll or navigate."), width))
-	b.WriteString("\n")
-
-	return b.String()
+}`, "go"),
+		wrapText(ty.Tip("Press "+ty.Kbd("\u2190")+"/"+ty.Kbd("\u2192")+" to switch focus. Use "+ty.Kbd("\u2191")+"/"+ty.Kbd("\u2193")+" to scroll or navigate."), width),
+	)
 }
 
 func buildTypography(ty *herald.Typography, width int) string {
-	var b strings.Builder
-
-	b.WriteString(ty.H1("Typography Elements"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.H2("Headings"))
-	b.WriteString("\n\n")
-
-	b.WriteString(wrapText(ty.P("H1\u2013H3 render with an underline; H4\u2013H6 with a left-bar prefix."), width))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.H3("This is H3"))
-	b.WriteString("\n\n")
-	b.WriteString(ty.H4("This is H4"))
-	b.WriteString("\n")
-	b.WriteString(ty.H5("This is H5"))
-	b.WriteString("\n")
-	b.WriteString(ty.H6("This is H6"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.HR())
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.H2("Block Elements"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.Blockquote("Blockquotes indent with a left bar.\nThey support multi-line input."))
-	b.WriteString("\n\n")
-
-	b.WriteString(wrapText(ty.P("Inline: "+ty.Code("os.Exit(1)")+" vs a fenced block below."), width))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.CodeBlock(`func greet(name string) string {
+	return ty.Compose(
+		ty.H1("Typography Elements"),
+		ty.H2("Headings"),
+		wrapText(ty.P("H1\u2013H3 render with an underline; H4\u2013H6 with a left-bar prefix."), width),
+		ty.H3("This is H3"),
+		ty.H4("This is H4"),
+		ty.H5("This is H5"),
+		ty.H6("This is H6"),
+		ty.HR(),
+		ty.H2("Block Elements"),
+		ty.Blockquote("Blockquotes indent with a left bar.\nThey support multi-line input."),
+		wrapText(ty.P("Inline: "+ty.Code("os.Exit(1)")+" vs a fenced block below."), width),
+		ty.CodeBlock(`func greet(name string) string {
     return "Hello, " + name
-}`, "go"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.HR())
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.H2("Inline Styles"))
-	b.WriteString("\n\n")
-
-	b.WriteString(wrapText(ty.P(
-		ty.Bold("Bold")+" \u00b7 "+
-			ty.Italic("Italic")+" \u00b7 "+
-			ty.Underline("Underline")+" \u00b7 "+
-			ty.Strikethrough("Strikethrough")+" \u00b7 "+
-			ty.Mark("Marked")+" \u00b7 "+
-			ty.Small("Small"),
-	), width))
-	b.WriteString("\n\n")
-
-	b.WriteString(wrapText(ty.P(
-		"Keyboard: "+ty.Kbd("Ctrl")+" + "+ty.Kbd("C")+"  |  "+
-			"Link: "+ty.Link("pkg.go.dev", "https://pkg.go.dev/github.com/indaco/herald"),
-	), width))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.HRWithLabel("Horizontal Rules"))
-	b.WriteString("\n\n")
-
-	b.WriteString(wrapText(ty.P("Plain "+ty.Code("HR()")+" and labeled "+ty.Code("HRWithLabel()")+":"), width))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.HR())
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.HRWithLabel("Section Break"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.Blockquote("The beginning is the most important part of the work.\n\u2014 Plato"))
-	b.WriteString("\n")
-
-	return b.String()
+}`, "go"),
+		ty.HR(),
+		ty.H2("Inline Styles"),
+		wrapText(ty.P(
+			ty.Bold("Bold")+" \u00b7 "+
+				ty.Italic("Italic")+" \u00b7 "+
+				ty.Underline("Underline")+" \u00b7 "+
+				ty.Strikethrough("Strikethrough")+" \u00b7 "+
+				ty.Mark("Marked")+" \u00b7 "+
+				ty.Small("Small"),
+		), width),
+		wrapText(ty.P(
+			"Keyboard: "+ty.Kbd("Ctrl")+" + "+ty.Kbd("C")+"  |  "+
+				"Link: "+ty.Link("pkg.go.dev", "https://pkg.go.dev/github.com/indaco/herald"),
+		), width),
+		ty.HRWithLabel("Horizontal Rules"),
+		wrapText(ty.P("Plain "+ty.Code("HR()")+" and labeled "+ty.Code("HRWithLabel()")+":"), width),
+		ty.HR(),
+		ty.HRWithLabel("Section Break"),
+		ty.Blockquote("The beginning is the most important part of the work.\n\u2014 Plato"),
+	)
 }
 
 func buildLists(ty *herald.Typography, width int) string {
-	var b strings.Builder
-
-	b.WriteString(ty.H1("Lists"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.H2("Unordered"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.UL("Design", "Implement", "Test"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.H2("Ordered"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.OL("Plan", "Build", "Ship", "Iterate"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.H2("Nested \u2014 mixed sub-lists"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.NestUL(
-		herald.Item("Frontend"),
-		herald.ItemWithChildren("Backend",
-			herald.Item("REST API"),
-			herald.Item("gRPC"),
-		),
-		herald.ItemWithOLChildren("DevOps",
-			herald.Item("CI/CD"),
-			herald.Item("Monitoring"),
-			herald.Item("Alerting"),
-		),
-	))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.H2("Hierarchical Ordered"))
-	b.WriteString("\n\n")
-
 	tyH := herald.New(
 		herald.WithTheme(herald.CatppuccinTheme()),
 		herald.WithHierarchicalNumbers(true),
 	)
-	b.WriteString(tyH.NestOL(
-		herald.Item("Introduction"),
-		herald.ItemWithOLChildren("Core Concepts",
-			herald.Item("Typography"),
-			herald.Item("Themes"),
+	return ty.Compose(
+		ty.H1("Lists"),
+		ty.H2("Unordered"),
+		ty.UL("Design", "Implement", "Test"),
+		ty.H2("Ordered"),
+		ty.OL("Plan", "Build", "Ship", "Iterate"),
+		ty.H2("Nested \u2014 mixed sub-lists"),
+		ty.NestUL(
+			herald.Item("Frontend"),
+			herald.ItemWithChildren("Backend",
+				herald.Item("REST API"),
+				herald.Item("gRPC"),
+			),
+			herald.ItemWithOLChildren("DevOps",
+				herald.Item("CI/CD"),
+				herald.Item("Monitoring"),
+				herald.Item("Alerting"),
+			),
 		),
-		herald.Item("Conclusion"),
-	))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.HRWithLabel("Definition List"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.DL([][2]string{
-		{"Typography", "The art of arranging type to make written language readable and appealing."},
-		{"Theme", "A collection of styles that define the visual appearance of all elements."},
-		{"Functional Option", "A pattern where configuration is passed as variadic function arguments."},
-	}))
-	b.WriteString("\n")
-
-	return b.String()
+		ty.H2("Hierarchical Ordered"),
+		tyH.NestOL(
+			herald.Item("Introduction"),
+			herald.ItemWithOLChildren("Core Concepts",
+				herald.Item("Typography"),
+				herald.Item("Themes"),
+			),
+			herald.Item("Conclusion"),
+		),
+		ty.HRWithLabel("Definition List"),
+		ty.DL([][2]string{
+			{"Typography", "The art of arranging type to make written language readable and appealing."},
+			{"Theme", "A collection of styles that define the visual appearance of all elements."},
+			{"Functional Option", "A pattern where configuration is passed as variadic function arguments."},
+		}),
+	)
 }
 
 func buildTablesAndData(ty *herald.Typography, width int) string {
-	var b strings.Builder
-
-	b.WriteString(ty.H2("Tables & Data"))
-	b.WriteString("\n\n")
-
-	b.WriteString(wrapText(ty.P("Herald renders bordered tables with header styling, optional striped rows, column alignment, and captions."), width))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.TableWithOpts(
-		[][]string{
-			{"Method", "Element", "Category"},
-			{"H1-H6", "Headings", "Block"},
-			{"P", "Paragraph", "Block"},
-			{"UL / OL", "Lists", "Block"},
-			{"CodeBlock", "Fenced code", "Block"},
-			{"Table", "Data table", "Block"},
-			{"Bold", "Strong text", "Inline"},
-			{"Code", "Inline code", "Inline"},
-			{"Kbd", "Key indicator", "Inline"},
-		},
-		herald.WithCaption("Herald API Elements"),
-		herald.WithStripedRows(true),
-	))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.HRWithLabel("Badges & Tags"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.P(
-		ty.Badge("STABLE") + " " + ty.Tag("v1.0.0") + " " + ty.Badge("GO") + " " + ty.Tag("lipgloss-v2"),
-	))
-	b.WriteString("\n\n")
-
-	b.WriteString(wrapText(ty.P("Use "+ty.Code("Badge()")+" for bold status pills and "+ty.Code("Tag()")+" for subtle category labels."), width))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.HRWithLabel("Key-Value Pairs"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.KVGroup([][2]string{
-		{"Package", "github.com/indaco/herald"},
-		{"Go version", "1.25+"},
-		{"Dependencies", "lipgloss v2 (single dep)"},
-		{"License", "MIT"},
-		{"Test coverage", "95%+"},
-	}))
-	b.WriteString("\n")
-
-	return b.String()
+	return ty.Compose(
+		ty.H2("Tables & Data"),
+		wrapText(ty.P("Herald renders bordered tables with header styling, optional striped rows, column alignment, and captions."), width),
+		ty.TableWithOpts(
+			[][]string{
+				{"Method", "Element", "Category"},
+				{"H1-H6", "Headings", "Block"},
+				{"P", "Paragraph", "Block"},
+				{"UL / OL", "Lists", "Block"},
+				{"CodeBlock", "Fenced code", "Block"},
+				{"Table", "Data table", "Block"},
+				{"Bold", "Strong text", "Inline"},
+				{"Code", "Inline code", "Inline"},
+				{"Kbd", "Key indicator", "Inline"},
+			},
+			herald.WithCaption("Herald API Elements"),
+			herald.WithStripedRows(true),
+		),
+		ty.HRWithLabel("Badges & Tags"),
+		ty.P(
+			ty.Badge("STABLE")+" "+ty.Tag("v1.0.0")+" "+ty.Badge("GO")+" "+ty.Tag("lipgloss-v2"),
+		),
+		wrapText(ty.P("Use "+ty.Code("Badge()")+" for bold status pills and "+ty.Code("Tag()")+" for subtle category labels."), width),
+		ty.HRWithLabel("Key-Value Pairs"),
+		ty.KVGroup([][2]string{
+			{"Package", "github.com/indaco/herald"},
+			{"Go version", "1.25+"},
+			{"Dependencies", "lipgloss v2 (single dep)"},
+			{"License", "MIT"},
+			{"Test coverage", "95%+"},
+		}),
+	)
 }
 
 func buildThemes(ty *herald.Typography, width int) string {
-	var b strings.Builder
-
-	b.WriteString(ty.H1("Themes"))
-	b.WriteString("\n\n")
-
-	b.WriteString(wrapText(ty.P(
-		"Herald ships with named themes that match "+
-			ty.Bold("huh")+"'s built-in palettes. "+
-			"Colors auto-adapt to light/dark terminal backgrounds.",
-	), width))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.H2("Built-in Themes"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.DL([][2]string{
-		{"Rose Pine", "Default \u2014 warm, muted palette with dark and light variants"},
-		{"Dracula", "Matches huh.ThemeDracula()"},
-		{"Catppuccin", "Mocha (dark) / Latte (light)"},
-		{"Base16", "ANSI base16 terminal colors"},
-		{"Charm", "Charm brand colors"},
-	}))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.H2("Applying a Theme"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.CodeBlock(
-		`ty := herald.New(herald.WithTheme(herald.DraculaTheme()))`, "go",
-	))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.H2("Custom Palette"))
-	b.WriteString("\n\n")
-
-	b.WriteString(wrapText(ty.P(
-		"Derive a full theme from 9 colors with "+ty.Code("ColorPalette")+". "+
-			"Use "+ty.Code("lipgloss.LightDark")+" for adaptive colors that adjust "+
-			"to the terminal background:",
-	), width))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.CodeBlock(`lightDark := lipgloss.LightDark(lipgloss.HasDarkBackground(os.Stdin, os.Stdout))
+	return ty.Compose(
+		ty.H1("Themes"),
+		wrapText(ty.P(
+			"Herald ships with named themes that match "+
+				ty.Bold("huh")+"'s built-in palettes. "+
+				"Colors auto-adapt to light/dark terminal backgrounds.",
+		), width),
+		ty.H2("Built-in Themes"),
+		ty.DL([][2]string{
+			{"Rose Pine", "Default \u2014 warm, muted palette with dark and light variants"},
+			{"Dracula", "Matches huh.ThemeDracula()"},
+			{"Catppuccin", "Mocha (dark) / Latte (light)"},
+			{"Base16", "ANSI base16 terminal colors"},
+			{"Charm", "Charm brand colors"},
+		}),
+		ty.H2("Applying a Theme"),
+		ty.CodeBlock(
+			`ty := herald.New(herald.WithTheme(herald.DraculaTheme()))`, "go",
+		),
+		ty.H2("Custom Palette"),
+		wrapText(ty.P(
+			"Derive a full theme from 9 colors with "+ty.Code("ColorPalette")+". "+
+				"Use "+ty.Code("lipgloss.LightDark")+" for adaptive colors that adjust "+
+				"to the terminal background:",
+		), width),
+		ty.CodeBlock(`lightDark := lipgloss.LightDark(lipgloss.HasDarkBackground(os.Stdin, os.Stdout))
 
 // Nord-inspired palette
 palette := herald.ColorPalette{
@@ -424,71 +299,38 @@ palette := herald.ColorPalette{
     Surface:   lightDark(lipgloss.Color("#D8DEE9"), lipgloss.Color("#3B4252")),
     Base:      lightDark(lipgloss.Color("#ECEFF4"), lipgloss.Color("#2E3440")),
 }
-ty := herald.New(herald.WithPalette(palette))`, "go"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.Tip("All built-in themes are themselves built with " + ty.Code("ThemeFromPalette()") + "."))
-	b.WriteString("\n")
-
-	return b.String()
+ty := herald.New(herald.WithPalette(palette))`, "go"),
+		ty.Tip("All built-in themes are themselves built with "+ty.Code("ThemeFromPalette()")+"."),
+	)
 }
 
 func buildAlertsAndInline(ty *herald.Typography, width int) string {
-	var b strings.Builder
-
-	b.WriteString(ty.H2("Alerts & Inline Styles"))
-	b.WriteString("\n\n")
-
-	b.WriteString(wrapText(ty.P("Herald provides five GitHub-style alert types:"), width))
-	b.WriteString("\n\n")
-
-	b.WriteString(wrapText(ty.Note("Useful information that users should know, even when skimming."), width))
-	b.WriteString("\n\n")
-	b.WriteString(wrapText(ty.Tip("Helpful advice for doing things better or more easily."), width))
-	b.WriteString("\n\n")
-	b.WriteString(wrapText(ty.Important("Key information users need to know to achieve their goal."), width))
-	b.WriteString("\n\n")
-	b.WriteString(wrapText(ty.Warning("Urgent info that needs immediate user attention to avoid problems."), width))
-	b.WriteString("\n\n")
-	b.WriteString(wrapText(ty.Caution("Advises about risks or negative outcomes of certain actions."), width))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.HRWithLabel("More Inline Styles"))
-	b.WriteString("\n\n")
-
-	b.WriteString(wrapText(ty.P(
-		"Inline code: "+ty.Code("fmt.Println()")+
-			"  Keyboard: "+ty.Kbd("Ctrl")+"+"+ty.Kbd("C")+
-			"  Highlight: "+ty.Mark("important"),
-	), width))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.P(
-		"Links: " + ty.Link("Herald", "https://github.com/indaco/herald"),
-	))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.P(
-		"Abbreviations: " + ty.Abbr("TUI", "Terminal User Interface") +
-			", " + ty.Abbr("CLI", "Command-Line Interface"),
-	))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.P(
-		"Subscript: H" + ty.Sub("2") + "O  " +
-			"Superscript: E=mc" + ty.Sup("2"),
-	))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.HRWithLabel("Diff Markers"))
-	b.WriteString("\n\n")
-
-	b.WriteString(ty.Del("typography.InlineCode(text)"))
-	b.WriteString("\n")
-	b.WriteString(ty.Ins("typography.Code(text, lang)"))
-	b.WriteString("\n")
-
-	return b.String()
+	return ty.Compose(
+		ty.H2("Alerts & Inline Styles"),
+		wrapText(ty.P("Herald provides five GitHub-style alert types:"), width),
+		wrapText(ty.Note("Useful information that users should know, even when skimming."), width),
+		wrapText(ty.Tip("Helpful advice for doing things better or more easily."), width),
+		wrapText(ty.Important("Key information users need to know to achieve their goal."), width),
+		wrapText(ty.Warning("Urgent info that needs immediate user attention to avoid problems."), width),
+		wrapText(ty.Caution("Advises about risks or negative outcomes of certain actions."), width),
+		ty.HRWithLabel("More Inline Styles"),
+		wrapText(ty.P(
+			"Inline code: "+ty.Code("fmt.Println()")+
+				"  Keyboard: "+ty.Kbd("Ctrl")+"+"+ty.Kbd("C")+
+				"  Highlight: "+ty.Mark("important"),
+		), width),
+		ty.P("Links: "+ty.Link("Herald", "https://github.com/indaco/herald")),
+		ty.P(
+			"Abbreviations: "+ty.Abbr("TUI", "Terminal User Interface")+
+				", "+ty.Abbr("CLI", "Command-Line Interface"),
+		),
+		ty.P(
+			"Subscript: H"+ty.Sub("2")+"O  "+
+				"Superscript: E=mc"+ty.Sup("2"),
+		),
+		ty.HRWithLabel("Diff Markers"),
+		ty.Del("typography.InlineCode(text)")+"\n"+ty.Ins("typography.Code(text, lang)"),
+	)
 }
 
 // allBuilders returns the ordered list of content builder functions.
