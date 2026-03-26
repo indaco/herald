@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). The changelog is generated and managed by [sley](https://github.com/indaco/sley).
 
+## v0.9.0 - 2026-03-26
+
+### 🚀 Enhancements
+
+- add Compose method for multi-block layouts ([26457ad](https://github.com/indaco/herald/commit/26457ad)) ([#45](https://github.com/indaco/herald/pull/45))
+
+### 📖 Documentation
+
+- **README:** link security badge to security workflow ([2d4e8e9](https://github.com/indaco/herald/commit/2d4e8e9))
+
+### 🏡 Chores
+
+- migrate prek config to toml format ([2791be0](https://github.com/indaco/herald/commit/2791be0))
+
+**Full Changelog:** [v0.8.0...v0.9.0](https://github.com/indaco/herald/compare/v0.8.0...v0.9.0)
+
+### ❤️ Contributors
+
+- [@indaco](https://github.com/indaco)
+
 ## v0.8.0 - 2026-03-26
 
 ### 🚀 Enhancements
