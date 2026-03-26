@@ -56,6 +56,7 @@ func main() {
 			ty.Code("inline code"),
 	)
 	fmt.Println(ty.Ins("added") + "  " + ty.Del("removed") + "  " + ty.Badge("NEW") + "  " + ty.Tag("go"))
+	fmt.Println(ty.SuccessBadge("running") + "  " + ty.ErrorBadge("failed") + "  " + ty.WarningBadge("expiring") + "  " + ty.InfoBadge("pending"))
 	fmt.Println()
 
 	// Key-value

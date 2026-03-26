@@ -64,6 +64,17 @@ type Theme struct {
 	Badge lipgloss.Style // style for bold pill/status labels
 	Tag   lipgloss.Style // style for subtle pill/category labels
 
+	// Semantic badge/tag styles (derived from SemanticPalette)
+	SuccessBadge lipgloss.Style
+	WarningBadge lipgloss.Style
+	ErrorBadge   lipgloss.Style
+	InfoBadge    lipgloss.Style
+
+	SuccessTag lipgloss.Style
+	WarningTag lipgloss.Style
+	ErrorTag   lipgloss.Style
+	InfoTag    lipgloss.Style
+
 	// Footnote elements
 	FootnoteRef     lipgloss.Style // style for inline reference markers (e.g. "[1]")
 	FootnoteItem    lipgloss.Style // style for each footnote entry in the section
@@ -258,6 +269,18 @@ func DefaultTheme() Theme {
 		Warning:   lightDark(lipgloss.Color("#D7827E"), lipgloss.Color("#F6C177")), // gold
 		Caution:   lightDark(lipgloss.Color("#B4637A"), lipgloss.Color("#EB6F92")), // love
 	})
+
+	// Semantic palette: Rose Pine foam/gold/love/iris
+	rosePineSP := SemanticPalette{
+		Success: lightDark(lipgloss.Color("#286983"), lipgloss.Color("#9CCFD8")), // foam/pine (green)
+		Warning: lightDark(lipgloss.Color("#D7827E"), lipgloss.Color("#F6C177")), // gold (amber)
+		Error:   lightDark(lipgloss.Color("#B4637A"), lipgloss.Color("#EB6F92")), // love (red)
+		Info:    lightDark(lipgloss.Color("#3e8fb0"), lipgloss.Color("#9CCFD8")), // foam (blue)
+	}
+	base := theme.Badge.GetForeground()
+	surface := theme.Tag.GetBackground()
+	theme.SuccessBadge, theme.WarningBadge, theme.ErrorBadge, theme.InfoBadge = defaultSemanticBadgeStyles(rosePineSP, base)
+	theme.SuccessTag, theme.WarningTag, theme.ErrorTag, theme.InfoTag = defaultSemanticTagStyles(rosePineSP, surface)
 
 	return theme
 }

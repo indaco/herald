@@ -24,6 +24,10 @@ type ColorPalette struct {
 // ThemeFromPalette constructs a complete Theme by mapping palette colors to
 // all style fields. Configurable tokens use the same defaults as DefaultTheme.
 func ThemeFromPalette(p ColorPalette) Theme {
+	sp := DefaultSemanticPalette(p)
+	sbSuccess, sbWarning, sbError, sbInfo := defaultSemanticBadgeStyles(sp, p.Base)
+	stSuccess, stWarning, stError, stInfo := defaultSemanticTagStyles(sp, p.Surface)
+
 	return Theme{
 		H1: lipgloss.NewStyle().
 			Bold(true).
@@ -170,6 +174,16 @@ func ThemeFromPalette(p ColorPalette) Theme {
 			Background(p.Surface).
 			Padding(0, 1),
 
+		SuccessBadge: sbSuccess,
+		WarningBadge: sbWarning,
+		ErrorBadge:   sbError,
+		InfoBadge:    sbInfo,
+
+		SuccessTag: stSuccess,
+		WarningTag: stWarning,
+		ErrorTag:   stError,
+		InfoTag:    stInfo,
+
 		FootnoteRef:     lipgloss.NewStyle().Foreground(p.Tertiary),
 		FootnoteItem:    lipgloss.NewStyle().Foreground(p.Muted),
 		FootnoteDivider: lipgloss.NewStyle().Foreground(p.Muted),
@@ -207,12 +221,6 @@ func ThemeFromPalette(p ColorPalette) Theme {
 		TableCellPad:   DefaultTableCellPad,
 
 		AlertBar: DefaultAlertBar,
-		Alerts: DefaultAlertConfigs(AlertPalette{
-			Note:      p.Tertiary,  // blue/cyan
-			Tip:       p.Tertiary,  // green in some palettes
-			Important: p.Secondary, // purple
-			Warning:   p.Accent,    // yellow/amber
-			Caution:   p.Highlight, // red
-		}),
+		Alerts:   DefaultAlertConfigs(DefaultAlertPalette(sp, p)),
 	}
 }

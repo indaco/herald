@@ -216,6 +216,60 @@ func WithTagStyle(s lipgloss.Style) Option {
 	return func(ty *Typography) { ty.theme.Tag = s }
 }
 
+// --- Semantic badge/tag style options ---
+
+// WithSemanticPalette rebuilds the 8 semantic badge/tag styles from the
+// provided SemanticPalette, using the current theme's Badge foreground (Base)
+// and Tag background (Surface) colors. Same pattern as WithAlertPalette.
+func WithSemanticPalette(sp SemanticPalette) Option {
+	return func(ty *Typography) {
+		base := ty.theme.Badge.GetForeground()
+		surface := ty.theme.Tag.GetBackground()
+		ty.theme.SuccessBadge, ty.theme.WarningBadge, ty.theme.ErrorBadge, ty.theme.InfoBadge = defaultSemanticBadgeStyles(sp, base)
+		ty.theme.SuccessTag, ty.theme.WarningTag, ty.theme.ErrorTag, ty.theme.InfoTag = defaultSemanticTagStyles(sp, surface)
+	}
+}
+
+// WithSuccessBadgeStyle overrides the success badge style.
+func WithSuccessBadgeStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.SuccessBadge = s }
+}
+
+// WithWarningBadgeStyle overrides the warning badge style.
+func WithWarningBadgeStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.WarningBadge = s }
+}
+
+// WithErrorBadgeStyle overrides the error badge style.
+func WithErrorBadgeStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.ErrorBadge = s }
+}
+
+// WithInfoBadgeStyle overrides the info badge style.
+func WithInfoBadgeStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.InfoBadge = s }
+}
+
+// WithSuccessTagStyle overrides the success tag style.
+func WithSuccessTagStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.SuccessTag = s }
+}
+
+// WithWarningTagStyle overrides the warning tag style.
+func WithWarningTagStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.WarningTag = s }
+}
+
+// WithErrorTagStyle overrides the error tag style.
+func WithErrorTagStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.ErrorTag = s }
+}
+
+// WithInfoTagStyle overrides the info tag style.
+func WithInfoTagStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.InfoTag = s }
+}
+
 // --- Footnote style options ---
 
 // WithFootnoteRefStyle overrides the inline footnote reference marker style.

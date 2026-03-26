@@ -197,9 +197,17 @@ fmt.Println(ty.FootnoteSection([]string{
 | `Ins(text)`                   | Inserted text, prefixed with `+`                                                            |
 | `Del(text)`                   | Deleted text, prefixed with `-`, strikethrough                                              |
 | `Badge(text)`                 | Styled pill/tag label (e.g. `[SUCCESS]`, `[BETA]`)                                          |
-| `BadgeWithStyle(text, style)` | Badge with a one-off style override for semantic variants                                   |
+| `BadgeWithStyle(text, style)` | Badge with a one-off style override                                                         |
 | `Tag(text)`                   | Subtle pill/category label (lighter variant of Badge)                                       |
 | `TagWithStyle(text, style)`   | Tag with a one-off style override                                                           |
+| `SuccessBadge(text)`          | Badge using the theme's success color (green)                                               |
+| `WarningBadge(text)`          | Badge using the theme's warning color (amber)                                               |
+| `ErrorBadge(text)`            | Badge using the theme's error color (red)                                                   |
+| `InfoBadge(text)`             | Badge using the theme's info color (blue)                                                   |
+| `SuccessTag(text)`            | Tag using the theme's success color                                                         |
+| `WarningTag(text)`            | Tag using the theme's warning color                                                         |
+| `ErrorTag(text)`              | Tag using the theme's error color                                                           |
+| `InfoTag(text)`               | Tag using the theme's info color                                                            |
 
 ```go
 fmt.Println(ty.Bold("important") + " and " + ty.Italic("nuanced"))
@@ -211,6 +219,10 @@ fmt.Println(ty.Ins("added line"))
 fmt.Println(ty.Del("removed line"))
 fmt.Println(ty.Badge("SUCCESS") + " " + ty.Badge("BETA"))
 fmt.Println(ty.Tag("v2.0") + " " + ty.Tag("go"))
+
+// Semantic variants use the theme's status colors automatically
+fmt.Println(ty.SuccessBadge("running"), ty.ErrorBadge("failed"), ty.WarningBadge("expiring"), ty.InfoBadge("pending"))
+fmt.Println(ty.SuccessTag("healthy"), ty.ErrorTag("critical"), ty.WarningTag("degraded"), ty.InfoTag("maintenance"))
 ```
 
 ```text
@@ -468,12 +480,17 @@ ty := herald.New()
 fmt.Println(ty.Ins("Build completed successfully"))  // green, prefixed with +
 fmt.Println(ty.Del("3 tests failed"))                // red, prefixed with -
 
-// Status badges inline with text
-fmt.Println(ty.Badge("PASS") + " " + "All checks passed")
-fmt.Println(ty.Badge("FAIL") + " " + "Linter found 2 issues")
+// Semantic badges use the theme's status colors automatically
+fmt.Println(ty.SuccessBadge("PASS") + " " + "All checks passed")
+fmt.Println(ty.ErrorBadge("FAIL") + " " + "Linter found 2 issues")
+fmt.Println(ty.WarningBadge("EXPIRING") + " " + "Certificate expires in 7 days")
+fmt.Println(ty.InfoBadge("PENDING") + " " + "Deployment queued")
 
-// Subtle labels for categories
-fmt.Println(ty.Tag("v2.1.0") + " " + ty.Tag("stable"))
+// Semantic tags for subtle status labels
+fmt.Println(ty.SuccessTag("healthy") + " " + ty.Tag("v2.1.0"))
+
+// Generic Badge/BadgeWithStyle for non-semantic cases
+fmt.Println(ty.Badge("BETA") + " " + ty.Tag("go"))
 ```
 
 ### Annotated sections
@@ -614,10 +631,19 @@ ty := herald.New(
 
 #### Badge & Tag
 
-| Option           | Targets |
-| ---------------- | ------- |
-| `WithBadgeStyle` | `Badge` |
-| `WithTagStyle`   | `Tag`   |
+| Option                    | Targets                |
+| ------------------------- | ---------------------- |
+| `WithBadgeStyle`          | `Badge`                |
+| `WithTagStyle`            | `Tag`                  |
+| `WithSemanticPalette(sp)` | All 8 semantic methods |
+| `WithSuccessBadgeStyle`   | `SuccessBadge`         |
+| `WithWarningBadgeStyle`   | `WarningBadge`         |
+| `WithErrorBadgeStyle`     | `ErrorBadge`           |
+| `WithInfoBadgeStyle`      | `InfoBadge`            |
+| `WithSuccessTagStyle`     | `SuccessTag`           |
+| `WithWarningTagStyle`     | `WarningTag`           |
+| `WithErrorTagStyle`       | `ErrorTag`             |
+| `WithInfoTagStyle`        | `InfoTag`              |
 
 #### Footnotes
 
@@ -847,9 +873,39 @@ Each `lightDark(lightColor, darkColor)` call returns a single adaptive color tha
 
 Plain `lipgloss.Color` values (without `LightDark`) work too - they apply the same color regardless of terminal background.
 
+#### Semantic palette
+
+`SemanticPalette` defines four status colors used to derive the themed `SuccessBadge`, `WarningBadge`, `ErrorBadge`, `InfoBadge`, `SuccessTag`, `WarningTag`, `ErrorTag`, and `InfoTag` styles.
+
+| Field     | Semantic meaning              | Default derivation from `ColorPalette` |
+| --------- | ----------------------------- | -------------------------------------- |
+| `Success` | Running, passed, healthy      | `Tertiary` (green in most themes)      |
+| `Warning` | Expiring, degraded            | `Accent` (amber in most themes)        |
+| `Error`   | Failed, critical, down        | `Highlight` (red in most themes)       |
+| `Info`    | Informational, neutral status | `Secondary` (blue in most themes)      |
+
+`ThemeFromPalette` automatically derives a `SemanticPalette` from your `ColorPalette`, so existing custom palettes produce valid semantic badge and tag styles without any changes.
+
+Use `WithSemanticPalette` to override all four semantic colors at once:
+
+```go
+ty := herald.New(
+    herald.WithSemanticPalette(herald.SemanticPalette{
+        Success: lipgloss.Color("#22c55e"),
+        Warning: lipgloss.Color("#f59e0b"),
+        Error:   lipgloss.Color("#ef4444"),
+        Info:    lipgloss.Color("#3b82f6"),
+    }),
+)
+```
+
+Individual styles can be overridden with `WithSuccessBadgeStyle`, `WithErrorTagStyle`, and the other per-variant options listed in [Badge & Tag](#badge--tag).
+
 #### Alert palette
 
-`AlertPalette` lets you override the 5 alert colors independently from the main `ColorPalette`. Use `lipgloss.LightDark` for adaptive colors, or plain `lipgloss.Color` for a fixed palette:
+`AlertPalette` lets you override the 5 alert colors independently from the main `ColorPalette`. By default, alert colors are derived from the semantic palette (`DefaultAlertPalette` maps `Info->Note`, `Success->Tip`, `Warning->Warning`, `Error->Caution`), with `Important` using `ColorPalette.Secondary`. Changing the semantic palette therefore updates alert colors too.
+
+Use `WithAlertPalette` to override all 5 alert colors independently:
 
 ```go
 ty := herald.New(
@@ -996,6 +1052,7 @@ Runnable examples are in the [`examples/`](examples/) directory:
 | [001_lists](examples/001_lists/)                                                       | Flat, nested, mixed, and hierarchical lists                                       |
 | [002_alerts](examples/002_alerts/)                                                     | GitHub-style alert callouts (Note, Tip, Important, Warning, Caution)              |
 | [003_table](examples/003_table/)                                                       | Table rendering: bordered, minimal, alignment, striped rows, captions, and footer |
+| [004_semantic-badges](examples/004_semantic-badges/)                                   | Semantic badge and tag methods with default and custom `SemanticPalette`          |
 | [100_custom-options](examples/100_custom-options/)                                     | Override styles, decoration chars, and tokens via functional options              |
 | [101_custom-palette](examples/101_custom-palette/)                                     | Custom adaptive theme from 9 colors using `ColorPalette` and `LightDark`          |
 | [102_builtin-themes](examples/102_builtin-themes/)                                     | Built-in themes (Dracula, Catppuccin, Base16, Charm) matching huh                 |

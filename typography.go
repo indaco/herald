@@ -895,6 +895,54 @@ func (t *Typography) TagWithStyle(text string, style lipgloss.Style) string {
 }
 
 // ---------------------------------------------------------------------------
+// Semantic Badges
+// ---------------------------------------------------------------------------
+
+// SuccessBadge renders a badge styled for success/positive status.
+func (t *Typography) SuccessBadge(text string) string {
+	return t.theme.SuccessBadge.Render(text)
+}
+
+// WarningBadge renders a badge styled for warning/degraded status.
+func (t *Typography) WarningBadge(text string) string {
+	return t.theme.WarningBadge.Render(text)
+}
+
+// ErrorBadge renders a badge styled for error/critical status.
+func (t *Typography) ErrorBadge(text string) string {
+	return t.theme.ErrorBadge.Render(text)
+}
+
+// InfoBadge renders a badge styled for informational status.
+func (t *Typography) InfoBadge(text string) string {
+	return t.theme.InfoBadge.Render(text)
+}
+
+// ---------------------------------------------------------------------------
+// Semantic Tags
+// ---------------------------------------------------------------------------
+
+// SuccessTag renders a tag styled for success/positive status.
+func (t *Typography) SuccessTag(text string) string {
+	return t.theme.SuccessTag.Render(text)
+}
+
+// WarningTag renders a tag styled for warning/degraded status.
+func (t *Typography) WarningTag(text string) string {
+	return t.theme.WarningTag.Render(text)
+}
+
+// ErrorTag renders a tag styled for error/critical status.
+func (t *Typography) ErrorTag(text string) string {
+	return t.theme.ErrorTag.Render(text)
+}
+
+// InfoTag renders a tag styled for informational status.
+func (t *Typography) InfoTag(text string) string {
+	return t.theme.InfoTag.Render(text)
+}
+
+// ---------------------------------------------------------------------------
 // Footnote
 // ---------------------------------------------------------------------------
 
