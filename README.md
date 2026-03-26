@@ -135,6 +135,7 @@ fmt.Println(ty.H4("Subsection"))
 | `AddressCard(text)`      | Bordered card variant of `Address` with rounded border                        |
 | `FootnoteRef(n)`         | Inline footnote reference marker, e.g. `[1]`                                  |
 | `FootnoteSection(notes)` | Numbered footnote list with divider; returns `""` if notes is empty           |
+| `Compose(blocks...)`     | Joins pre-rendered blocks with double newlines; empty blocks are skipped      |
 
 ```go
 fmt.Println(ty.Blockquote("First line.\nSecond line."))
@@ -546,11 +547,12 @@ fmt.Println(frame.Render(ty.P("Body text with " + ty.Bold("bold"))))
 **Whole-output wrapping** - build all output first, then wrap once:
 
 ```go
-var buf strings.Builder
-buf.WriteString(ty.H1("Title") + "\n")
-buf.WriteString(ty.P("Body text") + "\n")
-buf.WriteString(ty.HR() + "\n")
-fmt.Println(frame.Render(buf.String()))
+page := ty.Compose(
+    ty.H1("Title"),
+    ty.P("Body text"),
+    ty.HR(),
+)
+fmt.Println(frame.Render(page))
 ```
 
 ## Customization
@@ -1007,13 +1009,13 @@ herald works inside [bubbletea](https://github.com/charmbracelet/bubbletea) appl
 
 ```go
 func buildContent(ty *herald.Typography) string {
-    var buf strings.Builder
-    buf.WriteString(ty.H1("Release Notes") + "\n")
-    buf.WriteString(ty.Badge("STABLE") + " " + ty.Tag("v2.0.0") + "\n\n")
-    buf.WriteString(ty.HRWithLabel("Features") + "\n")
-    buf.WriteString(ty.UL("New dashboard", "Dark mode support") + "\n")
-    buf.WriteString(ty.Tip("Run `go get -u` to upgrade.") + "\n")
-    return buf.String()
+    return ty.Compose(
+        ty.H1("Release Notes"),
+        ty.Badge("STABLE")+" "+ty.Tag("v2.0.0"),
+        ty.HRWithLabel("Features"),
+        ty.UL("New dashboard", "Dark mode support"),
+        ty.Tip("Run `go get -u` to upgrade."),
+    )
 }
 
 // Pass to a bubbles viewport for scrolling
@@ -1053,6 +1055,7 @@ Runnable examples are in the [`examples/`](examples/) directory:
 | [002_alerts](examples/002_alerts/)                                                     | GitHub-style alert callouts (Note, Tip, Important, Warning, Caution)              |
 | [003_table](examples/003_table/)                                                       | Table rendering: bordered, minimal, alignment, striped rows, captions, and footer |
 | [004_semantic-badges](examples/004_semantic-badges/)                                   | Semantic badge and tag methods with default and custom `SemanticPalette`          |
+| [005_compose](examples/005_compose/)                                                   | Compose multiple rendered blocks into a single output                             |
 | [100_custom-options](examples/100_custom-options/)                                     | Override styles, decoration chars, and tokens via functional options              |
 | [101_custom-palette](examples/101_custom-palette/)                                     | Custom adaptive theme from 9 colors using `ColorPalette` and `LightDark`          |
 | [102_builtin-themes](examples/102_builtin-themes/)                                     | Built-in themes (Dracula, Catppuccin, Base16, Charm) matching huh                 |
