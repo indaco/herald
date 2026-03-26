@@ -25,6 +25,7 @@ Some examples live in the root module and can be run directly with `go run`. Oth
 | [002_alerts](002_alerts/)                   | GitHub-style alert callouts (Note, Tip, Important, Warning, Caution)              | `go run ./examples/002_alerts/`          |
 | [003_table](003_table/)                     | Table rendering: bordered, minimal, alignment, striped rows, captions, and footer | `go run ./examples/003_table/`           |
 | [004_semantic-badges](004_semantic-badges/) | Semantic badges and tags with default and custom palettes                         | `go run ./examples/004_semantic-badges/` |
+| [005_compose](005_compose/)                 | Compose multiple rendered blocks into a single output                             | `go run ./examples/005_compose/`         |
 
 ### Customization (`1xx`)
 

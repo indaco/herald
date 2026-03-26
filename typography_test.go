@@ -1243,6 +1243,84 @@ func TestKVGroup(t *testing.T) {
 }
 
 // ---------------------------------------------------------------------------
+// Compose
+// ---------------------------------------------------------------------------
+
+func TestCompose(t *testing.T) {
+	ty := newTestTypography()
+
+	t.Run("joins blocks with double newline", func(t *testing.T) {
+		result := ty.Compose("aaa", "bbb", "ccc")
+		if result != "aaa\n\nbbb\n\nccc" {
+			t.Errorf("Compose = %q, want %q", result, "aaa\n\nbbb\n\nccc")
+		}
+	})
+
+	t.Run("skips empty blocks", func(t *testing.T) {
+		result := ty.Compose("aaa", "", "bbb", "", "")
+		if result != "aaa\n\nbbb" {
+			t.Errorf("Compose with empties = %q, want %q", result, "aaa\n\nbbb")
+		}
+	})
+
+	t.Run("single block", func(t *testing.T) {
+		result := ty.Compose("only")
+		if result != "only" {
+			t.Errorf("Compose single = %q, want %q", result, "only")
+		}
+	})
+
+	t.Run("no blocks", func(t *testing.T) {
+		result := ty.Compose()
+		if result != "" {
+			t.Errorf("Compose empty = %q, want empty", result)
+		}
+	})
+
+	t.Run("all empty blocks", func(t *testing.T) {
+		result := ty.Compose("", "", "")
+		if result != "" {
+			t.Errorf("Compose all empty = %q, want empty", result)
+		}
+	})
+
+	t.Run("strips trailing newlines", func(t *testing.T) {
+		result := ty.Compose("aaa\n\n", "bbb\n")
+		if result != "aaa\n\nbbb" {
+			t.Errorf("Compose trailing newlines = %q, want %q", result, "aaa\n\nbbb")
+		}
+	})
+
+	t.Run("whitespace-only blocks skipped", func(t *testing.T) {
+		result := ty.Compose("aaa", "\n\n", "bbb")
+		if result != "aaa\n\nbbb" {
+			t.Errorf("Compose whitespace-only = %q, want %q", result, "aaa\n\nbbb")
+		}
+	})
+
+	t.Run("with rendered elements", func(t *testing.T) {
+		result := ty.Compose(
+			ty.H1("Title"),
+			ty.P("Body text"),
+			ty.UL("one", "two"),
+		)
+		plain := stripANSI(result)
+		if !strings.Contains(plain, "Title") {
+			t.Error("Compose: missing heading")
+		}
+		if !strings.Contains(plain, "Body text") {
+			t.Error("Compose: missing paragraph")
+		}
+		if !strings.Contains(plain, "one") {
+			t.Error("Compose: missing list item")
+		}
+		if strings.Count(result, "\n\n") < 2 {
+			t.Error("Compose: expected at least 2 double-newline separators")
+		}
+	})
+}
+
+// ---------------------------------------------------------------------------
 // Concurrency safety (for -race detector)
 // ---------------------------------------------------------------------------
 
@@ -1288,6 +1366,11 @@ func TestConcurrentAccess(t *testing.T) {
 			ty.WarningTag("warn")
 			ty.ErrorTag("err")
 			ty.InfoTag("info")
+			ty.Compose(
+				ty.H1("heading"),
+				ty.P("paragraph"),
+				ty.UL("a", "b"),
+			)
 		}()
 	}
 
