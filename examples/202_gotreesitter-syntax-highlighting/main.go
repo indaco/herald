@@ -123,7 +123,7 @@ func main() {
 
 	fmt.Println(ty.P("Using gotreesitter (pure Go, no CGo) for AST-based syntax highlighting."))
 
-	fmt.Println(ty.H3("Go — with gotreesitter highlighting"))
+	fmt.Println(ty.H3("Go - with gotreesitter highlighting"))
 	fmt.Println(ty.CodeBlock(`package main
 
 import "fmt"

@@ -84,7 +84,7 @@ func topics() []list.Item {
 }
 
 // ---------------------------------------------------------------------------
-// Content builders — one per topic
+// Content builders - one per topic
 // ---------------------------------------------------------------------------
 
 // contentBuilder is a function that renders a topic at a given width.

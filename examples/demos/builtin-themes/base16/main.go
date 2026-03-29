@@ -15,7 +15,7 @@ func main() {
 	fmt.Println(ty.H4("Render rich text elements in your terminal"))
 
 	fmt.Println(ty.P("A Go library for HTML-analogous TUI typography, built on lipgloss v2."))
-	fmt.Println(ty.Blockquote("Good design is as little design as possible.\n— Dieter Rams"))
+	fmt.Println(ty.Blockquote("Good design is as little design as possible.\n- Dieter Rams"))
 	fmt.Println()
 
 	fmt.Println(ty.CodeBlock("ty := herald.New()\nfmt.Println(ty.H1(\"Hello, World!\"))"))

@@ -176,7 +176,7 @@ func BoxBorderSet() TableBorderSet {
 	}
 }
 
-// MinimalBorderSet returns a TableBorderSet with no outer borders — only column
+// MinimalBorderSet returns a TableBorderSet with no outer borders - only column
 // separators and a header underline.
 func MinimalBorderSet() TableBorderSet {
 	return TableBorderSet{

@@ -169,7 +169,7 @@ func main() {
 
 	fmt.Println(ty.P("Using go-tree-sitter to parse Go code and apply Rose Pine colors."))
 
-	fmt.Println(ty.H3("Go — with tree-sitter highlighting"))
+	fmt.Println(ty.H3("Go - with tree-sitter highlighting"))
 	fmt.Println(ty.CodeBlock(`package main
 
 import "fmt"

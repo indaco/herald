@@ -12,12 +12,12 @@ func main() {
 	ty := herald.New()
 
 	// Headings (just two to show the range)
-	fmt.Println(ty.H1("Herald — TUI Typography"))
+	fmt.Println(ty.H1("Herald - TUI Typography"))
 	fmt.Println(ty.H4("Render rich text elements in your terminal"))
 
 	// Paragraph & blockquote
 	fmt.Println(ty.P("A Go library for HTML-analogous TUI typography, built on lipgloss v2."))
-	fmt.Println(ty.Blockquote("Good design is as little design as possible.\n— Dieter Rams"))
+	fmt.Println(ty.Blockquote("Good design is as little design as possible.\n- Dieter Rams"))
 	fmt.Println()
 
 	// Code

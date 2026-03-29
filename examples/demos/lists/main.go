@@ -49,7 +49,7 @@ func main() {
 	fmt.Println()
 
 	// Mixed nesting
-	fmt.Println(ty.H3("Mixed — Ordered inside Unordered"))
+	fmt.Println(ty.H3("Mixed - Ordered inside Unordered"))
 	fmt.Println(ty.NestUL(
 		herald.Item("Overview"),
 		herald.ItemWithOLChildren("Ranked Desserts",
