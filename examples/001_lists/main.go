@@ -57,7 +57,7 @@ func main() {
 
 	// --- Mixed nesting (OL children inside UL) ---
 
-	fmt.Println(ty.H3("Mixed Nesting — Ordered inside Unordered"))
+	fmt.Println(ty.H3("Mixed Nesting - Ordered inside Unordered"))
 	fmt.Println(ty.NestUL(
 		herald.Item("Overview"),
 		herald.ItemWithOLChildren("Ranked Desserts",
@@ -71,7 +71,7 @@ func main() {
 
 	// --- Mixed nesting (UL children inside OL) ---
 
-	fmt.Println(ty.H3("Mixed Nesting — Unordered inside Ordered"))
+	fmt.Println(ty.H3("Mixed Nesting - Unordered inside Ordered"))
 	fmt.Println(ty.NestOL(
 		herald.Item("Planning"),
 		herald.ItemWithChildren("Resources",

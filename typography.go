@@ -260,7 +260,7 @@ func (t *Typography) HRWithLabel(label string) string {
 	labelWidth := lipgloss.Width(label)
 	totalWidth := t.theme.HRWidth
 	if labelWidth+4 > totalWidth {
-		// Label too long — just render it styled
+		// Label too long - just render it styled
 		return t.theme.HRLabel.Render(label)
 	}
 	remaining := totalWidth - labelWidth - 2 // 2 spaces around label

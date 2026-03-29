@@ -82,6 +82,13 @@ func main() {
 }
 ```
 
+> [!TIP]
+> **Working with Markdown input?** [herald-md](https://github.com/indaco/herald-md) is a companion module that parses Markdown (CommonMark + GFM via goldmark) and maps each element to the corresponding herald typography method - so you can render `.md` content with the same themed output, no manual wiring required.
+>
+> ```sh
+> go get github.com/indaco/herald-md@latest
+> ```
+
 ## Available elements
 
 ### Headings

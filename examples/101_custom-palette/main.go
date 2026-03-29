@@ -12,10 +12,10 @@ import (
 
 func main() {
 	// lipgloss.LightDark returns a function that picks the right color
-	// based on the terminal background — define your palette once.
+	// based on the terminal background - define your palette once.
 	lightDark := lipgloss.LightDark(lipgloss.HasDarkBackground(os.Stdin, os.Stdout))
 
-	// Nord-inspired palette — cool blues, muted frost tones
+	// Nord-inspired palette - cool blues, muted frost tones
 	palette := herald.ColorPalette{
 		Primary:   lightDark(lipgloss.Color("#5E81AC"), lipgloss.Color("#88C0D0")), // frost blue
 		Secondary: lightDark(lipgloss.Color("#81A1C1"), lipgloss.Color("#81A1C1")), // frost lighter
@@ -60,7 +60,7 @@ func main() {
 	fmt.Println()
 
 	fmt.Println(ty.DL([][2]string{
-		{"Primary", "Main accent — headings, emphasis"},
-		{"Muted", "Subdued elements — comments, borders"},
+		{"Primary", "Main accent - headings, emphasis"},
+		{"Muted", "Subdued elements - comments, borders"},
 	}))
 }
