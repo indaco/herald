@@ -506,10 +506,12 @@ fmt.Println(ty.Badge("BETA") + " " + ty.Tag("go"))
 Pair headings with alerts for contextual guidance:
 
 ```go
-fmt.Println(ty.H2("Database Migration"))
-fmt.Println(ty.Warning("Back up your database before proceeding."))
-fmt.Println(ty.P("Run the following command to apply migrations:"))
-fmt.Println(ty.CodeBlock("go run ./cmd/migrate up"))
+fmt.Println(ty.Compose(
+    ty.H2("Database Migration"),
+    ty.Warning("Back up your database before proceeding."),
+    ty.P("Run the following command to apply migrations:"),
+    ty.CodeBlock("go run ./cmd/migrate up"),
+))
 ```
 
 ### Author blocks in release notes
@@ -517,9 +519,11 @@ fmt.Println(ty.CodeBlock("go run ./cmd/migrate up"))
 Use `AddressCard` for styled contact information:
 
 ```go
-fmt.Println(ty.H2("Release v2.0"))
-fmt.Println(ty.P("Major performance improvements and new API surface."))
-fmt.Println(ty.AddressCard("Maintained by\nJane Doe\njane@example.com"))
+fmt.Println(ty.Compose(
+    ty.H2("Release v2.0"),
+    ty.P("Major performance improvements and new API surface."),
+    ty.AddressCard("Maintained by\nJane Doe\njane@example.com"),
+))
 ```
 
 ### Rich paragraphs with references
@@ -527,14 +531,16 @@ fmt.Println(ty.AddressCard("Maintained by\nJane Doe\njane@example.com"))
 Compose inline elements and footnotes within paragraphs:
 
 ```go
-fmt.Println(ty.P(
-    "herald" + ty.FootnoteRef(1) + " is built on " +
-    ty.Link("lipgloss", "https://github.com/charmbracelet/lipgloss") +
-    " and supports " + ty.Bold("rich text") + ", " +
-    ty.Code("inline code") + ", and " + ty.Kbd("Ctrl") + "+" + ty.Kbd("C") +
-    " key indicators.",
+fmt.Println(ty.Compose(
+    ty.P(
+        "herald" + ty.FootnoteRef(1) + " is built on " +
+        ty.Link("lipgloss", "https://github.com/charmbracelet/lipgloss") +
+        " and supports " + ty.Bold("rich text") + ", " +
+        ty.Code("inline code") + ", and " + ty.Kbd("Ctrl") + "+" + ty.Kbd("C") +
+        " key indicators.",
+    ),
+    ty.FootnoteSection([]string{"A Go library for TUI typography"}),
 ))
-fmt.Println(ty.FootnoteSection([]string{"A Go library for TUI typography"}))
 ```
 
 ### Global padding and framing
