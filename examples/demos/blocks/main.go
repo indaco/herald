@@ -20,6 +20,10 @@ func main() {
 	// Code block with line numbers
 	tyLN := herald.New(herald.WithCodeLineNumbers(true))
 	fmt.Println(tyLN.CodeBlock("package main\n\nimport \"fmt\"\n\nfunc main() {\n\tfmt.Println(\"Hello, World!\")\n}"))
+
+	// Code block with line number offset (e.g. snippet starting at line 42)
+	tyOffset := herald.New(herald.WithCodeLineNumbers(true), herald.WithCodeLineNumberOffset(42))
+	fmt.Println(tyOffset.CodeBlock("func greet(name string) string {\n\treturn \"Hello, \" + name\n}"))
 	fmt.Println()
 
 	fmt.Println(ty.HR())
