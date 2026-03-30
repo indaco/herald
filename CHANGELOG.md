@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). The changelog is generated and managed by [sley](https://github.com/indaco/sley).
 
+## v0.10.0 - 2026-03-30
+
+### 🚀 Enhancements
+
+- support custom start line number in code blocks ([f20e3b3](https://github.com/indaco/herald/commit/f20e3b3)) ([#49](https://github.com/indaco/herald/pull/49))
+
+### 📖 Documentation
+
+- **readme:** use Compose in composition patterns examples ([6a2d7c0](https://github.com/indaco/herald/commit/6a2d7c0)) ([#48](https://github.com/indaco/herald/pull/48))
+- README tip about herald-md companion module ([9e1f394](https://github.com/indaco/herald/commit/9e1f394)) ([#47](https://github.com/indaco/herald/pull/47))
+
+**Full Changelog:** [v0.9.0...v0.10.0](https://github.com/indaco/herald/compare/v0.9.0...v0.10.0)
+
+### ❤️ Contributors
+
+- [@indaco](https://github.com/indaco)
+
 ## v0.9.0 - 2026-03-26
 
 ### 🚀 Enhancements
