@@ -212,14 +212,16 @@ func (t *Typography) CodeBlock(text string, lang ...string) string {
 // Render calls that break background propagation.
 func (t *Typography) codeBlockWithLineNumbers(content string) string {
 	lines := strings.Split(content, "\n")
-	width := len(fmt.Sprintf("%d", len(lines)))
+	offset := t.theme.CodeLineNumberOffset
+	lastNum := offset + len(lines) - 1
+	width := len(fmt.Sprintf("%d", lastNum))
 
 	bg := t.theme.CodeBlock.GetBackground()
 
 	// Build the gutter column: right-aligned numbers + separator.
 	gutter := make([]string, len(lines))
 	for i := range lines {
-		gutter[i] = fmt.Sprintf("%*d", width, i+1) + t.theme.CodeLineNumberSep
+		gutter[i] = fmt.Sprintf("%*d", width, offset+i) + t.theme.CodeLineNumberSep
 	}
 	gutterStyle := t.theme.CodeLineNumber.
 		Background(bg).

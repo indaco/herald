@@ -204,8 +204,9 @@ func ThemeFromPalette(p ColorPalette) Theme {
 		FootnoteDividerChar:  DefaultFootnoteDividerChar,
 		FootnoteDividerWidth: DefaultFootnoteDividerWidth,
 
-		CodeLineNumber:    lipgloss.NewStyle().Foreground(p.Muted).Background(p.Base),
-		CodeLineNumberSep: DefaultCodeLineNumberSep,
+		CodeLineNumber:       lipgloss.NewStyle().Foreground(p.Muted).Background(p.Base),
+		CodeLineNumberSep:    DefaultCodeLineNumberSep,
+		CodeLineNumberOffset: DefaultCodeLineNumberOffset,
 
 		TableHeader: lipgloss.NewStyle().
 			Bold(true).

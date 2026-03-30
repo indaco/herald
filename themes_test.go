@@ -104,6 +104,9 @@ func assertThemeValid(t *testing.T, theme Theme) {
 		if theme.ShowLineNumbers {
 			t.Error("ShowLineNumbers should be false by default")
 		}
+		if theme.CodeLineNumberOffset != DefaultCodeLineNumberOffset {
+			t.Errorf("CodeLineNumberOffset: expected %d, got %d", DefaultCodeLineNumberOffset, theme.CodeLineNumberOffset)
+		}
 	})
 
 	t.Run("CodeFormatter is nil", func(t *testing.T) {

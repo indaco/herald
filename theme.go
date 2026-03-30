@@ -90,9 +90,10 @@ type Theme struct {
 	HeadingBarChar  string // left-bar prefix for H4-H6 (e.g. "▎")
 
 	// Code block line numbers
-	CodeLineNumber    lipgloss.Style // style for line number text
-	CodeLineNumberSep string         // separator between line number and code (e.g. "│")
-	ShowLineNumbers   bool           // whether to render line numbers in CodeBlock
+	CodeLineNumber       lipgloss.Style // style for line number text
+	CodeLineNumberSep    string         // separator between line number and code (e.g. "│")
+	ShowLineNumbers      bool           // whether to render line numbers in CodeBlock
+	CodeLineNumberOffset int            // starting line number for code blocks (default 1)
 
 	// Configurable tokens
 	BulletChar           string   // character used for unordered list bullets
@@ -209,6 +210,7 @@ const (
 
 	DefaultAlertBar             = "│"
 	DefaultCodeLineNumberSep    = "│"
+	DefaultCodeLineNumberOffset = 1
 	DefaultTableCellPad         = 1
 	DefaultInsPrefix            = "+"
 	DefaultDelPrefix            = "-"
