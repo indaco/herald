@@ -504,6 +504,17 @@ func WithCodeLineNumberSep(sep string) Option {
 	return func(ty *Typography) { ty.theme.CodeLineNumberSep = sep }
 }
 
+// WithCodeLineNumberOffset sets the starting line number for code blocks.
+// The offset only applies when ShowLineNumbers is true.
+// Values less than 1 are ignored; the default is 1.
+func WithCodeLineNumberOffset(n int) Option {
+	return func(ty *Typography) {
+		if n >= 1 {
+			ty.theme.CodeLineNumberOffset = n
+		}
+	}
+}
+
 // --- Callback options ---
 
 // WithCodeFormatter sets a callback that receives raw code and a language hint,

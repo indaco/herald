@@ -715,13 +715,14 @@ ty := herald.New(
 
 #### Block tokens
 
-| Option                     | Default | Description                             |
-| -------------------------- | ------- | --------------------------------------- |
-| `WithHRChar(c)`            | `─`     | Character repeated for `HR`             |
-| `WithHRWidth(w)`           | `40`    | Width of `HR` in characters             |
-| `WithBlockquoteBar(c)`     | `│`     | Left bar character for `Blockquote`     |
-| `WithCodeLineNumbers(b)`   | `false` | Show line numbers in `CodeBlock`        |
-| `WithCodeLineNumberSep(c)` | `│`     | Separator between line numbers and code |
+| Option                        | Default | Description                             |
+| ----------------------------- | ------- | --------------------------------------- |
+| `WithHRChar(c)`               | `─`     | Character repeated for `HR`             |
+| `WithHRWidth(w)`              | `40`    | Width of `HR` in characters             |
+| `WithBlockquoteBar(c)`        | `│`     | Left bar character for `Blockquote`     |
+| `WithCodeLineNumbers(b)`      | `false` | Show line numbers in `CodeBlock`        |
+| `WithCodeLineNumberSep(c)`    | `│`     | Separator between line numbers and code |
+| `WithCodeLineNumberOffset(n)` | `1`     | Starting line number for code blocks    |
 
 #### Inline tokens
 
@@ -806,6 +807,23 @@ fmt.Println(ty.CodeBlock("func main() {\n\tfmt.Println(\"hello\")\n}", "go"))
 1│ func main() {
 2│     fmt.Println("hello")
 3│ }
+```
+
+When displaying a snippet from a larger file, set a custom starting line number with `WithCodeLineNumberOffset`:
+
+```go
+ty := herald.New(
+    herald.WithCodeLineNumbers(true),
+    herald.WithCodeLineNumberOffset(42),
+)
+
+fmt.Println(ty.CodeBlock("func greet(name string) string {\n\treturn \"Hello, \" + name\n}"))
+```
+
+```text
+42│ func greet(name string) string {
+43│     return "Hello, " + name
+44│ }
 ```
 
 Customize the separator and style:

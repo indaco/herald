@@ -477,6 +477,36 @@ func TestWithCodeLineNumberSep(t *testing.T) {
 	}
 }
 
+func TestWithCodeLineNumberOffset(t *testing.T) {
+	t.Run("sets custom offset", func(t *testing.T) {
+		ty := New(WithCodeLineNumberOffset(42))
+		if ty.theme.CodeLineNumberOffset != 42 {
+			t.Errorf("expected offset 42, got %d", ty.theme.CodeLineNumberOffset)
+		}
+	})
+
+	t.Run("default is 1", func(t *testing.T) {
+		ty := New()
+		if ty.theme.CodeLineNumberOffset != 1 {
+			t.Errorf("expected default offset 1, got %d", ty.theme.CodeLineNumberOffset)
+		}
+	})
+
+	t.Run("ignores zero", func(t *testing.T) {
+		ty := New(WithCodeLineNumberOffset(0))
+		if ty.theme.CodeLineNumberOffset != 1 {
+			t.Errorf("expected offset 1 after setting 0, got %d", ty.theme.CodeLineNumberOffset)
+		}
+	})
+
+	t.Run("ignores negative", func(t *testing.T) {
+		ty := New(WithCodeLineNumberOffset(-5))
+		if ty.theme.CodeLineNumberOffset != 1 {
+			t.Errorf("expected offset 1 after setting -5, got %d", ty.theme.CodeLineNumberOffset)
+		}
+	})
+}
+
 func TestWithSemanticBadgeTagStyles(t *testing.T) {
 	style := lipgloss.NewStyle().Bold(true)
 

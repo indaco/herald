@@ -540,6 +540,40 @@ func TestCodeBlockLineNumbers(t *testing.T) {
 			t.Errorf("expected single line number, got %q", result)
 		}
 	})
+
+}
+
+func TestCodeBlockLineNumberOffset(t *testing.T) {
+	t.Run("custom offset", func(t *testing.T) {
+		ty := New(WithCodeLineNumbers(true), WithCodeLineNumberOffset(42))
+		result := stripANSI(ty.CodeBlock("aaa\nbbb\nccc"))
+		if !strings.Contains(result, "42"+DefaultCodeLineNumberSep+" aaa") {
+			t.Errorf("expected line 42, got %q", result)
+		}
+		if !strings.Contains(result, "44"+DefaultCodeLineNumberSep+" ccc") {
+			t.Errorf("expected line 44, got %q", result)
+		}
+	})
+
+	t.Run("offset widens gutter", func(t *testing.T) {
+		ty := New(WithCodeLineNumbers(true), WithCodeLineNumberOffset(99))
+		result := stripANSI(ty.CodeBlock("x\ny\nz"))
+		// Lines 99, 100, 101 -> width 3 -> "99" should be padded to " 99"
+		if !strings.Contains(result, " 99"+DefaultCodeLineNumberSep) {
+			t.Errorf("expected padded line 99, got %q", result)
+		}
+		if !strings.Contains(result, "101"+DefaultCodeLineNumberSep) {
+			t.Errorf("expected line 101, got %q", result)
+		}
+	})
+
+	t.Run("offset ignored when line numbers disabled", func(t *testing.T) {
+		ty := New(WithCodeLineNumberOffset(10))
+		result := stripANSI(ty.CodeBlock("hello"))
+		if strings.Contains(result, "10") {
+			t.Errorf("offset should have no effect when line numbers disabled, got %q", result)
+		}
+	})
 }
 
 // ---------------------------------------------------------------------------
