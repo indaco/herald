@@ -146,6 +146,26 @@ func WithDelStyle(s lipgloss.Style) Option {
 	return func(ty *Typography) { ty.theme.Del = s }
 }
 
+// WithQStyle overrides the inline quotation style.
+func WithQStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.Q = s }
+}
+
+// WithCiteStyle overrides the citation style.
+func WithCiteStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.Cite = s }
+}
+
+// WithSampStyle overrides the sample output style.
+func WithSampStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.Samp = s }
+}
+
+// WithVarStyle overrides the variable name style.
+func WithVarStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.Var = s }
+}
+
 // --- List style options ---
 
 // WithListBulletStyle overrides the bullet/number marker style.
@@ -361,6 +381,16 @@ func WithDelPrefix(c string) Option {
 	return func(ty *Typography) { ty.theme.DelPrefix = c }
 }
 
+// WithQuoteOpen sets the opening quotation mark for Q.
+func WithQuoteOpen(s string) Option {
+	return func(ty *Typography) { ty.theme.QuoteOpen = s }
+}
+
+// WithQuoteClose sets the closing quotation mark for Q.
+func WithQuoteClose(s string) Option {
+	return func(ty *Typography) { ty.theme.QuoteClose = s }
+}
+
 // --- Nested list options ---
 
 // WithListIndent sets the number of spaces per nesting level for nested lists.
@@ -387,6 +417,40 @@ func WithNestedBulletChars(chars []string) Option {
 // sub-list restarts numbering at 1.
 func WithHierarchicalNumbers(enabled bool) Option {
 	return func(ty *Typography) { ty.theme.HierarchicalNumbers = enabled }
+}
+
+// --- Figure options ---
+
+// WithFigureCaptionStyle overrides the figure caption style.
+func WithFigureCaptionStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.FigureCaption = s }
+}
+
+// --- Fieldset options ---
+
+// WithFieldsetStyle overrides the fieldset content text style.
+func WithFieldsetStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.Fieldset = s }
+}
+
+// WithFieldsetBorderStyle overrides the fieldset border character style.
+func WithFieldsetBorderStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.FieldsetBorder = s }
+}
+
+// WithFieldsetLegendStyle overrides the fieldset legend text style.
+func WithFieldsetLegendStyle(s lipgloss.Style) Option {
+	return func(ty *Typography) { ty.theme.FieldsetLegend = s }
+}
+
+// WithFieldsetWidth sets the default fieldset width. A value of 0 means auto-fit.
+// Values must be between 0 and MaxWidthChars; out-of-range values are ignored.
+func WithFieldsetWidth(w int) Option {
+	return func(ty *Typography) {
+		if w >= 0 && w <= MaxWidthChars {
+			ty.theme.FieldsetWidth = w
+		}
+	}
 }
 
 // --- Table options ---

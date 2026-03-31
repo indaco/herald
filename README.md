@@ -126,23 +126,26 @@ fmt.Println(ty.H4("Subsection"))
 </p>
 </details>
 
-| Method                   | Description                                                                   |
-| ------------------------ | ----------------------------------------------------------------------------- |
-| `P(text)`                | Paragraph                                                                     |
-| `Blockquote(text)`       | Indented block with a left bar; supports multi-line input                     |
-| `CodeBlock(text, lang)`  | Fenced code block with padding; optional line numbers and syntax highlighting |
-| `HR()`                   | Horizontal rule, configurable width and character                             |
-| `HRWithLabel(label)`     | Horizontal rule with a centered label, e.g. `── Section ──`                   |
-| `DL(pairs)`              | Definition list from `[][2]string` pairs (term, description)                  |
-| `DT(text)`               | Definition term (standalone)                                                  |
-| `DD(text)`               | Definition description (standalone)                                           |
-| `KV(key, value)`         | Key-value pair rendered as `key: value` with independent styling              |
-| `KVGroup(pairs)`         | Aligned key-value list from `[][2]string` pairs; keys are right-padded        |
-| `Address(text)`          | Contact/author block; renders multi-line text in a distinctive italic style   |
-| `AddressCard(text)`      | Bordered card variant of `Address` with rounded border                        |
-| `FootnoteRef(n)`         | Inline footnote reference marker, e.g. `[1]`                                  |
-| `FootnoteSection(notes)` | Numbered footnote list with divider; returns `""` if notes is empty           |
-| `Compose(blocks...)`     | Joins pre-rendered blocks with double newlines; empty blocks are skipped      |
+| Method                                | Description                                                                   |
+| ------------------------------------- | ----------------------------------------------------------------------------- |
+| `P(text)`                             | Paragraph                                                                     |
+| `Blockquote(text)`                    | Indented block with a left bar; supports multi-line input                     |
+| `CodeBlock(text, lang)`               | Fenced code block with padding; optional line numbers and syntax highlighting |
+| `HR()`                                | Horizontal rule, configurable width and character                             |
+| `HRWithLabel(label)`                  | Horizontal rule with a centered label, e.g. `── Section ──`                   |
+| `DL(pairs)`                           | Definition list from `[][2]string` pairs (term, description)                  |
+| `DT(text)`                            | Definition term (standalone)                                                  |
+| `DD(text)`                            | Definition description (standalone)                                           |
+| `KV(key, value)`                      | Key-value pair rendered as `key: value` with independent styling              |
+| `KVGroup(pairs)`                      | Aligned key-value list from `[][2]string` pairs; keys are right-padded        |
+| `Address(text)`                       | Contact/author block; renders multi-line text in a distinctive italic style   |
+| `AddressCard(text)`                   | Bordered card variant of `Address` with rounded border                        |
+| `FootnoteRef(n)`                      | Inline footnote reference marker, e.g. `[1]`                                  |
+| `FootnoteSection(notes)`              | Numbered footnote list with divider; returns `""` if notes is empty           |
+| `Fieldset(legend, content, width...)` | Bordered box with legend embedded in top border; auto-width or explicit       |
+| `Figure(content, caption)`            | Content with styled caption below                                             |
+| `FigureTop(content, caption)`         | Content with styled caption above                                             |
+| `Compose(blocks...)`                  | Joins pre-rendered blocks with double newlines; empty blocks are skipped      |
 
 ```go
 fmt.Println(ty.Blockquote("First line.\nSecond line."))
@@ -177,6 +180,24 @@ fmt.Println(ty.FootnoteSection([]string{
     "Built on lipgloss v2",
     "Headings, lists, alerts, and more",
 }))
+
+// Fieldset: bordered box with legend
+fmt.Println(ty.Fieldset("Server Config", "Host:  localhost\nPort:  8080\nTLS:   enabled"))
+
+// Figure: content with caption
+fmt.Println(ty.Figure(ty.CodeBlock("SELECT * FROM users"), "Figure 1: Query example"))
+fmt.Println(ty.FigureTop(ty.Table([][]string{
+    {"Name", "Role"},
+    {"Alice", "Admin"},
+}), "Table 1: User roles"))
+```
+
+```text
+╭─ Server Config ──────────────────────╮
+│ Host:  localhost                     │
+│ Port:  8080                          │
+│ TLS:   enabled                       │
+╰──────────────────────────────────────╯
 ```
 
 ### Inline styles
@@ -204,6 +225,10 @@ fmt.Println(ty.FootnoteSection([]string{
 | `Sup(text)`                   | Renders with `^` prefix (style not configurable via options)                                |
 | `Ins(text)`                   | Inserted text, prefixed with `+`                                                            |
 | `Del(text)`                   | Deleted text, prefixed with `-`, strikethrough                                              |
+| `Q(text)`                     | Inline quotation with styled curly quotes (\u201C \u201D)                                   |
+| `Cite(text)`                  | Citation styling (italic + muted)                                                           |
+| `Samp(text)`                  | Sample output styling (monospace, distinct from `Code`)                                     |
+| `Var(text)`                   | Variable name styling (italic + accent color)                                               |
 | `Badge(text)`                 | Styled pill/tag label (e.g. `[SUCCESS]`, `[BETA]`)                                          |
 | `BadgeWithStyle(text, style)` | Badge with a one-off style override                                                         |
 | `Tag(text)`                   | Subtle pill/category label (lighter variant of Badge)                                       |
@@ -225,6 +250,10 @@ fmt.Println(ty.Abbr("CSS", "Cascading Style Sheets"))
 fmt.Println(ty.Sub("2") + "O" + ty.Sup("n"))
 fmt.Println(ty.Ins("added line"))
 fmt.Println(ty.Del("removed line"))
+fmt.Println(ty.Q("To be, or not to be"))
+fmt.Println(ty.Cite("The Go Programming Language"))
+fmt.Println("Output: " + ty.Samp("Hello, World!"))
+fmt.Println("Set " + ty.Var("PORT") + " to configure the server")
 fmt.Println(ty.Badge("SUCCESS") + " " + ty.Badge("BETA"))
 fmt.Println(ty.Tag("v2.0") + " " + ty.Tag("go"))
 
@@ -619,6 +648,10 @@ ty := herald.New(
 | `WithAbbrStyle`          | `Abbr`          |
 | `WithInsStyle`           | `Ins`           |
 | `WithDelStyle`           | `Del`           |
+| `WithQStyle`             | `Q`             |
+| `WithCiteStyle`          | `Cite`          |
+| `WithSampStyle`          | `Samp`          |
+| `WithVarStyle`           | `Var`           |
 
 #### Lists & definitions
 
@@ -643,6 +676,20 @@ ty := herald.New(
 | `WithAddressStyle`           | `Address`             |
 | `WithAddressCardStyle`       | `AddressCard` content |
 | `WithAddressCardBorderStyle` | `AddressCard` border  |
+
+#### Fieldset
+
+| Option                    | Targets            |
+| ------------------------- | ------------------ |
+| `WithFieldsetStyle`       | `Fieldset` content |
+| `WithFieldsetBorderStyle` | `Fieldset` border  |
+| `WithFieldsetLegendStyle` | `Fieldset` legend  |
+
+#### Figure
+
+| Option                   | Targets          |
+| ------------------------ | ---------------- |
+| `WithFigureCaptionStyle` | `Figure` caption |
 
 #### Badge & Tag
 
@@ -726,10 +773,18 @@ ty := herald.New(
 
 #### Inline tokens
 
-| Option             | Default | Description                      |
-| ------------------ | ------- | -------------------------------- |
-| `WithInsPrefix(c)` | `+`     | Prefix for `Ins` (inserted text) |
-| `WithDelPrefix(c)` | `-`     | Prefix for `Del` (deleted text)  |
+| Option              | Default  | Description                      |
+| ------------------- | -------- | -------------------------------- |
+| `WithInsPrefix(c)`  | `+`      | Prefix for `Ins` (inserted text) |
+| `WithDelPrefix(c)`  | `-`      | Prefix for `Del` (deleted text)  |
+| `WithQuoteOpen(c)`  | `\u201C` | Opening quote character for `Q`  |
+| `WithQuoteClose(c)` | `\u201D` | Closing quote character for `Q`  |
+
+#### Fieldset tokens
+
+| Option                 | Default | Description                                 |
+| ---------------------- | ------- | ------------------------------------------- |
+| `WithFieldsetWidth(w)` | `0`     | Default width for `Fieldset` (0 = auto-fit) |
 
 #### Key-value tokens
 
@@ -867,17 +922,17 @@ ty := herald.New(herald.WithTheme(herald.DraculaTheme()))
 
 `ColorPalette` lets you define 9 colors and derive a complete theme from them. All style fields map from this palette; token options (characters, widths) are unaffected and retain their defaults. Alert colors are handled separately via `AlertPalette`.
 
-| Field       | Maps to                                                                                                                                                                      |
-| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Primary`   | H1 headings                                                                                                                                                                  |
-| `Secondary` | H2, list bullets, `Badge` background, `Tag` foreground                                                                                                                       |
-| `Tertiary`  | H3, links, `Ins`, `FootnoteRef`                                                                                                                                              |
-| `Accent`    | H4, mark background                                                                                                                                                          |
-| `Highlight` | H5, `Abbr`, `Del`                                                                                                                                                            |
-| `Muted`     | H6, blockquote, HR, `HRLabel`, sub/sup, `DD`, `KVKey`, `Address`, `AddressCard`, `AddressCardBorder`, `FootnoteItem`, `FootnoteDivider`, line numbers, table border, caption |
-| `Text`      | Body text, paragraphs, list items, inline code, `DT`, `KVValue`, table cells, footer                                                                                         |
-| `Surface`   | Background for `Kbd`, `Tag`, striped table rows                                                                                                                              |
-| `Base`      | Background for inline code, code blocks; mark fg, `Badge` fg                                                                                                                 |
+| Field       | Maps to                                                                                                                                                                                                                      |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Primary`   | H1 headings                                                                                                                                                                                                                  |
+| `Secondary` | H2, list bullets, `Badge` background, `Tag` foreground                                                                                                                                                                       |
+| `Tertiary`  | H3, links, `Ins`, `FootnoteRef`                                                                                                                                                                                              |
+| `Accent`    | H4, mark background, `Var`                                                                                                                                                                                                   |
+| `Highlight` | H5, `Abbr`, `Del`                                                                                                                                                                                                            |
+| `Muted`     | H6, blockquote, HR, `HRLabel`, sub/sup, `DD`, `KVKey`, `Address`, `AddressCard`, `AddressCardBorder`, `FootnoteItem`, `FootnoteDivider`, line numbers, table border, caption, `Q`, `Cite`, `FigureCaption`, `FieldsetBorder` |
+| `Text`      | Body text, paragraphs, list items, inline code, `DT`, `KVValue`, table cells, footer, `Samp`, `Fieldset` content                                                                                                             |
+| `Surface`   | Background for `Kbd`, `Tag`, striped table rows                                                                                                                                                                              |
+| `Base`      | Background for inline code, code blocks; mark fg, `Badge` fg                                                                                                                                                                 |
 
 Pass the palette to `New()` via `WithPalette`, or call `ThemeFromPalette` to construct a `Theme` value directly.
 
@@ -1099,6 +1154,7 @@ Runnable examples are in the [`examples/`](examples/) directory:
 | [205_bubbletea-release-viewer](examples/205_bubbletea-release-viewer/)                 | Scrollable release notes viewer with bubbletea viewport                           |
 | [206_bubbletea-explorer](examples/206_bubbletea-explorer/)                             | Sidebar + scrollable content pane explorer with bubbletea                         |
 | [207_tview-explorer](examples/207_tview-explorer/)                                     | Sidebar + scrollable content pane explorer with tview                             |
+| [208_figure-with-image](examples/208_figure-with-image/)                               | `Figure` with ASCII art image rendering via image2ascii                           |
 
 ## License
 

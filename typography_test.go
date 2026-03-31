@@ -701,6 +701,9 @@ func TestInlineStyles(t *testing.T) {
 		{"Mark", ty.Mark, "highlighted"},
 		{"Kbd", ty.Kbd, "Ctrl+C"},
 		{"Kbd empty", ty.Kbd, ""},
+		{"Cite", ty.Cite, "citation text"},
+		{"Samp", ty.Samp, "sample output"},
+		{"Var", ty.Var, "myVariable"},
 	}
 
 	for _, tc := range tests {
@@ -859,6 +862,171 @@ func TestInsDelCustomPrefix(t *testing.T) {
 			t.Errorf("expected '-- old' in %q", result)
 		}
 	})
+}
+
+// ---------------------------------------------------------------------------
+// Q / Cite / Samp / Var
+// ---------------------------------------------------------------------------
+
+func TestQ(t *testing.T) {
+	ty := newTestTypography()
+
+	tests := []struct {
+		name     string
+		text     string
+		contains string
+	}{
+		{"basic", "hello world", "\u201Chello world\u201D"},
+		{"empty", "", "\u201C\u201D"},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			result := stripANSI(ty.Q(tc.text))
+			if !strings.Contains(result, tc.contains) {
+				t.Errorf("Q(%q): expected %q in %q", tc.text, tc.contains, result)
+			}
+		})
+	}
+}
+
+func TestQCustomQuotes(t *testing.T) {
+	ty := New(WithQuoteOpen("<<"), WithQuoteClose(">>"))
+	result := stripANSI(ty.Q("test"))
+	if !strings.Contains(result, "<<test>>") {
+		t.Errorf("expected custom quotes in %q", result)
+	}
+}
+
+func TestCite(t *testing.T) {
+	ty := newTestTypography()
+
+	tests := []struct {
+		name string
+		text string
+	}{
+		{"basic", "The Go Programming Language"},
+		{"empty", ""},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			result := stripANSI(ty.Cite(tc.text))
+			if tc.text != "" && !strings.Contains(result, tc.text) {
+				t.Errorf("Cite(%q): expected text in %q", tc.text, result)
+			}
+		})
+	}
+}
+
+func TestSamp(t *testing.T) {
+	ty := newTestTypography()
+
+	tests := []struct {
+		name string
+		text string
+	}{
+		{"basic", "Error: file not found"},
+		{"empty", ""},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			result := stripANSI(ty.Samp(tc.text))
+			if tc.text != "" && !strings.Contains(result, tc.text) {
+				t.Errorf("Samp(%q): expected text in %q", tc.text, result)
+			}
+		})
+	}
+}
+
+func TestVar(t *testing.T) {
+	ty := newTestTypography()
+
+	tests := []struct {
+		name string
+		text string
+	}{
+		{"basic", "maxRetries"},
+		{"empty", ""},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			result := stripANSI(ty.Var(tc.text))
+			if tc.text != "" && !strings.Contains(result, tc.text) {
+				t.Errorf("Var(%q): expected text in %q", tc.text, result)
+			}
+		})
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Figure
+// ---------------------------------------------------------------------------
+
+func TestFigure(t *testing.T) {
+	ty := newTestTypography()
+
+	t.Run("caption at bottom", func(t *testing.T) {
+		result := stripANSI(ty.Figure("content here", "Figure 1: description"))
+		lines := strings.Split(result, "\n")
+		if len(lines) < 2 {
+			t.Fatalf("expected at least 2 lines, got %d", len(lines))
+		}
+		if !strings.Contains(lines[0], "content here") {
+			t.Errorf("expected content on first line, got %q", lines[0])
+		}
+		if !strings.Contains(lines[len(lines)-1], "Figure 1: description") {
+			t.Errorf("expected caption on last line, got %q", lines[len(lines)-1])
+		}
+	})
+
+	t.Run("empty caption", func(t *testing.T) {
+		result := stripANSI(ty.Figure("content", ""))
+		if !strings.Contains(result, "content") {
+			t.Errorf("expected content in result, got %q", result)
+		}
+	})
+
+	t.Run("empty content", func(t *testing.T) {
+		result := stripANSI(ty.Figure("", "caption"))
+		if !strings.Contains(result, "caption") {
+			t.Errorf("expected caption in result, got %q", result)
+		}
+	})
+}
+
+func TestFigureTop(t *testing.T) {
+	ty := newTestTypography()
+
+	result := stripANSI(ty.FigureTop("content here", "Figure 1"))
+	lines := strings.Split(result, "\n")
+	if len(lines) < 2 {
+		t.Fatalf("expected at least 2 lines, got %d", len(lines))
+	}
+	if !strings.Contains(lines[0], "Figure 1") {
+		t.Errorf("expected caption on first line, got %q", lines[0])
+	}
+	if !strings.Contains(lines[len(lines)-1], "content here") {
+		t.Errorf("expected content on last line, got %q", lines[len(lines)-1])
+	}
+}
+
+func TestFigureThemePosition(t *testing.T) {
+	// When theme has CaptionTop, Figure() should place caption on top.
+	custom := DefaultTheme()
+	custom.FigureCaptionPosition = CaptionTop
+	ty := New(WithTheme(custom))
+
+	result := stripANSI(ty.Figure("content", "cap"))
+	lines := strings.Split(result, "\n")
+	if len(lines) < 2 {
+		t.Fatalf("expected at least 2 lines, got %d", len(lines))
+	}
+	if !strings.Contains(lines[0], "cap") {
+		t.Errorf("with CaptionTop, expected caption first, got %q", lines[0])
+	}
 }
 
 // ---------------------------------------------------------------------------

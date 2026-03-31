@@ -97,6 +97,10 @@ func TestWithInlineStyles(t *testing.T) {
 		{"Abbr", WithAbbrStyle(style), func(ty *Typography) string { return ty.Abbr("test", "title") }},
 		{"Ins", WithInsStyle(style), func(ty *Typography) string { return ty.Ins("test") }},
 		{"Del", WithDelStyle(style), func(ty *Typography) string { return ty.Del("test") }},
+		{"Q", WithQStyle(style), func(ty *Typography) string { return ty.Q("test") }},
+		{"Cite", WithCiteStyle(style), func(ty *Typography) string { return ty.Cite("test") }},
+		{"Samp", WithSampStyle(style), func(ty *Typography) string { return ty.Samp("test") }},
+		{"Var", WithVarStyle(style), func(ty *Typography) string { return ty.Var("test") }},
 	}
 
 	for _, tc := range tests {
@@ -298,6 +302,20 @@ func TestWithTokenOptions(t *testing.T) {
 		ty := New(WithDelPrefix("-- "))
 		if ty.theme.DelPrefix != "-- " {
 			t.Errorf("expected %q, got %q", "-- ", ty.theme.DelPrefix)
+		}
+	})
+
+	t.Run("QuoteOpen", func(t *testing.T) {
+		ty := New(WithQuoteOpen("<<"))
+		if ty.theme.QuoteOpen != "<<" {
+			t.Errorf("expected %q, got %q", "<<", ty.theme.QuoteOpen)
+		}
+	})
+
+	t.Run("QuoteClose", func(t *testing.T) {
+		ty := New(WithQuoteClose(">>"))
+		if ty.theme.QuoteClose != ">>" {
+			t.Errorf("expected %q, got %q", ">>", ty.theme.QuoteClose)
 		}
 	})
 
@@ -592,6 +610,73 @@ func TestWithSemanticPalettePreservesOtherStyles(t *testing.T) {
 	if !strings.Contains(result, "v1.0") {
 		t.Errorf("Tag should still work after WithSemanticPalette, got %q", result)
 	}
+}
+
+func TestWithFigureCaptionStyle(t *testing.T) {
+	style := lipgloss.NewStyle().Foreground(lipgloss.Color("#FF0000"))
+	ty := New(WithFigureCaptionStyle(style))
+	result := ty.theme.FigureCaption.Render("test")
+	if result == "" {
+		t.Error("expected non-empty render from FigureCaption style")
+	}
+}
+
+func TestWithFieldsetStyles(t *testing.T) {
+	style := lipgloss.NewStyle().Foreground(lipgloss.Color("#FF0000"))
+
+	t.Run("FieldsetStyle", func(t *testing.T) {
+		ty := New(WithFieldsetStyle(style))
+		result := ty.theme.Fieldset.Render("test")
+		if result == "" {
+			t.Error("expected non-empty render from Fieldset style")
+		}
+	})
+
+	t.Run("FieldsetBorderStyle", func(t *testing.T) {
+		ty := New(WithFieldsetBorderStyle(style))
+		result := ty.theme.FieldsetBorder.Render("test")
+		if result == "" {
+			t.Error("expected non-empty render from FieldsetBorder style")
+		}
+	})
+
+	t.Run("FieldsetLegendStyle", func(t *testing.T) {
+		ty := New(WithFieldsetLegendStyle(style))
+		result := ty.theme.FieldsetLegend.Render("test")
+		if result == "" {
+			t.Error("expected non-empty render from FieldsetLegend style")
+		}
+	})
+
+	t.Run("FieldsetWidth positive", func(t *testing.T) {
+		ty := New(WithFieldsetWidth(60))
+		if ty.theme.FieldsetWidth != 60 {
+			t.Errorf("expected 60, got %d", ty.theme.FieldsetWidth)
+		}
+	})
+
+	t.Run("FieldsetWidth zero allowed", func(t *testing.T) {
+		custom := DefaultTheme()
+		custom.FieldsetWidth = 50
+		ty := New(WithTheme(custom), WithFieldsetWidth(0))
+		if ty.theme.FieldsetWidth != 0 {
+			t.Errorf("expected 0 (auto-fit), got %d", ty.theme.FieldsetWidth)
+		}
+	})
+
+	t.Run("FieldsetWidth negative ignored", func(t *testing.T) {
+		ty := New(WithFieldsetWidth(-5))
+		if ty.theme.FieldsetWidth != 0 {
+			t.Errorf("expected default 0, got %d", ty.theme.FieldsetWidth)
+		}
+	})
+
+	t.Run("FieldsetWidth exceeds max ignored", func(t *testing.T) {
+		ty := New(WithFieldsetWidth(MaxWidthChars + 1))
+		if ty.theme.FieldsetWidth != 0 {
+			t.Errorf("expected default 0, got %d", ty.theme.FieldsetWidth)
+		}
+	})
 }
 
 func TestMultipleOptions(t *testing.T) {

@@ -56,6 +56,30 @@ func main() {
 	fmt.Println(ty.AddressCard("Jane Doe\njane@example.com\nSan Francisco, CA"))
 	fmt.Println()
 
+	// Fieldset
+	fmt.Println(ty.Fieldset("Server Config", "Host:  localhost\nPort:  8080\nTLS:   enabled"))
+	fmt.Println()
+
+	// Fieldset without legend
+	fmt.Println(ty.Fieldset("", "Plain bordered box\nwithout a legend"))
+	fmt.Println()
+
+	// Figure
+	fmt.Println(ty.Figure(
+		ty.CodeBlock("SELECT * FROM users WHERE active = true"),
+		"Figure 1: Active users query",
+	))
+	fmt.Println()
+	fmt.Println(ty.FigureTop(
+		ty.Table([][]string{
+			{"Name", "Role"},
+			{"Alice", "Admin"},
+			{"Bob", "Editor"},
+		}),
+		"Table 1: User roles",
+	))
+	fmt.Println()
+
 	// Footnote section
 	fmt.Println(ty.P("Herald supports rich typography" + ty.FootnoteRef(1) + " with multiple elements" + ty.FootnoteRef(2)))
 	fmt.Println(ty.FootnoteSection([]string{
