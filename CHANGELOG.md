@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). The changelog is generated and managed by [sley](https://github.com/indaco/sley).
 
+## v0.11.0 - 2026-03-31
+
+### 🚀 Enhancements
+
+- add `Q`, `Cite`, `Samp`, `Var`, `Fieldset`, and `Figure` primitives ([e642bf8](https://github.com/indaco/herald/commit/e642bf8)) ([#50](https://github.com/indaco/herald/pull/50))
+
+**Full Changelog:** [v0.10.0...v0.11.0](https://github.com/indaco/herald/compare/v0.10.0...v0.11.0)
+
+### ❤️ Contributors
+
+- [@indaco](https://github.com/indaco)
+
 ## v0.10.0 - 2026-03-30
 
 ### 🚀 Enhancements
