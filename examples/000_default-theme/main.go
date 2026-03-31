@@ -78,6 +78,14 @@ func main() {
 	fmt.Println(ty.Del("removed line"))
 	fmt.Println()
 
+	// Quotations & citations
+	fmt.Println(ty.H3("Quotations & Citations"))
+	fmt.Println(ty.Q("To be, or not to be"))
+	fmt.Println(ty.Cite("The Go Programming Language"))
+	fmt.Println("Output: " + ty.Samp("Hello, World!"))
+	fmt.Println("Set " + ty.Var("PORT") + " to configure the server")
+	fmt.Println()
+
 	// Links & Abbreviations
 	fmt.Println(ty.H3("Links & Abbreviations"))
 	fmt.Println(ty.Link("https://go.dev"))
@@ -133,6 +141,30 @@ func main() {
 	// Badge / Tag
 	fmt.Println(ty.H3("Badge / Tag"))
 	fmt.Println(ty.Badge("SUCCESS") + " " + ty.Badge("BETA") + " " + ty.Tag("v2.0") + " " + ty.Tag("go"))
+	fmt.Println()
+
+	// Fieldset
+	fmt.Println(ty.H3("Fieldset"))
+	fmt.Println(ty.Fieldset("Server Config", "Host:  localhost\nPort:  8080\nTLS:   enabled"))
+	fmt.Println()
+	fmt.Println(ty.Fieldset("", "Plain bordered box without a legend"))
+	fmt.Println()
+
+	// Figure
+	fmt.Println(ty.H3("Figure"))
+	fmt.Println(ty.Figure(
+		ty.CodeBlock("SELECT * FROM users WHERE active = true"),
+		"Figure 1: Active users query",
+	))
+	fmt.Println()
+	fmt.Println(ty.FigureTop(
+		ty.Table([][]string{
+			{"Name", "Role"},
+			{"Alice", "Admin"},
+			{"Bob", "Editor"},
+		}),
+		"Table 1: User roles",
+	))
 	fmt.Println()
 
 	// Footnote

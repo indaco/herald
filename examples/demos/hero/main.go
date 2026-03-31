@@ -55,8 +55,13 @@ func main() {
 			ty.Kbd("Ctrl") + "+" + ty.Kbd("C") + "  " +
 			ty.Code("inline code"),
 	)
+	fmt.Println(ty.Q("quoted") + "  " + ty.Cite("citation") + "  " + ty.Samp("output") + "  " + ty.Var("x"))
 	fmt.Println(ty.Ins("added") + "  " + ty.Del("removed") + "  " + ty.Badge("NEW") + "  " + ty.Tag("go"))
 	fmt.Println(ty.SuccessBadge("running") + "  " + ty.ErrorBadge("failed") + "  " + ty.WarningBadge("expiring") + "  " + ty.InfoBadge("pending"))
+	fmt.Println()
+
+	// Fieldset
+	fmt.Println(ty.Fieldset("Config", "Host: localhost\nPort: 8080"))
 	fmt.Println()
 
 	// Key-value
