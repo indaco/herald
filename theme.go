@@ -45,6 +45,10 @@ type Theme struct {
 	Sup           lipgloss.Style
 	Ins           lipgloss.Style
 	Del           lipgloss.Style
+	Q             lipgloss.Style // quotation mark + text styling
+	Cite          lipgloss.Style // citation (italic + muted)
+	Samp          lipgloss.Style // sample output (monospace, distinct from CodeInline)
+	Var           lipgloss.Style // variable name (italic monospace)
 
 	// Definition list
 	DT lipgloss.Style // definition term
@@ -105,8 +109,20 @@ type Theme struct {
 	BlockquoteBar        string   // left-bar character for blockquotes
 	InsPrefix            string   // prefix for inserted text (e.g. "+")
 	DelPrefix            string   // prefix for deleted text (e.g. "-")
+	QuoteOpen            string   // opening quotation mark for Q (default "\u201C")
+	QuoteClose           string   // closing quotation mark for Q (default "\u201D")
 	FootnoteDividerChar  string   // character for footnote section divider (default "─")
 	FootnoteDividerWidth int      // width of footnote divider (default 20)
+
+	// Figure elements
+	FigureCaption         lipgloss.Style  // style for figure caption text
+	FigureCaptionPosition CaptionPosition // default CaptionBottom
+
+	// Fieldset elements
+	Fieldset       lipgloss.Style // content text style
+	FieldsetBorder lipgloss.Style // border characters style
+	FieldsetLegend lipgloss.Style // legend text style
+	FieldsetWidth  int            // default 0 = auto-fit
 
 	// Table elements
 	TableHeader      lipgloss.Style // style for header cell text (e.g. bold + primary color)
@@ -217,6 +233,8 @@ const (
 	DefaultFootnoteDividerChar  = "─"
 	DefaultFootnoteDividerWidth = 20
 	DefaultKVSeparator          = ":"
+	DefaultQuoteOpen            = "\u201C" // left curly double quote
+	DefaultQuoteClose           = "\u201D" // right curly double quote
 	MaxWidthChars               = 500
 )
 

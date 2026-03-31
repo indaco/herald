@@ -354,6 +354,46 @@ func (t *Typography) Del(text string) string {
 	return t.theme.Del.Render(t.theme.DelPrefix + text)
 }
 
+// Q renders an inline quotation wrapped in styled quotation marks.
+func (t *Typography) Q(text string) string {
+	return t.theme.Q.Render(t.theme.QuoteOpen + text + t.theme.QuoteClose)
+}
+
+// Cite renders a citation reference, typically italic and muted.
+func (t *Typography) Cite(text string) string {
+	return t.theme.Cite.Render(text)
+}
+
+// Samp renders sample program output, styled distinctly from CodeInline.
+func (t *Typography) Samp(text string) string {
+	return t.theme.Samp.Render(text)
+}
+
+// Var renders a variable name, typically italic with an accent color.
+func (t *Typography) Var(text string) string {
+	return t.theme.Var.Render(text)
+}
+
+// ---------------------------------------------------------------------------
+// Figure
+// ---------------------------------------------------------------------------
+
+// Figure renders content with a styled caption. The caption position is
+// determined by the theme's FigureCaptionPosition (default CaptionBottom).
+func (t *Typography) Figure(content, caption string) string {
+	if t.theme.FigureCaptionPosition == CaptionTop {
+		return t.FigureTop(content, caption)
+	}
+	styled := t.theme.FigureCaption.Render(caption)
+	return content + "\n" + styled
+}
+
+// FigureTop renders content with the caption placed above the content.
+func (t *Typography) FigureTop(content, caption string) string {
+	styled := t.theme.FigureCaption.Render(caption)
+	return styled + "\n\n" + content
+}
+
 // ---------------------------------------------------------------------------
 // Alerts
 // ---------------------------------------------------------------------------
@@ -421,13 +461,13 @@ const (
 // It is distinct from Option, which configures the Typography instance.
 type TableOption func(*tableConfig)
 
-// CaptionPosition specifies where a table caption is rendered.
+// CaptionPosition specifies where a caption is rendered relative to its content.
 type CaptionPosition int
 
 const (
-	// CaptionTop renders the caption above the table.
+	// CaptionTop renders the caption above the content.
 	CaptionTop CaptionPosition = iota
-	// CaptionBottom renders the caption below the table.
+	// CaptionBottom renders the caption below the content.
 	CaptionBottom
 )
 

@@ -137,6 +137,22 @@ func ThemeFromPalette(p ColorPalette) Theme {
 			Foreground(p.Highlight).
 			Strikethrough(true),
 
+		Q: lipgloss.NewStyle().
+			Foreground(p.Muted).
+			Italic(true),
+
+		Cite: lipgloss.NewStyle().
+			Foreground(p.Muted).
+			Italic(true),
+
+		Samp: lipgloss.NewStyle().
+			Foreground(p.Text).
+			Background(p.Base),
+
+		Var: lipgloss.NewStyle().
+			Foreground(p.Accent).
+			Italic(true),
+
 		DT: lipgloss.NewStyle().
 			Bold(true).
 			Foreground(p.Text),
@@ -201,12 +217,25 @@ func ThemeFromPalette(p ColorPalette) Theme {
 		BlockquoteBar:        DefaultBlockquoteBar,
 		InsPrefix:            DefaultInsPrefix,
 		DelPrefix:            DefaultDelPrefix,
+		QuoteOpen:            DefaultQuoteOpen,
+		QuoteClose:           DefaultQuoteClose,
 		FootnoteDividerChar:  DefaultFootnoteDividerChar,
 		FootnoteDividerWidth: DefaultFootnoteDividerWidth,
 
 		CodeLineNumber:       lipgloss.NewStyle().Foreground(p.Muted).Background(p.Base),
 		CodeLineNumberSep:    DefaultCodeLineNumberSep,
 		CodeLineNumberOffset: DefaultCodeLineNumberOffset,
+
+		FigureCaption:         lipgloss.NewStyle().Foreground(p.Muted).Italic(true),
+		FigureCaptionPosition: CaptionBottom,
+
+		Fieldset: lipgloss.NewStyle().
+			Foreground(p.Text),
+		FieldsetBorder: lipgloss.NewStyle().
+			Foreground(p.Muted),
+		FieldsetLegend: lipgloss.NewStyle().
+			Bold(true).
+			Foreground(p.Primary),
 
 		TableHeader: lipgloss.NewStyle().
 			Bold(true).
