@@ -131,6 +131,15 @@ func main() {
 	}))
 	fmt.Println()
 
+	// KVGroupWithOpts: no separator, pre-styled keys, indented
+	fmt.Println(ty.H3("KVGroupWithOpts"))
+	fmt.Println(ty.KVGroupWithOpts([][2]string{
+		{ty.Var("--output") + " " + ty.Small("string"), "Output destination " + ty.Small("(default: stdout)")},
+		{ty.Var("--verbose"), "Enable verbose output"},
+		{ty.Var("--port") + " " + ty.Small("int"), "Port number " + ty.Small("(default: 8080)")},
+	}, herald.WithKVGroupSeparator(""), herald.WithKVRawKeys(true), herald.WithKVRawValues(true), herald.WithKVIndent(2)))
+	fmt.Println()
+
 	// Address
 	fmt.Println(ty.H3("Address"))
 	fmt.Println(ty.Address("Jane Doe\njane@example.com\nSan Francisco, CA"))
