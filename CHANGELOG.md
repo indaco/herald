@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). The changelog is generated and managed by [sley](https://github.com/indaco/sley).
 
+## v0.12.0 - 2026-04-01
+
+### 🚀 Enhancements
+
+- add per-call options for KVGroup rendering ([5bb1b9d](https://github.com/indaco/herald/commit/5bb1b9d)) ([#51](https://github.com/indaco/herald/pull/51))
+
+**Full Changelog:** [v0.11.0...v0.12.0](https://github.com/indaco/herald/compare/v0.11.0...v0.12.0)
+
+### ❤️ Contributors
+
+- [@indaco](https://github.com/indaco)
+
 ## v0.11.0 - 2026-03-31
 
 ### 🚀 Enhancements
