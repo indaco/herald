@@ -1445,6 +1445,131 @@ func TestKVGroup(t *testing.T) {
 }
 
 // ---------------------------------------------------------------------------
+// KVGroupWithOpts
+// ---------------------------------------------------------------------------
+
+func kvTestPairs() [][2]string {
+	return [][2]string{
+		{"Name", "Alice"},
+		{"Location", "Wonderland"},
+	}
+}
+
+func TestKVGroupWithOptsNoOptions(t *testing.T) {
+	ty := newTestTypography()
+	pairs := kvTestPairs()
+	got := stripANSI(ty.KVGroupWithOpts(pairs))
+	want := stripANSI(ty.KVGroup(pairs))
+	if got != want {
+		t.Errorf("KVGroupWithOpts() = %q, want %q", got, want)
+	}
+}
+
+func TestKVGroupWithOptsEmpty(t *testing.T) {
+	ty := newTestTypography()
+	got := ty.KVGroupWithOpts(nil)
+	if got != "" {
+		t.Errorf("KVGroupWithOpts(nil) = %q, want empty", got)
+	}
+}
+
+func TestKVGroupWithOptsCustomSeparator(t *testing.T) {
+	ty := newTestTypography()
+	got := stripANSI(ty.KVGroupWithOpts(kvTestPairs(), WithKVGroupSeparator(" =")))
+	for i, line := range strings.Split(got, "\n") {
+		if !strings.Contains(line, " = ") {
+			t.Errorf("line %d should contain ' = ': %q", i, line)
+		}
+	}
+}
+
+func TestKVGroupWithOptsEmptySeparator(t *testing.T) {
+	ty := newTestTypography()
+	got := stripANSI(ty.KVGroupWithOpts(kvTestPairs(), WithKVGroupSeparator("")))
+	for i, line := range strings.Split(got, "\n") {
+		if strings.Contains(line, ":") {
+			t.Errorf("line %d should not contain ':': %q", i, line)
+		}
+	}
+}
+
+func TestKVGroupWithOptsRawKeys(t *testing.T) {
+	ty := newTestTypography()
+	styled := [][2]string{
+		{ty.Bold("Name"), "Alice"},
+		{ty.Bold("Location"), "Wonderland"},
+	}
+	got := ty.KVGroupWithOpts(styled, WithKVRawKeys(true))
+	if got == "" {
+		t.Error("KVGroupWithOpts raw keys returned empty")
+	}
+}
+
+func TestKVGroupWithOptsRawValues(t *testing.T) {
+	ty := newTestTypography()
+	styled := [][2]string{
+		{"Name", ty.Italic("Alice")},
+	}
+	got := ty.KVGroupWithOpts(styled, WithKVRawValues(true))
+	if got == "" {
+		t.Error("KVGroupWithOpts raw values returned empty")
+	}
+}
+
+func TestKVGroupWithOptsIndent(t *testing.T) {
+	ty := newTestTypography()
+	got := stripANSI(ty.KVGroupWithOpts(kvTestPairs(), WithKVIndent(4)))
+	for i, line := range strings.Split(got, "\n") {
+		if !strings.HasPrefix(line, "    ") {
+			t.Errorf("line %d should have 4-space indent: %q", i, line)
+		}
+	}
+}
+
+func TestKVGroupWithOptsCombined(t *testing.T) {
+	ty := newTestTypography()
+	styled := [][2]string{
+		{ty.Var("--output"), "Output destination"},
+		{ty.Var("--verbose"), "Enable verbose output"},
+	}
+	got := stripANSI(ty.KVGroupWithOpts(styled,
+		WithKVGroupSeparator(""),
+		WithKVRawKeys(true),
+		WithKVIndent(2),
+	))
+	lines := strings.Split(got, "\n")
+	if len(lines) != 2 {
+		t.Fatalf("expected 2 lines, got %d", len(lines))
+	}
+	for i, line := range lines {
+		if !strings.HasPrefix(line, "  ") {
+			t.Errorf("line %d should have 2-space indent: %q", i, line)
+		}
+		if strings.Contains(line, ":") {
+			t.Errorf("line %d should not contain ':': %q", i, line)
+		}
+	}
+}
+
+func TestKVGroupWithOptsAlignment(t *testing.T) {
+	ty := newTestTypography()
+	styled := [][2]string{
+		{ty.Bold("A"), "short"},
+		{ty.Bold("Longer"), "also short"},
+	}
+	got := stripANSI(ty.KVGroupWithOpts(styled, WithKVRawKeys(true), WithKVGroupSeparator("")))
+	lines := strings.Split(got, "\n")
+	if len(lines) != 2 {
+		t.Fatalf("expected 2 lines, got %d", len(lines))
+	}
+	idx1 := strings.Index(lines[0], "short")
+	idx2 := strings.Index(lines[1], "also short")
+	if idx1 != idx2 {
+		t.Errorf("values not aligned: %q at %d, %q at %d", lines[0], idx1, lines[1], idx2)
+	}
+}
+
+// ---------------------------------------------------------------------------
 // Compose
 // ---------------------------------------------------------------------------
 

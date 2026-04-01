@@ -872,9 +872,31 @@ func (t *Typography) KV(key, value string) string {
 // values align vertically. Each pair is a two-element array [key, value].
 // Returns an empty string for empty input.
 func (t *Typography) KVGroup(pairs [][2]string) string {
+	return t.KVGroupWithOpts(pairs)
+}
+
+// KVGroupWithOpts renders key-value pairs like KVGroup but accepts functional
+// options to customise the separator, styling, and indentation per call.
+func (t *Typography) KVGroupWithOpts(pairs [][2]string, opts ...KVOption) string {
 	if len(pairs) == 0 {
 		return ""
 	}
+
+	cfg := &kvConfig{}
+	for _, opt := range opts {
+		opt(cfg)
+	}
+
+	sep := t.theme.KVSeparator
+	if cfg.separator != nil {
+		sep = *cfg.separator
+	}
+
+	indent := ""
+	if cfg.indent > 0 {
+		indent = strings.Repeat(" ", cfg.indent)
+	}
+
 	// Find max key width for alignment.
 	maxKeyWidth := 0
 	for _, pair := range pairs {
@@ -882,11 +904,23 @@ func (t *Typography) KVGroup(pairs [][2]string) string {
 			maxKeyWidth = w
 		}
 	}
+
 	lines := make([]string, len(pairs))
 	for i, pair := range pairs {
 		keyWidth := lipgloss.Width(pair[0])
 		padding := strings.Repeat(" ", maxKeyWidth-keyWidth)
-		lines[i] = t.theme.KVKey.Render(pair[0]+padding+t.theme.KVSeparator) + " " + t.theme.KVValue.Render(pair[1])
+
+		key := pair[0] + padding + sep
+		if !cfg.rawKeys {
+			key = t.theme.KVKey.Render(key)
+		}
+
+		val := pair[1]
+		if !cfg.rawValues {
+			val = t.theme.KVValue.Render(val)
+		}
+
+		lines[i] = indent + key + " " + val
 	}
 	return strings.Join(lines, "\n")
 }
