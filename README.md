@@ -138,6 +138,7 @@ fmt.Println(ty.H4("Subsection"))
 | `DD(text)`                            | Definition description (standalone)                                           |
 | `KV(key, value)`                      | Key-value pair rendered as `key: value` with independent styling              |
 | `KVGroup(pairs)`                      | Aligned key-value list from `[][2]string` pairs; keys are right-padded        |
+| `KVGroupWithOpts(pairs, opts...)`     | Like `KVGroup` with per-call options for separator, styling, and indentation  |
 | `Address(text)`                       | Contact/author block; renders multi-line text in a distinctive italic style   |
 | `AddressCard(text)`                   | Bordered card variant of `Address` with rounded border                        |
 | `FootnoteRef(n)`                      | Inline footnote reference marker, e.g. `[1]`                                  |
@@ -171,6 +172,12 @@ fmt.Println(ty.KVGroup([][2]string{
     {"Role", "Admin"},
     {"Status", "Active"},
 }))
+
+// KVGroup with per-call options: no separator, pre-styled keys, indented
+fmt.Println(ty.KVGroupWithOpts([][2]string{
+    {ty.Var("--output"), "Output destination"},
+    {ty.Var("--verbose"), "Enable verbose output"},
+}, herald.WithKVGroupSeparator(""), herald.WithKVRawKeys(true), herald.WithKVIndent(2)))
 
 fmt.Println(ty.Address("Jane Doe\njane@example.com\nSan Francisco, CA"))
 
@@ -788,9 +795,20 @@ ty := herald.New(
 
 #### Key-value tokens
 
+**Theme-level** (set via `herald.New()`):
+
 | Option               | Default | Description                                       |
 | -------------------- | ------- | ------------------------------------------------- |
 | `WithKVSeparator(c)` | `:`     | Separator between key and value in `KV`/`KVGroup` |
+
+**Per-call** (passed to `KVGroupWithOpts`):
+
+| Option                    | Default       | Description                                                |
+| ------------------------- | ------------- | ---------------------------------------------------------- |
+| `WithKVGroupSeparator(s)` | theme default | Override separator for this call (empty string = no colon) |
+| `WithKVRawKeys(bool)`     | `false`       | Skip applying KVKey style (keys are pre-styled)            |
+| `WithKVRawValues(bool)`   | `false`       | Skip applying KVValue style (values are pre-styled)        |
+| `WithKVIndent(n)`         | `0`           | Prepend n spaces of indentation to each line               |
 
 #### Table tokens
 
