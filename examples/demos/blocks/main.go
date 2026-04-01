@@ -51,6 +51,13 @@ func main() {
 	}))
 	fmt.Println()
 
+	// KVGroupWithOpts
+	fmt.Println(ty.KVGroupWithOpts([][2]string{
+		{ty.Var("--output") + " " + ty.Small("string"), "Output destination"},
+		{ty.Var("--verbose"), "Enable verbose output"},
+	}, herald.WithKVGroupSeparator(""), herald.WithKVRawKeys(true), herald.WithKVRawValues(true), herald.WithKVIndent(2)))
+	fmt.Println()
+
 	fmt.Println(ty.Address("Jane Doe\njane@example.com\nSan Francisco, CA"))
 	fmt.Println()
 	fmt.Println(ty.AddressCard("Jane Doe\njane@example.com\nSan Francisco, CA"))
