@@ -1573,6 +1573,93 @@ func TestKVGroupWithOptsAlignment(t *testing.T) {
 // Compose
 // ---------------------------------------------------------------------------
 
+func TestBR(t *testing.T) {
+	ty := newTestTypography()
+	result := ty.BR()
+	if result != "\n" {
+		t.Errorf("BR = %q, want %q", result, "\n")
+	}
+}
+
+func TestSection(t *testing.T) {
+	ty := newTestTypography()
+
+	t.Run("joins blocks with single newline", func(t *testing.T) {
+		result := ty.Section("aaa", "bbb", "ccc")
+		if result != "aaa\nbbb\nccc" {
+			t.Errorf("Section = %q, want %q", result, "aaa\nbbb\nccc")
+		}
+	})
+
+	t.Run("skips empty blocks", func(t *testing.T) {
+		result := ty.Section("aaa", "", "bbb", "", "")
+		if result != "aaa\nbbb" {
+			t.Errorf("Section with empties = %q, want %q", result, "aaa\nbbb")
+		}
+	})
+
+	t.Run("single block", func(t *testing.T) {
+		result := ty.Section("only")
+		if result != "only" {
+			t.Errorf("Section single = %q, want %q", result, "only")
+		}
+	})
+
+	t.Run("no blocks", func(t *testing.T) {
+		result := ty.Section()
+		if result != "" {
+			t.Errorf("Section empty = %q, want empty", result)
+		}
+	})
+
+	t.Run("all empty blocks", func(t *testing.T) {
+		result := ty.Section("", "", "")
+		if result != "" {
+			t.Errorf("Section all empty = %q, want empty", result)
+		}
+	})
+
+	t.Run("strips trailing newlines", func(t *testing.T) {
+		result := ty.Section("aaa\n\n", "bbb\n")
+		if result != "aaa\nbbb" {
+			t.Errorf("Section trailing newlines = %q, want %q", result, "aaa\nbbb")
+		}
+	})
+
+	t.Run("with rendered heading and list", func(t *testing.T) {
+		result := ty.Section(
+			ty.H4("Fruits"),
+			ty.UL("Apples", "Bananas"),
+		)
+		plain := stripANSI(result)
+		if !strings.Contains(plain, "Fruits") {
+			t.Error("Section: missing heading")
+		}
+		if !strings.Contains(plain, "Apples") {
+			t.Error("Section: missing list item")
+		}
+		// Section should NOT have double-newline separators
+		if strings.Contains(result, "\n\n") {
+			t.Error("Section: should not contain double-newline separators")
+		}
+	})
+
+	t.Run("inside Compose", func(t *testing.T) {
+		result := ty.Compose(
+			ty.Section(ty.H4("Fruits"), ty.UL("Apples", "Bananas")),
+			ty.Section(ty.H4("Colors"), ty.UL("Red", "Blue")),
+		)
+		plain := stripANSI(result)
+		if !strings.Contains(plain, "Fruits") || !strings.Contains(plain, "Colors") {
+			t.Error("Section inside Compose: missing headings")
+		}
+		// Compose should insert double newline between sections
+		if strings.Count(result, "\n\n") < 1 {
+			t.Error("Section inside Compose: expected double-newline between sections")
+		}
+	})
+}
+
 func TestCompose(t *testing.T) {
 	ty := newTestTypography()
 
