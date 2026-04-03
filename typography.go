@@ -246,6 +246,26 @@ func (t *Typography) codeBlockWithLineNumbers(content string) string {
 	)
 }
 
+// BR returns a line break, analogous to HTML <br/>.
+func (t *Typography) BR() string {
+	return "\n"
+}
+
+// Section joins blocks with a single newline (no blank line between them),
+// unlike Compose which uses double newlines. Use this when a heading should
+// sit tight against its content, avoiding the extra blank line that Compose
+// would insert between a heading with MarginBottom and the following block.
+func (t *Typography) Section(blocks ...string) string {
+	non := make([]string, 0, len(blocks))
+	for _, b := range blocks {
+		trimmed := strings.TrimRight(b, "\n")
+		if trimmed != "" {
+			non = append(non, trimmed)
+		}
+	}
+	return strings.Join(non, "\n")
+}
+
 // HR renders a horizontal rule.
 func (t *Typography) HR() string {
 	line := strings.Repeat(t.theme.HRChar, t.theme.HRWidth)

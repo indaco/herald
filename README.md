@@ -43,7 +43,7 @@
   <b><a href="#examples">Examples</a></b>
 </p>
 
-herald maps familiar HTML elements (H1-H6, P, Blockquote, UL, OL, Code, HR, Tables, Alerts, and inline styles) to styled terminal output, built on [lipgloss v2](https://github.com/charmbracelet/lipgloss).
+herald maps familiar HTML elements (H1-H6, P, Blockquote, UL, OL, Code, HR, BR, Tables, Alerts, and inline styles) to styled terminal output, built on [lipgloss v2](https://github.com/charmbracelet/lipgloss).
 
 It ships with a Rose Pine-inspired default theme, built-in themes matching the Charm ecosystem (Dracula, Catppuccin, Base16, Charm), and full style customization via functional options and ColorPalette.
 
@@ -146,6 +146,8 @@ fmt.Println(ty.H4("Subsection"))
 | `Fieldset(legend, content, width...)` | Bordered box with legend embedded in top border; auto-width or explicit       |
 | `Figure(content, caption)`            | Content with styled caption below                                             |
 | `FigureTop(content, caption)`         | Content with styled caption above                                             |
+| `BR()`                                | Line break, analogous to `<br/>`                                              |
+| `Section(blocks...)`                  | Joins blocks with single newlines; keeps a heading tight against its content  |
 | `Compose(blocks...)`                  | Joins pre-rendered blocks with double newlines; empty blocks are skipped      |
 
 ```go
@@ -205,6 +207,24 @@ fmt.Println(ty.FigureTop(ty.Table([][]string{
 │ Port:  8080                          │
 │ TLS:   enabled                       │
 ╰──────────────────────────────────────╯
+```
+
+```go
+// BR inserts a line break
+fmt.Println(ty.P("Line one" + ty.BR() + "Line two"))
+
+// Section groups blocks with single newlines instead of double
+fmt.Println(ty.Compose(
+    ty.H2("Shopping List"),
+    ty.Section(
+        ty.H4("Fruits"),
+        ty.UL("Apples", "Bananas", "Cherries"),
+    ),
+    ty.Section(
+        ty.H4("Vegetables"),
+        ty.UL("Carrots", "Spinach"),
+    ),
+))
 ```
 
 ### Inline styles
@@ -576,6 +596,24 @@ fmt.Println(ty.Compose(
         " key indicators.",
     ),
     ty.FootnoteSection([]string{"A Go library for TUI typography"}),
+))
+```
+
+### Tight heading-body groups
+
+`Compose` inserts a blank line (`\n\n`) between every block. When a heading (e.g. H4) already has `MarginBottom`, this produces unwanted triple spacing. `Section` solves this by joining its blocks with a single newline, and the resulting group becomes one block to `Compose`:
+
+```go
+fmt.Println(ty.Compose(
+    ty.H2("Release Notes"),
+    ty.Section(
+        ty.H4("Bug Fixes"),
+        ty.UL("Fixed crash on empty input", "Resolved race condition"),
+    ),
+    ty.Section(
+        ty.H4("Features"),
+        ty.UL("Added Section method", "Added BR method"),
+    ),
 ))
 ```
 
@@ -1160,6 +1198,7 @@ Runnable examples are in the [`examples/`](examples/) directory:
 | [003_table](examples/003_table/)                                                       | Table rendering: bordered, minimal, alignment, striped rows, captions, and footer |
 | [004_semantic-badges](examples/004_semantic-badges/)                                   | Semantic badge and tag methods with default and custom `SemanticPalette`          |
 | [005_compose](examples/005_compose/)                                                   | Compose multiple rendered blocks into a single output                             |
+| [006_section](examples/006_section/)                                                   | Section groups heading + content tightly; BR for line breaks                      |
 | [100_custom-options](examples/100_custom-options/)                                     | Override styles, decoration chars, and tokens via functional options              |
 | [101_custom-palette](examples/101_custom-palette/)                                     | Custom adaptive theme from 9 colors using `ColorPalette` and `LightDark`          |
 | [102_builtin-themes](examples/102_builtin-themes/)                                     | Built-in themes (Dracula, Catppuccin, Base16, Charm) matching huh                 |
