@@ -26,6 +26,7 @@ Some examples live in the root module and can be run directly with `go run`. Oth
 | [003_table](003_table/)                     | Table rendering: bordered, minimal, alignment, striped rows, captions, and footer | `go run ./examples/003_table/`           |
 | [004_semantic-badges](004_semantic-badges/) | Semantic badges and tags with default and custom palettes                         | `go run ./examples/004_semantic-badges/` |
 | [005_compose](005_compose/)                 | Compose multiple rendered blocks into a single output                             | `go run ./examples/005_compose/`         |
+| [006_section](006_section/)                 | Section groups heading + content tightly; BR for line breaks                      | `go run ./examples/006_section/`         |
 
 ### Customization (`1xx`)
 
