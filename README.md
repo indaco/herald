@@ -89,6 +89,13 @@ func main() {
 > go get github.com/indaco/herald-md@latest
 > ```
 
+> [!TIP]
+> **Need themed CLI help pages?** [herald-help](https://github.com/indaco/herald-help) renders `--help` output with herald's full theming. Adapters for [cobra](https://github.com/indaco/herald-help/tree/main/cobra), [urfave/cli](https://github.com/indaco/herald-help/tree/main/urfave), and [kong](https://github.com/indaco/herald-help/tree/main/kong) are available as sub-modules.
+>
+> ```sh
+> go get github.com/indaco/herald-help@latest
+> ```
+
 ## Available elements
 
 ### Headings

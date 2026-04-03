@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). The changelog is generated and managed by [sley](https://github.com/indaco/sley).
 
+## v0.13.0 - 2026-04-03
+
+### 🚀 Enhancements
+
+- add `BR` and `Section` methods ([3c7c0bb](https://github.com/indaco/herald/commit/3c7c0bb)) ([#52](https://github.com/indaco/herald/pull/52))
+
+**Full Changelog:** [v0.12.0...v0.13.0](https://github.com/indaco/herald/compare/v0.12.0...v0.13.0)
+
+### ❤️ Contributors
+
+- [@indaco](https://github.com/indaco)
+
 ## v0.12.0 - 2026-04-01
 
 ### 🚀 Enhancements
